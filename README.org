@@ -1,43 +1,165 @@
-* Codename: Shimogawa
+* Project Codename: Shimogawa
 
 ** Product 
 
-This is a web application providing a cloud infrastructure management console.
-It provides a unified view of your cloud resources and inventory spanning 
-cloud providers including AWS, GCP and Azure.
+Web app to read and write to CSPs ( cloud providers )
 
-The out-of-the-box experience provided by the cloud providers / utility
-companies is inadequate. Our products' selling point is speed: both 
-in raw engineering performance, but also in intuitive design to fast-track you
-through cloud workflows and critical-user-journeys.
+What makes it different? 
+- perf //  i.e. pages loads fast, runs fast
+- basic UI // e.g. Craigslist/HackerNews
+- mobile-responsive
+- global // multi-cloud, cross-region, cross-Project queries 
+- minimal // address a few CUJs (Critical User Journeys) well, rather than comprehensive and mediocre
+- emphasis on search 
 
-The means of getting there include robust views to list your resources, as well 
-as a search engine. Ultimately, allowing you to quickly identify and isolate 
-the cloud resources under consideration, whether that is to understanding 
-billing or handle outages.
+Other product features:
+- billing and birds-eye visibilty of project 
 
 ** Tech and Architecture 
 
-This is a monolithic application server written in Go.
-It uses the Gin Web Framework which is 10x more performant than the `net/http` 
-standard library, while reducing boilerplate.
+Monorepo with monolithic server in Go. The server serves web browser requests.
 
-The application levies SSR ( server side rendered ) HTML rather than shipping 
-JavaScript which renders HTML in the client's browser. There are trade-offs 
-as to which method has superior user-perceived latency. However, the simplicity 
-of the SSR rendering model, and especially not a hybrid SSR with client-side 
-hydration, frees us up to optimize critical latency paths. For one, the 
-DevEx is simple and stays simple, without having to catch up with vendoring 
-complexities and configuring woes plaguing the JavaScript / Node.JS world.
+Shimogawa: Postgres database containing search index and all metadata
+Kamogawa: web server that talks to Shimogawa and renders HTML, CSS, JS
 
-For the persistence layer, either SQLite or Postgres DB will be used. Postgres 
-DB has a good-enough full-text search, which should be good enough for a 
-medium-term stop-gap solution before investing in tuning a search database 
-such as Apache Lucene, Amazon ElasticSearch, or pricy options such as Algolia.
-SQLIte has the benefit that we can have one shard per user, and allow them to 
-download all their indexed data. This is TBD. We will use the Go Gorm library 
-as an ORM with the DBs.
+*** Shimogawa
 
+Postgres13 chosen because it's general purpose. Currently handles:
+
+  1. general SQL DB
+  2. basic full-text search index 
+  3. cache / session management
+
+Redis is a DB optimized for cache. s/psql/redis for cache in future.
+Lucene-based DBs such as AWS Elastisearch is optimized for search. s/psql/lucene in future.
+
+*** Kamogawa 
+
+Monolithic Go server. 
+
+Dependencies:
+  - GORM as ORM for Postgres 
+  - Gin is the web server "framework"
+    - listens for HTTP request, sends HTML, CSS, image files back 
+
+Otherwise, we use Go's standard library.
+
+Go was chosen because:
+  - fast compilation
+  - predictable resource usage when deployed to cloud
+  - memory efficient 
+  - fast for CPU-bound tasks including cryptography and math 
+  - don't have to deal with managing memory 
+  - don't have to debate which competing library to use. there's usually 1 good one. 
+  - library and FOSS ecosystem's code is high quality and can be understand 
+  - can build a binary with zero-dependency.
+    - easier deployment
+    - can let customers run on-prem, without providing our source-code, unlike Node.js
+
+**** Gin
+
+Elected because it's popular, 10x faster than Go's stdlib net/http ( which is still very fast ),
+and doesn't have too many bells / whistles. 
+
+**** HTML templating 
+
+At the most basic level, HTML templating is having an HTML-like file that 
+specifies slots to replace variables in. 
+
+Interfacing with Gin, it uses Go's stdlib `html/template` object.
+
+Effectively, 'html/template' takes the html-like file, and an object with those 
+parameter values, and outputs an HTML string.
+
+**** No JavaScript framework
+
+We do not have a JavaScript framework in the loop.
+
+React.js, AngularJs, Vue.js and other JavaScript "frameworks" allows 
+developers to think declarative, and separate MVC concerns.
+
+- at it's core, components are just reusable chunk of HTML 
+- these frameworks allows components to nested other components. ie. a tree
+- unlike HTML, these components have data/state
+- these components have javascript behavior attached to them 
+
+After "build time", what is sent to the web browser is a bundle of JavaScript containing:
+
+- metadata about the components
+- a JavaScript class representing these components.
+- the framework runtime 
+
+The runtime looks at this abstract set of JavaScript classes/objects, and ultimately 
+yield some HTML that is inserted into the DOM. 
+
+Before these modern JavaScript UI frameworks was jQuery. People would imperatively, 
+rather than declarative, write JavaScript program with global state, handle 
+DOM events by mutating this state, and surgically and imperatively modify the 
+DOM/HTML, which is really just a long string.
+
+The problem with all these JavaScript approaches is that the HTML generation,
+aka "rendering" ( the process of outputting HTML to the web browser ), is done 
+on the user's web browser. On devices with weaker hardware, users will experience 
+Jank, unlike just HTML and native browser behavior ( since browsers run natively 
+as Rust/C programs). Second, they have complicated tool chains. Third, it's 
+hard to reason about the implementation details / flow of control once you've 
+handled off control the frameworks. 
+
+With careful hygiene, you can build complex apps with jQuery or VanillsJS 
+
+**** SSR 
+
+With client-side renndering, we are forced to use Node.js. That's a 
+second language to be proficient in. Worst, the ecosystem is brittle. 
+
+With server-side rendering, we can use any programming language. Again, 
+"rendering" is simplying outputting an HTML string.
+
+There's performance tradeoffs of CSR vs SSR. CSR loads fast since the initial 
+HTML is barebone, then the JavaScript framework does "hydration" which means 
+goes back to the server for small chunks of data. This is why you see a super 
+chatty list of network requests in the web browser dev console when viewing 
+these kinds of webapps. At any rate, the CSR JavaScript framework adds overhead 
+to the bundle size, aswell as being a complex bundle of javaScript that the 
+browser has to parse. Because of all these network latency and coordination, 
+you see these apps have elements moving and shifting around as the page 
+incrementally loads.
+
+With SSR, we just send people 1 giant HTML file. In aggregate, the network 
+transfer size of this HTML file is a fraction of all that JavaScript chatter. 
+You pay more in network transfer up front, in the first request, but the page 
+works immediarely as the user receives the file. 
+
+At any rate, SSR is much simpler. Our server simply needs some logic and 
+generate HTML files. We simply need to test that our source code behaves 
+as a pure function: given an input, we expect this output HTML. That's also 
+easier to test. We think this simpler operating and debugging model is 
+way faster to develop with, easier to test, and, in practice, faster and 
+less janky than JavaScript.
+
+**** SSR Web App 
+
+There is a misconception that because the server sends HTML back, there is no 
+dynamic behavior. 
+
+The server can generate different HTML depending on the user's state. For example, 
+they may have a browser cookie ( which is sent a long browser HTTP requests )
+or URL query params. We can add HTML anchor links that encode some specific 
+set of inputs to the server. 
+
+**** VanillsJS
+
+There are some trivial 
+
+**** Endpoints 
+
+
+Wrap up
+
+
+
+
+## 
 One feature of  Go is that we can have one self-contained binary. 
 Assets such as CSS or HTML are not included by default, and the binary will 
 read from the file system, however there is a way to bake these assets 

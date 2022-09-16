@@ -55,73 +55,73 @@
       <li><a href="mailto:{{.ContactEmail}}">Contact</a></li>
     </ul>
   </footer>
-  <script>
-    $ = l => document.getElementById(l);
-    rm = (l, c) => $(l).classList.remove(c);
-    ad = (l, c) => $(l).classList.add(c);
+<script>
 
-    let searchBoxInFocus = showingQueryBuilder = false,
-        c = 'click',
-        u = 'keyup';
+let $ = l => document.getElementById(l);
+let rm = (l, c) => $(l).classList.remove(c);
+let ad = (l, c) => $(l).classList.add(c);
+let searchBoxInFocus = false,
+                   c = 'click',
+                   u = 'keyup',
+                   z = 'addEventListener',
+                   p = 'preventDefault';
     
-    function eventHandlerSearchBoxFocus(q) {
-      searchBoxInFocus = true;
-      rm('search-box', '👻');
-      ad('top-nav', '👻');
-      ad('main', '🌃');
-      ad('logo', '🌃');
-      if(q && q.length > 0) $('search-input').value = q;
-      $('search-input').focus();
-    }
+function fo(q) {
+  searchBoxInFocus = true;
+  rm('search-box', '👻');
+  ad('top-nav', '👻');
+  ad('main', '🌃');
+  ad('logo', '🌃');
+  if(q && q.length > 0) $('search-input').value = q;
+  $('search-input').focus();
+}
 
-    function eventHandlerSearchBoxDefocus() {
-      searchBoxInFocus = false;
-      ad('search-box', '👻');
-      rm('top-nav', '👻');
-      rm('main', '🌃');
-      rm('logo', '🌃');
-      $('search-input').value = '';
-    }
+function defo() {
+  searchBoxInFocus = false;
+  ad('search-box', '👻');
+  rm('top-nav', '👻');
+  rm('main', '🌃');
+  rm('logo', '🌃');
+  $('search-input').value = '';
+}
 
-    const ss = $('search-start');
-    if(ss)  {
-      ss.addEventListener(c, eventHandlerSearchBoxFocus);
-      ss.addEventListener(u, e => e.code == 'Enter' && e.preventDefault() && eventHandlerSearchBoxFocus());
-    }
+const ss = $('search-start');
+if(ss)  {
+  ss[z](c, fo);
+  ss[z](u, e => e.code == 'Enter' && e[p]() && fo());
+}
 
-    document.addEventListener('keydown', e => {
-      if (!searchBoxInFocus && e.code == 'Backslash') e.preventDefault(), eventHandlerSearchBoxFocus(e);
+    document[z]('keydown', e => {
+      if (!searchBoxInFocus && e.code == 'Backslash') e[p](), fo(e);
     });
-    $('search-input').addEventListener('keydown', e => {
+    $('search-input')[z]('keydown', e => {
       if(!searchBoxInFocus) return;
-      if (e.code == 'Escape') e.preventDefault(), eventHandlerSearchBoxDefocus();
+      if (e.code == 'Escape') e[p](), defo();
       else if (e.code == 'Enter') {
         {{if not .IsLoggedIn}}
           window.location.href = '/login?error=4';
         {{else}}
-          e.preventDefault();
+          e[p]();
           s($('search-input').value);
         {{end}}
-      } else if (e.code == 'Tab') e.preventDefault();
+      } else if (e.code == 'Tab') e[p]();
     });
-    $('search-cancel').addEventListener(c, eventHandlerSearchBoxDefocus);
+    $('search-cancel')[z](c, defo);
     
     const elNavGcp = $("nav-gcp");
     if (elNavGcp) {
       if (localStorage.getItem('nav-gcp-open') == 'true') elNavGcp.open = true;
 
-      elNavGcp.addEventListener("toggle", _ => {
+      elNavGcp[z]("toggle", _ => {
         localStorage.setItem('nav-gcp-open', elNavGcp.open);
       });
     } 
 
-    console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))",
-      "font-size: 24px;background: #67b26f; background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd); color: white;text-align: center; padding: 10px 15px; width: 100%;border-radius: 20px;");   
-
+console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size: 24px;background: #67b26f; background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd); color: white;text-align: center; padding: 10px 15px; width: 100%;border-radius: 20px;");   
 
 {{if .IsSearch}}
-  {{if .Query}} let q = '{{.Query}}'; {{else}} let q = ''; {{end}}
-let originalQuery = q || '',
+let             q = '';
+              sqb = false,
         baseQuery = (q.length > 0 && q.split(':::')[0] ) || '',
                 f = ['all', 'substring', 'lastmonth'],
                 r = $("query"),
@@ -130,30 +130,36 @@ let originalQuery = q || '',
           elSbrId = 'search-builder-reset',
             elSbr = $(elSbrId),
         elSrctaId = 'search-redo-cta',
-            srcta = $(elSrctaId);
+            srcta = $(elSrctaId),
+           elQbId = 'query-builder',
+            elHId = 'search-header', 
+               dd = 'down';
+ {{if .Query}}  q = '{{.Query}}' {{end}};
+                o = q || '';
 
-elSearchAdvanced.addEventListener(c, _ => {
-  if(showingQueryBuilder) elSearchAdvanced.classList.add('down'), ad("query-builder", "🥷");
-  else elSearchAdvanced.classList.remove('down'), rm("query-builder", "🥷");
-  showingQueryBuilder = !showingQueryBuilder;
+
+elSearchAdvanced[z](c, _ => {
+  if(sqb) elSearchAdvanced.classList.add(dd), ad(elQbId, "🥷");
+  else elSearchAdvanced.classList.remove(dd), rm(elQbId, "🥷");
+  sqb = !sqb;
 }); 
-elSearchAdvanced.addEventListener(u, (e) => {
-  if(e.code == 'Enter') { event.preventDefault();
-    if(showingQueryBuilder)
-      elSearchAdvanced.classList.add('down'),
-      showingQueryBuilder = false,
-      ad("query-builder", "🥷");
+elSearchAdvanced[z](u, (e) => {
+  if(e.code == 'Enter') { event[p]();
+    if(sqb)
+      elSearchAdvanced.classList.add(dd),
+      sqb = false,
+      ad(elQbId, "🥷");
     else
-      elSearchAdvanced.classList.remove('down'),
-      showingQueryBuilder = true,
-      rm("query-builder", "🥷");
+      elSearchAdvanced.classList.remove(dd),
+      sqb = true,
+      rm(elQbId, "🥷");
   }
 });
 
-elSbr.addEventListener(c, _ => { r.value = originalQuery, resetSearchState() });
+elSbr[z](c, _ => { r.value = o, resetSearchState() });
     
 function resetSearchState() {
-  rm('search-header', '⚡');
+  rm(elHId, '⚡');
   ad(elSrctaId, '⚡');
   ad(elSbrId, '🥷');
   elSoq.innerText = '';
@@ -164,51 +170,44 @@ function updateQuery(tk = []) {
   if(f[2] != "lastmonth") tk.push("time:" + f[2]);
   if(tk.length == 0) {
     r.value = r.value.split(":::")[0].trim()
-    if(r.value == originalQuery) {
-      console.log('originalQuery', originalQuery);
-      resetSearchState();
-    }
+    if(r.value == o) resetSearchState();
   } else {
     q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
-    console.log("q", q, originalQuery);
-    if (q == originalQuery) {
-      r.value = originalQuery;
+    if (q == o) {
+      r.value = o;
       resetSearchState();
     } else {
       r.value = q;
-      ad('search-header', '⚡');
-      elSoq.innerText = originalQuery;
+      ad(elHId, '⚡');
+      elSoq.innerText = o;
       rm(elSrctaId, '⚡');
       rm(elSbrId, '🥷');
     }
   }
 }
 function change(e, i) { f[i] = e.target.value, updateQuery() }
-r.addEventListener(u, e => {
-  e.preventDefault();
+r[z](u, e => {
+  e[p]();
   if(e.code == 'Enter') s(e.target.value);
-  else if(e.target.value == originalQuery) q = e.target.value, resetSearchState();
+  else if(e.target.value == o) q = e.target.value, resetSearchState();
   else {
     q = e.target.value;
-    ad('search-header', '⚡');
-    elSoq.innerText = originalQuery;
+    ad(elHId, '⚡');
+    elSoq.innerText = o;
     rm(elSrctaId, '⚡');
     rm(elSbrId, '🥷');
   }
 });
-srcta.addEventListener(c, e => q != originalQuery && e.preventDefault() && s(q));  
-srcta.addEventListener(u, e => event.code == 'Enter' && q != originalQuery && e.preventDefault() && s(q));
+srcta[z](c, e => q != o && e[p]() && s(q));  
+srcta[z](u, e => event.code == 'Enter' && q != o && e[p]() && s(q));
 {{end}}
 
-  const leftNavLinks = document.querySelectorAll('.left-nav-link');
-  if(leftNavLinks) {
-    leftNavLinks.forEach(el => {
-      if (el.querySelector('a').href.split('?')[0] == window.location.href.split('?')[0]) {
-        el.classList.add('active');
-        return;
-      }
-    });
+const lnl = document.querySelectorAll('.left-nav-link');
+lnl && lnl.forEach(el => {
+  if (el.querySelector('a').href.split('?')[0] == window.location.href.split('?')[0]) {
+    el.classList.add('active');
+    return;
   }
-
-  function s(q) { window.location.href = '/search?q=' + encodeURI(q); }
-  </script>
+});
+function s(q) { window.location.href = '/search?q=' + encodeURI(q); }
+</script>

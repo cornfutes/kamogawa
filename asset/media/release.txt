@@ -1,9 +1,9 @@
       ,~~. 
      (  9 )-_,                  RELEASE NOTES
-(\___ )=='-'               DiceDuckMonk Web Console
+(\___ )=='-'               ListVMs Web Console
  \ .   ) )                  
   \ `-' /           These release notes are for the current
-   `~j-'         development version of DiceDuckMonk Web Console.
+   `~j-'         development version of ListVMs Web Console.
      "=:
 
 ------------------------------------------------------------------------

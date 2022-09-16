@@ -42,9 +42,9 @@ func init() {
 	//db.Create(&types.Project{
 	//	Email:          "1337gamer@gmail.com",
 	//	ProjectNumber:  "472481681891",
-	//	ProjectId:      "diceduckmonk1",
+	//	ProjectId:      "ListVMs1",
 	//	LifeCycleState: "ACTIVE",
-	//	Name:           "diceduckmonk1",
+	//	Name:           "ListVMs1",
 	//	CreateTime:     "2022-08-30T12:30:58.750Z",
 	//})
 }

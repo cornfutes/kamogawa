@@ -1,4 +1,4 @@
-* DiceDuckMonk 
+* ListVMs 
 
 ** Product 
 
@@ -7,7 +7,7 @@ It provides a unified view of your cloud resources and inventory spanning
 cloud providers including AWS, GCP and Azure.
 
 The out-of-the-box experience provided by the cloud providers / utility
-companies is inadequate. DiceDuckMonk's selling point is speed: both 
+companies is inadequate. ListVMs's selling point is speed: both 
 in raw engineering performance, but also in intuitive design to fast-track you
 through cloud workflows and critical-user-journeys.
 
@@ -168,13 +168,13 @@ gBuild and tag container. There is bug with CloudRun and M1 macs. Linux platform
 specified if using m1 mac.
 
 ```
-docker build -t gcr.io/linear-cinema-<retroactively_redacted>/diceduckmonk --platform linux/amd64 .
+docker build -t gcr.io/linear-cinema-<retroactively_redacted>/ListVMs --platform linux/amd64 .
 ```
 
 Push to Google Container Registry 
 
 ```
-docker push gcr.io/linear-cinema-<retroactively_redacted>/diceduckmonk
+docker push gcr.io/linear-cinema-<retroactively_redacted>/ListVMs
 ```
 
 It's worth noting the CloudRun Servicem which hosts 

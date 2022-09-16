@@ -14,13 +14,13 @@ Y8a     a8P  "8b,   ,aa  "8a,   ,aa  "8a,   ,a88  88          88    88,      `8b
 ========================================================================
 Vulnerability Disclosure Policy
 
-DiceDuckMonk
+ListVMs
 
 September 6, 2022
 ========================================================================
 Introduction
 
-DiceDuckMonk is committed to ensuring the security of the American public by
+ListVMs is committed to ensuring the security of the American public by
 protecting their information. This policy is intended to give security
 researchers clear guidelines for conducting vulnerability discovery activities
 and to convey our preferences in how to submit discovered vulnerabilities to us.
@@ -35,7 +35,7 @@ Authorization
 
 If you make a good faith effort to comply with this policy during your security
 research, we will consider your research to be authorized we will work with you
-to understand and resolve the issue quickly, and DiceDuckMonk will not
+to understand and resolve the issue quickly, and ListVMs will not
 recommend or pursue legal action related to your research.
 Should legal action be initiated by a third party against you for activities
 that were conducted in accordance with this policy, we will make this
@@ -69,16 +69,16 @@ non-technical vulnerability testing Scope
 
 This policy applies to the following systems and services:
 
-  - app.diceduckmonk.com
-  - diceduckmonk.com
-  - api.diceduckmonk.com
+  - app.ListVMs.com
+  - ListVMs.com
+  - api.ListVMs.com
 
 Any service not expressly listed above, such as any connected services, are
 excluded from scope and are not authorized for testing. Additionally,
 vulnerabilities found in systems from our vendors fall outside of this
 policy’s scope and should be reported directly to the vendor according to
 their disclosure policy (if any). If you aren’t sure whether a system is in 
-cope or not, contact us at team@diceduckmonk.com.
+cope or not, contact us at team@ListVMs.com.
 
 Though we develop and maintain other internet-accessible systems or services,
 we ask that active research and testing only be conducted on the systems and
@@ -91,12 +91,12 @@ Reporting a vulnerability
 Information submitted under this policy will be used for defensive purposes
 only – to mitigate or remediate vulnerabilities. If your findings include newly
 discovered vulnerabilities that affect all users of a product or service and not
-solely DiceDuckMonk, we may share your report with the Cybersecurity and
+solely ListVMs, we may share your report with the Cybersecurity and
 Infrastructure Security Agency, where it will be handled under their coordinated
 vulnerability disclosure process. We will not share your name or contact
 information without express permission.
 
-We accept vulnerability reports at team@diceduckmonk.com. Reports may be submitted
+We accept vulnerability reports at team@ListVMs.com. Reports may be submitted
 anonymously. If you share contact information, we will acknowledge receipt of
 your report within 3 business days.
 
@@ -121,7 +121,7 @@ resolution. We will maintain an open dialogue to discuss issues.
 ========================================================================
 Questions
 
-Questions regarding this policy may be sent to team@diceduckmonk@.com.
+Questions regarding this policy may be sent to team@ListVMs@.com.
 We also invite you to contact us with suggestions for improving this policy.
 ========================================================================
 Document change history

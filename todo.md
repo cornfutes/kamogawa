@@ -40,7 +40,7 @@ production
 - [ ] load test
   - [ ] perform load test 
   - [ ] consider having fake static website, cant login / not dynamic, in case of HN hug of death
-  - [ ] then host the real app on app.diceduckmonk.com or something
+  - [ ] then host the real app on app.ListVMs.com or something
 - [ ] logs and monitoring 
 - [x] parameterize dev environment flag properly ... its showing in prod 
 - [x] Minify CSS file. Goal: reduce bundle size
@@ -88,7 +88,7 @@ polish
 - [x] make search and 'launch search' CTA keyboard accessible
 
 meta 
-- [x] set up email. team@diceduckmonk.com
+- [x] set up email. team@ListVMs.com
 
 easter egg 
 - [x] log stuff to console 

@@ -1,57 +1,47 @@
 {{define "page"}}
 <div class="main-header">
-  <a class="menu-link-main" href="#">Search results</a>
-  <!-- <div class="header-menu">
-    <a class="main-header-link is-active" href="#">Desktop</a>
-    <a class="main-header-link" href="#">Mobile</a>
-    <a class="main-header-link" href="#">Web</a>
-  </div> -->
+  <a class="menu-link-main" href="#">CloudSQL</a>
 </div>
 <div class="content-wrapper">
-<h2>CloudSQL</h2>
+  {{if .Unauthorized}}
+  <p>
+    You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
+  </p>
+  {{else if .MissingScopes}}
+  <p>
+    The following OAuth2 Scopes are needed but not yet granted:
+  </p>
+  <ul>
+    <li>https://www.googleapis.com/auth/cloud-platform.read-only
+    <li>https://www.googleapis.com/auth/sqlservice.admin (write)
+      <ul>
+        <li>CloudSQL demands this, even if only reading.
+        </li>
+      </ul>
+  </ul>
 
-{{if .Unauthorized}}
-<p>
-  You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
-</p>
-{{else if .MissingScopes}}
-<p>
-  The following OAuth2 Scopes are needed but not yet granted:
+  <p>
+    <a href="authorization">Securely grant access.</a> (note: we applied principle of least privilege in the demo
+    account. initially and, by default, only read scopes
+    requested. write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
+  </p>
+  {{else}}
+  <p>
+    Enumerates functions across Projects
+  </p>
+  <ul>{{.AssetLines}}</ul>
+  {{end}}
 
-<ul>
-  <li>https://www.googleapis.com/auth/cloud-platform.read-only
-  <li>https://www.googleapis.com/auth/sqlservice.admin (write)
-    <ul>
-      <li>CloudSQL demands this, even if only reading.
-      </li>
-    </ul>
-</ul>
-
-<a href="authorization">Securely grant access. </a>
-(note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
-requested.
-write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
-</p>
-{{else}}
-<p>
-  Enumerates functions across Projects
-</p>
-
-<ul>{{.AssetLines}}</ul>
-{{end}}
-
-<h2 class="🍜">Update SQL Cache</h2>
-
-<p>
-  You can manually refresh the cache for individual services for free.
-</p>
-
-<button class="disabled">Refresh</button> <span style="color:red">(disabled in demo)</span>
-
-<p>
-  <a href="overview">See Overview on details on traversing entire graph</a>
-</p>
-
+  <div class="content-section">
+    <h2>Update Cache Subtree</h2>
+    <p>
+      You can manually refresh the cache for subtrees such as this for free.
+    </p>
+    <button class="content-button status-button open">Disabled in demo</button>
+    <p>
+      <a href=overview>See Overview on details on traversing entire graph</a>
+    </p>
+  </div>
 
 </div>
 {{end}}

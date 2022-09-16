@@ -132,7 +132,7 @@ func getSearchResults(db *gorm.DB, user types.User, q string) []SearchResult {
 		searchResults = append(searchResults, r...)
 	}
 
-	r, err = searchGAEVersions(db, word)
+	r, err = searchGAEVersions(db, user, word)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
@@ -249,26 +249,28 @@ func searchGAEServices(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 
 }
 
-func searchGAEVersions(db *gorm.DB, q string) ([]SearchResult, error) {
-	var x []gaetypes.GAEVersionDB
+func searchGAEVersions(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
+	var gaeVersionDBs []gaetypes.GAEVersionDB
 	result := db.Raw(""+
-		" SELECT * "+
+		" SELECT gae_version_dbs.* "+
 		" FROM gae_version_dbs"+
-		" WHERE id "+
-		" ILIKE ?"+
-		" LIMIT ?", fmt.Sprintf("%%%v%%", q), resultLimit).Find(&x)
+		" INNER JOIN gae_version_auths "+
+		" ON gae_version_auths.id = gae_version_dbs.id"+
+		" AND gae_version_auths.gmail = ?"+
+		" AND gae_version_dbs.id ILIKE ?"+
+		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gaeVersionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
 	}
 
-	if len(x) == 0 {
+	if len(gaeVersionDBs) == 0 {
 		fmt.Printf("No results found\n")
 		return nil, fmt.Errorf("No results found")
 	}
 
-	searchResults := make([]SearchResult, 0, len(x))
-	for _, v := range x {
+	searchResults := make([]SearchResult, 0, len(gaeVersionDBs))
+	for _, v := range gaeVersionDBs {
 		searchResults = append(searchResults,
 			SearchResult{
 				Text:     v.ToSearchString(),

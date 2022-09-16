@@ -78,45 +78,48 @@ func WriteServicesAuth(db *gorm.DB, user types.User, gaeServiceDBs []gaetypes.GA
 	}
 }
 
-func ReadVersionsCache(db *gorm.DB, projectId string, serviceName string) (*gaetypes.GAEListVersionsResponse, error) {
-	var versionDBs []gaetypes.GAEVersionDB
-	result := db.Where("service_id = ?", gaetypes.ToServiceId(projectId, serviceName)).Find(&versionDBs)
+func ReadVersionsCache(db *gorm.DB, user types.User, projectId string, serviceName string) (*gaetypes.GAEListVersionsResponse, error) {
+	var gaeVersionDBs []gaetypes.GAEVersionDB
+	result := db.Joins(
+		" INNER JOIN gae_version_auths"+
+			" ON gae_version_auths.id = gae_version_dbs.id"+
+			" AND gae_version_auths.gmail = ?"+
+			" AND gae_version_dbs.service_id = ?", user.Gmail.String, gaetypes.ToServiceId(projectId, serviceName)).Find(&gaeVersionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
 	}
 
-	if len(versionDBs) == 0 {
+	if len(gaeVersionDBs) == 0 {
 		fmt.Printf("Cache miss\n")
 		return nil, fmt.Errorf("Cache miss")
 	}
 	fmt.Printf("Cache hit\n")
 
-	versions := make([]gaetypes.GAEVersion, 0, len(versionDBs))
-	for _, versionDB := range versionDBs {
-		versions = append(versions, gaetypes.GAEVersion{
+	gaeVersions := make([]gaetypes.GAEVersion, 0, len(gaeVersionDBs))
+	for _, v := range gaeVersionDBs {
+		gaeVersions = append(gaeVersions, gaetypes.GAEVersion{
 			// GAE API is misleading
-			Id:            versionDB.Name,
-			Name:          versionDB.Id,
-			ServingStatus: versionDB.ServingStatus,
+			Id:            v.Name,
+			Name:          v.Id,
+			ServingStatus: v.ServingStatus,
 		})
 	}
 
-	return &gaetypes.GAEListVersionsResponse{Versions: versions}, nil
+	return &gaetypes.GAEListVersionsResponse{Versions: gaeVersions}, nil
 }
 
-func WriteVersionsCache(db *gorm.DB, projectId string, serviceName string, resp *gaetypes.GAEListVersionsResponse) {
+func WriteVersionsCache(db *gorm.DB, user types.User, projectId string, serviceName string, resp *gaetypes.GAEListVersionsResponse) {
 	if resp == nil {
-		panic("Unexpected list of projects")
+		panic("Unexpected list of versions")
 	}
 	if len(resp.Versions) == 0 {
 		return
 	}
 
-	versionDBs := make([]gaetypes.GAEVersionDB, 0, len(resp.Versions))
-
+	gaeVersionDBs := make([]gaetypes.GAEVersionDB, 0, len(resp.Versions))
 	for _, v := range resp.Versions {
-		versionDBs = append(versionDBs, gaetypes.GAEVersionDB{
+		gaeVersionDBs = append(gaeVersionDBs, gaetypes.GAEVersionDB{
 			// GAE API is misleading
 			Name:          v.Id,   // The ID is the name, not its unique resource name e.g. 20220830t021415
 			Id:            v.Name, // The name is the ID, the unique resource name e.g. apps/linear-cinema-360910/services/default/versions/20220830t021415
@@ -127,8 +130,24 @@ func WriteVersionsCache(db *gorm.DB, projectId string, serviceName string, resp 
 		})
 	}
 
-	for _, versionDB := range versionDBs {
-		db.FirstOrCreate(&versionDB)
+	for _, v := range gaeVersionDBs {
+		db.FirstOrCreate(&v)
+	}
+
+	WriteVersionsAuth(db, user, gaeVersionDBs)
+}
+
+func WriteVersionsAuth(db *gorm.DB, user types.User, gaeVersionDBs []gaetypes.GAEVersionDB) {
+	if len(gaeVersionDBs) == 0 {
+		return
+	}
+
+	gaeVersionAuths := make([]gaetypes.GAEVersionAuth, 0, len(gaeVersionDBs))
+	for _, v := range gaeVersionDBs {
+		gaeVersionAuths = append(gaeVersionAuths, gaetypes.GAEVersionAuth{Gmail: user.Gmail.String, Id: v.Id})
+	}
+	for _, v := range gaeVersionAuths {
+		db.FirstOrCreate(&v)
 	}
 }
 

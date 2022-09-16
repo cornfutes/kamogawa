@@ -115,10 +115,6 @@ func main() {
 			core.HTMLWithGlobalState(c, "status.html", gin.H{})
 			c.Abort()
 		})
-		authed.GET("/plans", func(c *gin.Context) {
-			core.HTMLWithGlobalState(c, "plans.html", gin.H{})
-			c.Abort()
-		})
 
 		authed.GET("/project.csv", func(c *gin.Context) {
 			if c.Query("t") != "project" {

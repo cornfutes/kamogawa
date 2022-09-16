@@ -46,7 +46,7 @@ html {
 
 body {
   font-family: var(--body-font);
-  background-image: url(https://wallpapershome.com/images/wallpapers/macos-big-sur-1280x720-dark-wwdc-2020-22655.jpg);
+  background-image: url(big_sur.jpg);
   background-size: cover;
   background-position: center;
   display: flex;
@@ -140,8 +140,7 @@ body.light-mode .video-bg:before {
 .app {
   background-color: var(--theme-bg-color);
   max-width: 1250px;
-  max-height: 860px;
-  height: 90vh;
+  min-height: 95vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;

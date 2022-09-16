@@ -63,6 +63,8 @@ var (
 	api []byte
 	//go:embed media/nft.gif
 	gifProfile []byte
+	//go:embed media/big_sur.jpg
+	jpgBigSur []byte
 
 	//go:embed media/consent.png
 	consent []byte
@@ -120,6 +122,7 @@ func Config(r *gin.Engine) {
 	r.GET("about.txt", TXT(about))
 	r.GET("api.txt", TXT(api))
 	r.GET("nft.gif", gif(gifProfile))
+	r.GET("big_sur.jpg", jpg(jpgBigSur))
 
 	// Register static views.
 	for route, file := range staticHtml {

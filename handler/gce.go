@@ -2,7 +2,6 @@ package handler
 
 import (
 	"database/sql"
-	"fmt"
 	"html/template"
 	"kamogawa/core"
 	"kamogawa/gcp"
@@ -10,6 +9,7 @@ import (
 	"kamogawa/types"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -36,20 +36,19 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
+		// Token expires at 3600.
+		if time.Now().Sub(user.UpdatedAt).Seconds() > 3500 {
+			respRefreshtoken := identity.GCPRefresh(c, db)
+			user.AccessToken = &sql.NullString{String: respRefreshtoken.AccessToken, Valid: true}
+			db.Save(&user)
+		}
+
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "gce.html", gin.H{
 				"MissingScopes": true,
 			})
 			return
-		}
-		// TODO: this bakes in assumption that responseError not nil IFF 401.
-		if responseError != nil && responseError.Error.Code > 0 {
-			fmt.Printf("Retrying project fetch by first refreshing access token")
-			respRefreshtoken := identity.GCPRefresh(c, db)
-			user.AccessToken = &sql.NullString{String: respRefreshtoken.AccessToken, Valid: true}
-			db.Save(&user)
-			responseSuccess, _ = gcp.GCPListProjects(db, user, useCache)
 		}
 
 		var projectStrings []types.Project

@@ -10,10 +10,8 @@
   <li style="font-family: monospace;">{{.}}</li>
   {{ end }}
 </ul>
-<p>
-  <a href="/revokegcp">Revoke all scopes, tokens and wipe data.</a>
-</p>
 
+<h4>Extended Functionality</h4>
 {{if .HasMissingScopes}}
 <p>
   For full functionality, the additional scopes are needed
@@ -37,6 +35,16 @@
   {{ end }}
 </ul>
 {{end}}
+
+<h4 class="🍜">Revoke access</h4>
+<p>
+  {{if .ShowRevoke}}
+  <a href="/revokegcp">Revoke all scopes, tokens and wipe data.</a>
+  {{else}}
+  For the demo, we've disabled this to prevent mutations.
+  {{end}}
+</p>
+
 
 {{else}}
 <p>

@@ -67,6 +67,7 @@ func Authorization(db *gorm.DB) func(c *gin.Context) {
 			}
 		}
 		core.HTMLWithGlobalState(c, "authorization.html", gin.H{
+			"ShowRevoke":          config.Env == config.Dev,
 			"GmailExists":         user.Gmail != nil && user.Gmail.Valid,
 			"Gmail":               gmail,
 			"GCPDelegatedAuthUrl": googleAuthUrl,

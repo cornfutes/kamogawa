@@ -13,9 +13,10 @@ func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectRespo
 	var projectDBs []coretypes.ProjectDB
 
 	result := db.Joins(
-		" INNER JOIN project_auths "+
+		" INNER JOIN project_auths"+
 			" ON project_auths.project_id = project_dbs.project_id"+
-			" AND project_auths.gmail = ? ", user.Gmail.String).Find(&projectDBs)
+			" AND project_auths.gmail = ? ", user.Gmail.String,
+	).Order("project_dbs.name, project_dbs.project_id").Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -39,9 +40,10 @@ func ReadProjectsCache2(db *gorm.DB, user types.User) []coretypes.ProjectDB {
 	var projectDBs []coretypes.ProjectDB
 
 	result := db.Joins(
-		" INNER JOIN project_auths "+
+		" INNER JOIN project_auths"+
 			" ON project_auths.project_id = project_dbs.project_id"+
-			" AND project_auths.gmail = ? ", user.Gmail.String).Find(&projectDBs)
+			" AND project_auths.gmail = ? ", user.Gmail.String,
+	).Order("project_dbs.name, project_dbs.project_id").Find(&projectDBs)
 	if result.Error != nil {
 		panic("Query failed")
 	}
@@ -124,7 +126,8 @@ func ReadInstancesCache(db *gorm.DB, user types.User, projectId string) (*gcetyp
 		" INNER JOIN gce_instance_auths"+
 			" ON gce_instance_auths.id = gce_instance_dbs.id"+
 			" AND gce_instance_auths.gmail = ?"+
-			" AND gce_instance_dbs.project_id = ?", user.Gmail.String, projectId).Find(&gceInstanceDBs)
+			" AND gce_instance_dbs.project_id = ?", user.Gmail.String, projectId,
+	).Order("gce_instance_dbs.name, gce_instance_dbs.id").Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

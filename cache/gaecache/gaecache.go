@@ -13,7 +13,8 @@ func ReadServicesCache(db *gorm.DB, user types.User, projectId string) (*gaetype
 		" INNER JOIN gae_service_auths"+
 			" ON gae_service_auths.id = gae_service_dbs.id"+
 			" AND gae_service_auths.gmail = ?"+
-			" AND gae_service_dbs.project_id = ?", user.Gmail.String, projectId).Find(&gaeServiceDBs)
+			" AND gae_service_dbs.project_id = ?", user.Gmail.String, projectId,
+	).Order("gae_service_dbs.name, gae_service_dbs.id").Find(&gaeServiceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -84,7 +85,8 @@ func ReadVersionsCache(db *gorm.DB, user types.User, projectId string, serviceNa
 		" INNER JOIN gae_version_auths"+
 			" ON gae_version_auths.id = gae_version_dbs.id"+
 			" AND gae_version_auths.gmail = ?"+
-			" AND gae_version_dbs.service_id = ?", user.Gmail.String, gaetypes.ToServiceId(projectId, serviceName)).Find(&gaeVersionDBs)
+			" AND gae_version_dbs.service_id = ?", user.Gmail.String, gaetypes.ToServiceId(projectId, serviceName),
+	).Order("gae_version_dbs.name, gae_version_dbs.id").Find(&gaeVersionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -157,7 +159,8 @@ func ReadInstancesCache(db *gorm.DB, user types.User, projectId string, serviceN
 		" INNER JOIN gae_instance_auths"+
 			" ON gae_instance_auths.id = gae_instance_dbs.id"+
 			" AND gae_instance_auths.gmail = ?"+
-			" AND gae_instance_dbs.version_id = ?", user.Gmail.String, gaetypes.ToVersionId(projectId, serviceName, versionName)).Find(&instanceDBs)
+			" AND gae_instance_dbs.version_id = ?", user.Gmail.String, gaetypes.ToVersionId(projectId, serviceName, versionName),
+	).Order("gae_instance_dbs.name, gae_instance_dbs.id").Find(&instanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

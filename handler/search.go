@@ -150,6 +150,7 @@ func searchProjects(db *gorm.DB, user types.User, q string) ([]SearchResult, err
 			" ON project_auths.project_id = project_dbs.project_id"+
 			" AND project_auths.gmail = ?"+
 			" AND (project_dbs.name || ' ' || project_dbs.project_id) ILIKE ?"+
+			" ORDER BY project_dbs.name, project_dbs.project_id"+
 			" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
@@ -186,6 +187,7 @@ func SearchGCEInstances(db *gorm.DB, user types.User, q string) ([]SearchResult,
 		" ON gce_instance_auths.id = gce_instance_dbs.id"+
 		" AND gce_instance_auths.gmail = ?"+
 		" AND (gce_instance_dbs.id || ' ' || gce_instance_dbs.name || ' ' || gce_instance_dbs.status || ' ' || gce_instance_dbs.project_id || ' ' || gce_instance_dbs.zone) ILIKE ?"+
+		" ORDER BY gce_instance_dbs.name, gce_instance_dbs.id"+
 		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
@@ -222,6 +224,7 @@ func searchGAEServices(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 		" ON gae_service_auths.id = gae_service_dbs.id"+
 		" AND gae_service_auths.gmail = ?"+
 		" AND (gae_service_dbs.name || ' ' || gae_service_dbs.id || ' ' || gae_service_dbs.project_id) ILIKE ?"+
+		" ORDER BY gae_service_dbs.name, gae_service_dbs.id"+
 		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gaeServiceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
@@ -259,6 +262,7 @@ func searchGAEVersions(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 		" ON gae_version_auths.id = gae_version_dbs.id"+
 		" AND gae_version_auths.gmail = ?"+
 		" AND (gae_version_dbs.name || ' ' || gae_version_dbs.id || ' ' || gae_version_dbs.project_id || ' ' || gae_version_dbs.service_name || ' ' || gae_version_dbs.service_id || ' ' || gae_version_dbs.serving_status) ILIKE ?"+
+		" ORDER BY gae_version_dbs.name, gae_version_dbs.id"+
 		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gaeVersionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")

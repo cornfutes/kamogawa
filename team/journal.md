@@ -1,4 +1,9 @@
-
+** 2022 Sep 17
+  - VSCode is great
+    - Postgres, Docker Intellisense, Go tooling 
+  - Disabled backups on CloudSQL
+  - Docs
+    - updated docs 
 
 ** 2022 Sep 16 
   - Added e2e test automation w/ Playwright. For now, just-ad hoc against prod.

@@ -1,0 +1,171 @@
+* Overview of tech decisions 
+
+**** Embedding 
+
+Originally, the application binary looked up on the file system ( your native machine )
+for files using relative paths. If you moved the binary file, ran it someone else, 
+those look ups would fail. It would also fail if your machine simply don't have those files,
+i.e. you deploy the binary to a cloud VM but forgot to upload the files alongside.
+
+Since then, we've utilized Go's embedded filesystem which bakes file such as 
+HTML, CSS, directly into the Go application binary, such that the binary is 
+self contained. We don't even need Docker, just the postgres connection.
+
+*** Logging 
+
+Use log, not fmt.Printf
+
+** Background Story
+
+*** Tech and Architecture 
+
+Monorepo with monolithic server in Go. The server serves web browser requests.
+
+Shimogawa: Postgres database containing search index and all metadata
+Kamogawa: web server that talks to Shimogawa and renders HTML, CSS, JS
+
+*** Shimogawa
+
+Postgres13 chosen because it's general purpose. Currently handles:
+
+  1. general SQL DB
+  2. basic full-text search index 
+  3. cache / session management
+
+Redis is a DB optimized for cache. s/psql/redis for cache in future.
+Lucene-based DBs such as AWS Elastisearch is optimized for search. s/psql/lucene in future.
+
+*** Kamogawa 
+
+Monolithic Go server. 
+
+Dependencies:
+  - GORM as ORM for Postgres 
+  - Gin is the web server "framework"
+    - listens for HTTP request, sends HTML, CSS, image files back 
+
+Otherwise, we use Go's standard library.
+
+Go was chosen because:
+  - fast compilation
+  - predictable resource usage when deployed to cloud
+  - memory efficient 
+  - fast for CPU-bound tasks including cryptography and math 
+  - don't have to deal with managing memory 
+  - don't have to debate which competing library to use. there's usually 1 good one. 
+  - library and FOSS ecosystem's code is high quality and can be understand 
+  - can build a binary with zero-dependency.
+    - easier deployment
+    - can let customers run on-prem, without providing our source-code, unlike Node.js
+
+**** Gin
+
+Elected because it's popular, 10x faster than Go's stdlib net/http ( which is still very fast ),
+and doesn't have too many bells / whistles. 
+
+**** HTML templating 
+
+At the most basic level, HTML templating is having an HTML-like file that 
+specifies slots to replace variables in. 
+
+Interfacing with Gin, it uses Go's stdlib `html/template` object.
+
+Effectively, 'html/template' takes the html-like file, and an object with those 
+parameter values, and outputs an HTML string.
+
+**** No JavaScript framework
+
+We do not have a JavaScript framework in the loop.
+
+React.js, AngularJs, Vue.js and other JavaScript "frameworks" allows 
+developers to think declarative, and separate MVC concerns.
+
+- at it's core, components are just reusable chunk of HTML 
+- these frameworks allows components to nested other components. ie. a tree
+- unlike HTML, these components have data/state
+- these components have javascript behavior attached to them 
+
+After "build time", what is sent to the web browser is a bundle of JavaScript containing:
+
+- metadata about the components
+- a JavaScript class representing these components.
+- the framework runtime 
+
+The runtime looks at this abstract set of JavaScript classes/objects, and ultimately 
+yield some HTML that is inserted into the DOM. 
+
+Before these modern JavaScript UI frameworks was jQuery. People would imperatively, 
+rather than declarative, write JavaScript program with global state, handle 
+DOM events by mutating this state, and surgically and imperatively modify the 
+DOM/HTML, which is really just a long string.
+
+The problem with all these JavaScript approaches is that the HTML generation,
+aka "rendering" ( the process of outputting HTML to the web browser ), is done 
+on the user's web browser. On devices with weaker hardware, users will experience 
+Jank, unlike just HTML and native browser behavior ( since browsers run natively 
+as Rust/C programs). Second, they have complicated tool chains. Third, it's 
+hard to reason about the implementation details / flow of control once you've 
+handled off control the frameworks. 
+
+With careful hygiene, you can build complex apps with jQuery or VanillsJS 
+
+**** SSR 
+
+With client-side renndering, we are forced to use Node.js. That's a 
+second language to be proficient in. Worst, the ecosystem is brittle. 
+
+With server-side rendering, we can use any programming language. Again, 
+"rendering" is simplying outputting an HTML string.
+
+There's performance tradeoffs of CSR vs SSR. CSR loads fast since the initial 
+HTML is barebone, then the JavaScript framework does "hydration" which means 
+goes back to the server for small chunks of data. This is why you see a super 
+chatty list of network requests in the web browser dev console when viewing 
+these kinds of webapps. At any rate, the CSR JavaScript framework adds overhead 
+to the bundle size, aswell as being a complex bundle of javaScript that the 
+browser has to parse. Because of all these network latency and coordination, 
+you see these apps have elements moving and shifting around as the page 
+incrementally loads.
+
+With SSR, we just send people 1 giant HTML file. In aggregate, the network 
+transfer size of this HTML file is a fraction of all that JavaScript chatter. 
+You pay more in network transfer up front, in the first request, but the page 
+works immediarely as the user receives the file. 
+
+At any rate, SSR is much simpler. Our server simply needs some logic and 
+generate HTML files. We simply need to test that our source code behaves 
+as a pure function: given an input, we expect this output HTML. That's also 
+easier to test. We think this simpler operating and debugging model is 
+way faster to develop with, easier to test, and, in practice, faster and 
+less janky than JavaScript.
+
+**** SSR Web App 
+
+There is a misconception that because the server sends HTML back, there is no 
+dynamic behavior. 
+
+The server can generate different HTML depending on the user's state. For example, 
+they may have a browser cookie ( which is sent a long browser HTTP requests )
+or URL query params. We can add HTML anchor links that encode some specific 
+set of inputs to the server. 
+
+**** VanillsJS
+
+There is some Vanilla JS sprinkled in.
+
+**** Endpoints 
+
+One feature of Go is that we can have one self-contained binary. 
+Assets such as CSS or HTML are not included by default, and the binary will 
+read from the file system, however there is a way to bake these assets 
+directly into a fully encapsulated binary. 
+
+Why Go? Very fast compile time, good enough GC, low memory footprint. 
+Fast crypto, security and numeric libraries. Pragmatic and simple programming 
+model, as well as package management. It's minimal compared to a verbose language 
+like Java, but has much more reliable and consistent performant than Node.js. 
+It has an extensive community and well documented unlike edgy languages such as 
+Phoenix or Haskell. The language gets out of the way so we can focus on the problem
+domain. Finally, Go forces you to write code in one way, thereby eliminating a lot of
+brainpower spent philosophizing.
+

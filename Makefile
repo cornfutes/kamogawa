@@ -23,6 +23,8 @@ dev: ## Run local Postgres server + live-reloading App Server
 dev_clean: ## Start local environment from clean slate 
 	docker compose build --no-cache && docker-compose up
 
+# note: due to bug between M1/CloudRun, --platform linux/amd64 must be set.
+# see: https://stackoverflow.com/questions/66127933/cloud-run-failed-to-start-and-then-listen-on-the-port-defined-by-the-port-envi
 build: ## Build and tag for GCR.
 	docker build -t gcr.io/linear-cinema-360910/diceduckmonk --platform linux/amd64 ./src
 
@@ -30,7 +32,7 @@ deploy: build ## Build then deploy to GCR.
 	docker push gcr.io/linear-cinema-360910/diceduckmonk
 
 go_clean: ## Cleans up go code.
-	cd src && go mod tidy && go mode clean
+	cd src && go mod tidy && go mode clean && go fmt
 
 test_prod: ## visual regression against prod
 	cd e2e && npx playwright test

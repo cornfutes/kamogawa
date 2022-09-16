@@ -2,15 +2,15 @@ version: "3.9"
 services:
   app:
     build:
-      dockerfile: src/Dockerfile
+      dockerfile: src/Dockerfile.dev
       context: .
       target: dev
     volumes:
       - ./src:/opt/app/api
     ports:
-    - "3000:3000"
+      - "3000:3000"
     links:
-    - shimogawa_service
+      - shimogawa_service
     environment:
       HOST: localhost
       REDIRECT_URI: http://localhost:3000/google/oauth2

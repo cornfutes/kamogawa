@@ -122,11 +122,20 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 			})
 			return
 		}
+		isRegex := false
+		for i := 0; i < len(q); i++ {
+			char := string(q[i])
+			if char == "*" || char == "\\" || char == "." || char == "+" || char == "^" || char == "[" || char == "]" {
+				isRegex = true
+				break
+			}
+		}
 
 		searchResults := getRealData(db, q)
 
 		core.HTMLWithGlobalState(c, "search.html", gin.H{
 			"Error":      nil,
+			"IsRegex":    isRegex,
 			"Query":      q,
 			"HasResults": searchResults != nil,
 			"Results":    searchResults,

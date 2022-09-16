@@ -39,6 +39,10 @@
   </div>
 </div>
 
+{{if .IsRegex}}
+<p style="font-style: italic;">warning: regex is not supported yet.</p>
+{{end}}
+
 {{if .Error }}
 <p>{{.Error}}</p>
 {{else if .HasResults}}

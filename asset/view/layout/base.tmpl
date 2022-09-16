@@ -264,6 +264,16 @@
     });
   }
 
+  const leftNavLinks = document.querySelectorAll('.left-nav-link');
+  if(leftNavLinks) {
+    leftNavLinks.forEach(el => {
+      if (el.querySelector('a').href.split('?')[0] == window.location.href.split('?')[0]) {
+        el.classList.add('active');
+        return;
+      }
+    });
+  }
+
   function search(q) {
      window.location.href = '/search?q=' + encodeURI(q);
   }

@@ -1,15 +1,15 @@
 {{define "leftnav"}}
 <nav class="🔫 ">
-  <li><a href="search?q=duck%20:::%20time:last24">Search</a>
+  <li class="left-nav-link"><a href="search?q=duck%20:::%20time:last24">Search</a>
   <li>
     <details id="nav-gcp">
       <summary>GCP</summary>
       <ul class="🔫 ">
-        <li class="active"><a href="overview">Overview</a></li>
-        <li><a href="gce">VMs</a></li>
-        <li><a href="gae">App Engine</a></li>
-        <li><a href="sql">Postgres</a></li>
-        <li><a href="functions">Functions</a></li>
+        <li class="left-nav-link"><a href="overview">Overview</a></li>
+        <li class="left-nav-link"><a href="gce">VMs</a></li>
+        <li class="left-nav-link"><a href="gae">App Engine</a></li>
+        <li class="left-nav-link"><a href="sql">Postgres</a></li>
+        <li class="left-nav-link"><a href="functions">Functions</a></li>
       </ul>
     </details>
   </li>
@@ -29,9 +29,9 @@
       </p>
     </details>
   </li>
-  <li><a href="export">Download Data</a>
-  <li><a href="authorization">Authorization</a>
-  <li><a href="account">Account</a>
+  <li class="left-nav-link"><a href="export">Download Data</a>
+  <li class="left-nav-link"><a href="authorization">Authorization</a>
+  <li class="left-nav-link"><a href="account">Account</a>
   <li>
     <form method="post" action="/logout">
       <input type="hidden" name="name" value="value" />

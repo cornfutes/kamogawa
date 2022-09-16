@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"database/sql"
-	"fmt"
 	"html/template"
 	"kamogawa/core"
 	"kamogawa/gcp"
@@ -34,6 +32,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 			})
 			return
 		}
+		identity.CheckDBAndRefreshToken(c, user, db)
 
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
@@ -41,14 +40,6 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 				"MissingScopes": true,
 			})
 			return
-		}
-		// TODO: this bakes in assumption that responseError not nil IFF 401.
-		if responseError != nil && responseError.Error.Code > 0 {
-			fmt.Printf("Retrying project fetch by first refreshing access token")
-			respRefreshtoken := identity.GCPRefresh(c, db)
-			user.AccessToken = &sql.NullString{String: respRefreshtoken.AccessToken, Valid: true}
-			db.Save(&user)
-			responseSuccess, _ = gcp.GCPListProjects(db, user, useCache)
 		}
 
 		var projectStrings []types.Project

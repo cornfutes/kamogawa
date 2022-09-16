@@ -2,9 +2,11 @@ package identity
 
 import (
 	"bytes"
+	"database/sql"
 	"fmt"
 	"kamogawa/types"
 	"log"
+	"time"
 
 	"net/http"
 
@@ -51,4 +53,12 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) ResponseRefreshToken {
 	log.Println(responseRefreshToken)
 
 	return responseRefreshToken
+}
+
+func CheckDBAndRefreshToken(c *gin.Context, user types.User, db *gorm.DB) {
+	if time.Now().Sub(user.UpdatedAt).Seconds() > 3300 {
+		respRefreshtoken := GCPRefresh(c, db)
+		user.AccessToken = &sql.NullString{String: respRefreshtoken.AccessToken, Valid: true}
+		db.Save(&user)
+	}
 }

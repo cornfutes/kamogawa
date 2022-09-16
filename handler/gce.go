@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"database/sql"
 	"html/template"
 	"kamogawa/core"
 	"kamogawa/gcp"
@@ -9,7 +8,6 @@ import (
 	"kamogawa/types"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -35,13 +33,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			})
 			return
 		}
-
-		// Token expires at 3600.
-		if time.Now().Sub(user.UpdatedAt).Seconds() > 3500 {
-			respRefreshtoken := identity.GCPRefresh(c, db)
-			user.AccessToken = &sql.NullString{String: respRefreshtoken.AccessToken, Valid: true}
-			db.Save(&user)
-		}
+		identity.CheckDBAndRefreshToken(c, user, db)
 
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {

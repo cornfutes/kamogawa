@@ -1,77 +1,81 @@
 {{define "javascript"}}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script>
+  // Only show one dropdown at a time.
+  const dropdowns = document.querySelectorAll(".dropdown");
+  dropdowns.forEach((dropdown) => {
+    dropdown.addEventListener("click", (e) => {
+      e.stopPropagation();
+      dropdowns.forEach((c) => c.classList.remove("is-active"));
+      dropdown.classList.add("is-active");
+    });
+  });
+
+  $$ = i => document.getElementById(i);
+  l = (el, ev, f) => el.addEventListener(ev, f);
+  w = u => window.location.href = u;
+  s = q => w(`/search?q=${encodeURI(q)}`)
+  elPD = $$('profile-dropdown')
+  $(".search-bar input")
+    .focus(function () {
+      $(".header").addClass("wide");
+    })
+    .blur(function () {
+      $(".header").removeClass("wide");
+    });
+  l($$('search-bar'), 'keyup', e => {
+    if (e.code == 'Enter') {
+      e.preventDefault();
+      s(e.target.value);
+    }
+  });
+
+  l($$('profile-icon'), 'click', e =>
+    elPD.classList.contains('is-active') ? elPD.classList.remove('is-active') : elPD.classList.add('is-active')
+  );
+
+
+  $(document).click(function (e) {
+    var container = $(".status-button");
+    var dd = $(".dropdown");
+    if (!container.is(e.target) && container.has(e.target).length === 0) {
+      dd.removeClass("is-active");
+    }
+  });
+
+  // Toggle dark overlay on the content section.
   $(function () {
-      $(".menu-link").click(function () {
-        $(".menu-link").removeClass("is-active");
-        $(this).addClass("is-active");
-      });
+    $(".dropdown").on("click", function (e) {
+      $(".content-wrapper").addClass("overlay");
+      e.stopPropagation();
     });
-
-    $(function () {
-      $(".main-header-link").click(function () {
-        $(".main-header-link").removeClass("is-active");
-        $(this).addClass("is-active");
-      });
-    });
-
-    const dropdowns = document.querySelectorAll(".dropdown");
-    dropdowns.forEach((dropdown) => {
-      dropdown.addEventListener("click", (e) => {
-        e.stopPropagation();
-        dropdowns.forEach((c) => c.classList.remove("is-active"));
-        dropdown.classList.add("is-active");
-      });
-    });
-
-    $(".search-bar input")
-      .focus(function () {
-        $(".header").addClass("wide");
-      })
-      .blur(function () {
-        $(".header").removeClass("wide");
-      });
-
-    $(document).click(function (e) {
-      var container = $(".status-button");
-      var dd = $(".dropdown");
-      if (!container.is(e.target) && container.has(e.target).length === 0) {
-        dd.removeClass("is-active");
+    $(document).on("click", function (e) {
+      if ($(e.target).is(".dropdown") === false) {
+        $(".content-wrapper").removeClass("overlay");
       }
     });
+  });
 
-    $(function () {
-      $(".dropdown").on("click", function (e) {
-        $(".content-wrapper").addClass("overlay");
-        e.stopPropagation();
-      });
-      $(document).on("click", function (e) {
-        if ($(e.target).is(".dropdown") === false) {
-          $(".content-wrapper").removeClass("overlay");
-        }
-      });
+  $(function () {
+    $(".status-button:not(.open)").on("click", function (e) {
+      $(".overlay-app").addClass("is-active");
     });
-
-    $(function () {
-      $(".status-button:not(.open)").on("click", function (e) {
-        $(".overlay-app").addClass("is-active");
-      });
-      $(".pop-up .close").click(function () {
-        $(".overlay-app").removeClass("is-active");
-      });
-    });
-
-    $(".status-button:not(.open)").click(function () {
-      $(".pop-up").addClass("visible");
-    });
-
     $(".pop-up .close").click(function () {
-      $(".pop-up").removeClass("visible");
+      $(".overlay-app").removeClass("is-active");
     });
+  });
 
-    const toggleButton = document.querySelector('.dark-light');
+  $(".status-button:not(.open)").click(function () {
+    $(".pop-up").addClass("visible");
+  });
 
-    toggleButton.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-    });
+  $(".pop-up .close").click(function () {
+    $(".pop-up").removeClass("visible");
+  });
+
+  const toggleButton = document.querySelector('.dark-light');
+  toggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+  });
 </script>
 {{end}}

@@ -331,6 +331,7 @@ body.light-mode .video-bg:before {
   object-fit: cover;
   border: 2px solid var(--theme-color);
   margin-left: 22px;
+  cursor: pointer;
 }
 
 .wide .header-menu,
@@ -750,6 +751,93 @@ body.light-mode .video-bg:before {
 .dropdown.is-active ul li:hover {
   background-color: var(--dropdown-hover);
 }
+
+/** begin my customer dropdown */
+
+.profile ul {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  background-color: var(--content-bg);
+  padding-left: 0;
+  margin: 0;
+  border-radius: 14px;
+  border: 1px solid var(--theme-bg-color);
+  cursor: pointer;
+}
+
+.profile ul {
+  position: absolute;
+  background: var(--dropdown-bg);
+  height: 80px;
+  width: 120px;
+  right: 45px;
+  top: 25px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translatey(10px);
+  transition: all 0.4s ease;
+}
+
+.profile ul li {
+  list-style: none;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+  transition: 0.3s;
+}
+
+.profile button {
+  background: transparent;
+  border: 0;
+}
+
+.profile ul li:hover {
+  background-color: var(--theme-bg-color);
+}
+
+.profile ul li:hover:first-child {
+  border-radius: 13px 13px 0 0;
+}
+
+.profile ul li:hover:last-child {
+  border-radius: 0 0 13px 13px;
+}
+
+.profile ul li+li {
+  border-top: 1px solid var(--border-color);
+}
+
+.profile ul svg {
+  width: 28px;
+  border-radius: 6px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.profile ul li a {
+  text-decoration: none;
+  color: var(--theme-color);
+  font-size: 12px;
+}
+
+.profile .is-active ul {
+  opacity: 1;
+  pointer-events: all;
+  transform: translatey(25px);
+}
+
+.profile .is-active ul li:hover {
+  background-color: var(--dropdown-hover);
+}
+
+/** end my custmer dropdown */
 
 .button-wrapper {
   display: flex;

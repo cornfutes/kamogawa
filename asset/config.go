@@ -16,6 +16,8 @@ var (
 	//go:embed media/style.css
 	styleCss    []byte
 	styleCssMin []byte
+	//go:embed media/screensaver.mp4
+	mp4Screensaver []byte
 	//go:embed media/cloud_logo_aws.png
 	pngAWS []byte
 	//go:embed media/cloud_logo_gcp.png
@@ -59,6 +61,8 @@ var (
 	about []byte
 	//go:embed media/api.txt
 	api []byte
+	//go:embed media/nft.gif
+	gifProfile []byte
 
 	//go:embed media/consent.png
 	consent []byte
@@ -92,6 +96,7 @@ func Config(r *gin.Engine) {
 	} else {
 		r.GET("style.css", css(styleCssMin))
 	}
+	r.GET("screensaver.mp4", mp4(mp4Screensaver))
 	r.GET("cloud_logo_aws.png", png(pngAWS))
 	r.GET("cloud_logo_gcp.png", png(pngGCP))
 	r.GET("cloud_logo_azure.png", png(pngAzure))
@@ -114,6 +119,7 @@ func Config(r *gin.Engine) {
 	r.GET("security.txt", TXT(security))
 	r.GET("about.txt", TXT(about))
 	r.GET("api.txt", TXT(api))
+	r.GET("nft.gif", gif(gifProfile))
 
 	// Register static views.
 	for route, file := range staticHtml {
@@ -169,4 +175,8 @@ func svg(contents []byte) func(c *gin.Context) {
 
 func TXT(contents []byte) func(c *gin.Context) {
 	return data("text/plain; charset=utf-8", contents)
+}
+
+func mp4(contents []byte) func(c *gin.Context) {
+	return data("video/mp4", contents)
 }

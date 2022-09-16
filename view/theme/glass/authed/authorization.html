@@ -1,85 +1,96 @@
 {{define "page"}}
-<h2>Authorization</h2>
-<h3 class="🍜">GCP</h3>
-{{if .GmailExists}}
-<p>
-  We've been granted the following OAuth2 scopes for <span style="font-family: monospace; ">{{.Gmail}} </span>
-</p>
-<ul>
-  {{ range .Scopes }}
-  <li style="font-family: monospace;">{{.}}</li>
-  {{ end }}
-</ul>
+<div class="main-header">
+  <a class="menu-link-main" href="#">Search results</a>
+  <!-- <div class="header-menu">
+    <a class="main-header-link is-active" href="#">Desktop</a>
+    <a class="main-header-link" href="#">Mobile</a>
+    <a class="main-header-link" href="#">Web</a>
+  </div> -->
+</div>
+<div class="content-wrapper">
 
-<h4>Extended Functionality</h4>
-{{if .HasMissingScopes}}
-<p>
-  For full functionality, the additional scopes are needed
-</p>
-<ul>
-  {{range $key, $value := .MissingScopes}}
-  <li style="font-family: monospace;">
-    {{$value.Description}}
-    <ul>
-      <li><a href="{{$key}}">Grant just this scope</a></li>
-      <li>
-        Needed for:
-        <ul>
-          {{range .UsedBy}}
-          <li>{{.}}</li>
-          {{end}}
-        </ul>
-      </li>
-    </ul>
-  </li>
-  {{ end }}
-</ul>
-{{end}}
+  <h2>Authorization</h2>
+  <h3 class="🍜">GCP</h3>
+  {{if .GmailExists}}
+  <p>
+    We've been granted the following OAuth2 scopes for <span style="font-family: monospace; ">{{.Gmail}} </span>
+  </p>
+  <ul>
+    {{ range .Scopes }}
+    <li style="font-family: monospace;">{{.}}</li>
+    {{ end }}
+  </ul>
 
-{{if .ShowRevoke}}
-<h4 class="🍜">Disconnect ( without revoking refresh token )</h4>
-<p>
-  <a href="/disconnectgcp">Disconnect email</a>
-</p>
-{{end}}
-
-<h4 class="🍜">Revoke access</h4>
-<p>
-  {{if .ShowRevoke}}
-  <a href="/revokegcp">Revoke all scopes, tokens and wipe data.</a>
-  {{else}}
-  For the demo, we've disabled this to prevent mutations.
+  <h4>Extended Functionality</h4>
+  {{if .HasMissingScopes}}
+  <p>
+    For full functionality, the additional scopes are needed
+  </p>
+  <ul>
+    {{range $key, $value := .MissingScopes}}
+    <li style="font-family: monospace;">
+      {{$value.Description}}
+      <ul>
+        <li><a href="{{$key}}">Grant just this scope</a></li>
+        <li>
+          Needed for:
+          <ul>
+            {{range .UsedBy}}
+            <li>{{.}}</li>
+            {{end}}
+          </ul>
+        </li>
+      </ul>
+    </li>
+    {{ end }}
+  </ul>
   {{end}}
-</p>
+
+  {{if .ShowRevoke}}
+  <h4 class="🍜">Disconnect ( without revoking refresh token )</h4>
+  <p>
+    <a href="/disconnectgcp">Disconnect email</a>
+  </p>
+  {{end}}
+
+  <h4 class="🍜">Revoke access</h4>
+  <p>
+    {{if .ShowRevoke}}
+    <a href="/revokegcp">Revoke all scopes, tokens and wipe data.</a>
+    {{else}}
+    For the demo, we've disabled this to prevent mutations.
+    {{end}}
+  </p>
 
 
-{{else}}
-<p>
-  You've not authorized ListVMs to manage your GCP projects.
-  <br /><br />
-  <a href=" {{.GCPDelegatedAuthUrl}}">Securely authorize with OAuth2</a>
-</p>
-<p class=🍕>
-  Be sure to check the following boxes: <br /><br />
-  <img src="consent.png" style="border-radius: 20px;"
-    alt="Screenshot giving user tip to check GCP related scopes in OAuth2 Consent screen">
-</p>
-{{end}}
+  {{else}}
+  <p>
+    You've not authorized ListVMs to manage your GCP projects.
+    <br /><br />
+    <a href=" {{.GCPDelegatedAuthUrl}}">Securely authorize with OAuth2</a>
+  </p>
+  <p class=🍕>
+    Be sure to check the following boxes: <br /><br />
+    <img src="consent.png" style="border-radius: 20px;"
+      alt="Screenshot giving user tip to check GCP related scopes in OAuth2 Consent screen">
+  </p>
+  {{end}}
 
-<p>
-  Note: We applied the principle of least privilege. Initially, and by default,
-  we only request(ed) read-only scopes. We allow you to individually opt into write
-  scopes (at your own risk). GCP did not properly make certain APIs granular,
-  unfortunately.
-</p>
-<h3 class="🍜">AWS</h3>
-<p>
-  Disabled in demo. <a href="{{.EapUrl}}">Join Early Access Program.</a>
-</p>
+  <p>
+    Note: We applied the principle of least privilege. Initially, and by default,
+    we only request(ed) read-only scopes. We allow you to individually opt into write
+    scopes (at your own risk). GCP did not properly make certain APIs granular,
+    unfortunately.
+  </p>
+  <h3 class="🍜">AWS</h3>
+  <p>
+    Disabled in demo. <a href="{{.EapUrl}}">Join Early Access Program.</a>
+  </p>
 
-<h3 class="🍜">Azure</h3>
-<p>
-  Disabled in demo. <a href="{{.EapUrl}}">Join Early Access Program.</a>
-</p>
+  <h3 class="🍜">Azure</h3>
+  <p>
+    Disabled in demo. <a href="{{.EapUrl}}">Join Early Access Program.</a>
+  </p>
 
+</div>
 {{end}}

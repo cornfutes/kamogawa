@@ -4,27 +4,6 @@
     <aside class="💪 🦠 🪜 🚫">
       {{template "leftnav" .}}
 
-      <details style="padding: 10px 0; font-family: monospace; font-size: 12px;">
-        <summary>Hackers x Poets </summary>
-        <p>
-          <a href="">UI preferences</a>
-        <p>
-          Keyboard:
-        <ul class="🔫">
-          <li style="font-size: 12px"><kbd>\</kbd>
-            <span tabindex="0" class="🐕" onclick="eventHandlerSearchBoxFocus()"
-              onkeyup="if(event.code == 'Enter') event.preventDefault(),eventHandlerSearchBoxFocus()">launch search
-            </span>
-          </li>
-        </ul>
-        <p>
-          Stats for nerds:
-        <ul class="🔫 ">
-          <li style="font-size: 12px">localstorage: enabled</li>
-          <li style="font-size: 12px">HTTP caching: enabled</li>
-        </ul>
-        </p>
-      </details>
     </aside>
     <div id="content" class="🌳">
       {{template "page" .}}

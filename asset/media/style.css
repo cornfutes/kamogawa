@@ -845,6 +845,10 @@ h5.truncate {
   }
 }
 
+#hackers {
+  display: none;
+}
+
 @media all and (max-width: 800px) {
   aside>nav {
     margin-left: 20px;

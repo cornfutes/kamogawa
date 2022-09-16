@@ -43,6 +43,12 @@
       </ul>
     </div>
   </header>
+  <div id="banner-warning" class="banner-warning">
+    <p>
+       This demo uses mock static data for obvious reasons.<br />
+       Chat ( team@listvms ) with us for a live tech demo.
+    </p>
+  </div>
   <div class="💪 🌳 ⚖️">
     {{template "main" .}}
   </div>
@@ -280,4 +286,8 @@
   function search(q) {
      window.location.href = '/search?q=' + encodeURI(q);
   }
+
+  setTimeout(() => {
+    document.getElementById('banner-warning').classList.add('show');
+  }, 1500);
   </script>

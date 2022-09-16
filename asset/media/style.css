@@ -849,6 +849,23 @@ h5.truncate {
   display: none;
 }
 
+.banner-warning {
+  display: flex;
+  background-color: var(--d);
+  padding-left: 20px;
+  padding-right: 20px;
+  color: var(--j);
+  align-items: center;
+  justify-content: center;
+  max-height: 0px;
+  overflow: hidden;
+}
+
+.banner-warning.show {
+  max-height: 100px;
+  transition: max-height 1.5s;
+}
+
 @media all and (max-width: 800px) {
   aside>nav {
     margin-left: 20px;

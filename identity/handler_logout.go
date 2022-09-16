@@ -12,7 +12,7 @@ func HandleLogout(c *gin.Context) {
 	// -1 indicates -1 second from now.
 	// TODO: evaluate if there may be bug due to timezone skew
 	const maxAge = -1
-	c.SetCookie(SessionCookieKey, "", maxAge, "/", config.Host, false, true)
+	c.SetCookie(SessionCookieKey, "", maxAge, "/", config.Host, config.CookieHttpsOnly, true)
 
 	c.Redirect(http.StatusFound, "/loggedout")
 }

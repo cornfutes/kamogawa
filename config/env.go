@@ -26,6 +26,7 @@ var (
 	GCPClientSecret string
 	ContactEmail    string
 	BrandName       string
+	CookieHttpsOnly bool
 )
 
 func init() {
@@ -52,8 +53,12 @@ func init() {
 
 	if os.Getenv("RELEASE_ENV") == "dev" {
 		Env = Dev
+		// Locally, we want to have localdev at http://
+		CookieHttpsOnly = false
 	} else {
 		Env = Prod
+		// Prod should be https://.
+		CookieHttpsOnly = true
 	}
 	log.Printf("Env=%v\n", Env)
 

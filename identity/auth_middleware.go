@@ -44,7 +44,7 @@ func SetAuthContext() gin.HandlerFunc {
 		if result != nil {
 			c.Set(IdentityContextKey, *result)
 			// Extend the session.
-			c.SetCookie(SessionCookieKey, tokenString, 3600, "/", config.Host, false, true)
+			c.SetCookie(SessionCookieKey, tokenString, 3600, "/", config.Host, config.CookieHttpsOnly, true)
 		}
 	}
 }

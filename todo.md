@@ -19,9 +19,8 @@
   [ ] when people revoke, delete old projects and data
 [ ] caching model
   [ ] by project? by gmail?
-[ ]
-  try calling api with revoked refresh token and see what happens 
-[ ] default
+[x] try calling api with revoked refresh token and see what happens 
+[x] prevent man in the middle attack on cookie
 [ ] refactor
   [ ] all places where we parse response success and error response can be refactored.
     check responseStatus code and branch respectively

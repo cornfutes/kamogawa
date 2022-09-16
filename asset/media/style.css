@@ -633,7 +633,6 @@ table {
   margin: 25px 0;
   font-size: 0.9em;
   font-family: sans-serif;
-  min-width: 600px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   border-top: 1px solid #484b45;
 }
@@ -649,7 +648,7 @@ tbody tr {
 }
 
 td {
-  padding: 10px 5px;
+  padding: 10px 10px;
 }
 
 .styled-table tbody tr.active-row {

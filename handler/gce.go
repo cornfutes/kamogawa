@@ -1,7 +1,10 @@
 package handler
 
 import (
+	"fmt"
 	"html/template"
+	"kamogawa/cache/gcecache"
+	"kamogawa/config"
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
@@ -21,30 +24,50 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		user := identity.CheckSessionForUser(c, db)
 		if user.AccessToken == nil {
 			core.HTMLWithGlobalState(c, "gce.html", gin.H{
-				"Unauthorized": true,
+				"NumCachedCalls": 0,
+				"Unauthorized":   true,
 			})
 			return
 		}
 		identity.CheckDBAndRefreshToken(c, user, db)
 
-		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
-		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-			core.HTMLWithGlobalState(c, "gce.html", gin.H{
-				"MissingScopes": true,
-			})
-			return
+		var responseSuccess *gcetypes.ListProjectResponse
+		var projectDBs []gcetypes.ProjectDB
+		if config.CacheEnabled && useCache {
+			var err error
+			projectDBs, err = gcecache.ReadProjectsCache2(db, user)
+			if err != nil {
+				panic("idk")
+			}
+		} else {
+			var responseError *gcetypes.ErrorResponse
+			responseSuccess, responseError = gcp.GCPListProjectsMain(db, user)
+			if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
+				core.HTMLWithGlobalState(c, "gce.html", gin.H{
+					"MissingScopes": true,
+				})
+				return
+			}
+			projectDBs = make([]gcetypes.ProjectDB, 0, len(responseSuccess.Projects))
+			for _, p := range responseSuccess.Projects {
+				projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &p, 0))
+			}
+			fmt.Printf("len %v\n", projectDBs)
 		}
 
-		var projectStrings []gcetypes.Project
 		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []gcetypes.Project{}
-		} else {
-			projectStrings = responseSuccess.Projects
+			panic("Missing scope")
 		}
 
 		var htmlLines []string
-		// Enumerate Projects for credentials
-		for _, p := range projectStrings {
+		var cachedCalls = 0
+		for i, p := range projectDBs {
+			if projectDBs[i].HasGCEEnabled == -1 {
+				cachedCalls++
+				htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul><li>Compute Engine API has not been enabled on project.</li></ul>")
+				continue
+			}
+
 			responseSuccess, responseError := gcp.GCEListInstances(db, user, p.ProjectId, useCache)
 			htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul>")
 			if responseError.Error.Code > 0 {
@@ -59,6 +82,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Compute Engine API has not been used in project") {
 					htmlLines = append(htmlLines, "<li>Compute Engine API has not been enabled on project.</li>")
+					projectDBs[i].HasGCEEnabled = -1
 				} else {
 					htmlLines = append(htmlLines, "<li>Unknown error with code: "+strconv.Itoa(responseError.Error.Code)+"</li>")
 				}
@@ -79,7 +103,14 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		}
 
 		core.HTMLWithGlobalState(c, "gce.html", gin.H{
+			"NumCachedCalls": cachedCalls,
+
 			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
 		})
+
+		if config.CacheEnabled {
+			fmt.Printf("writing cache %v\n", len(projectDBs))
+			gcecache.WriteProjectsCache2(db, user, projectDBs)
+		}
 	}
 }

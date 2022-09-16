@@ -2,9 +2,11 @@ package gcecache
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"kamogawa/types"
 	"kamogawa/types/gcp/gcetypes"
+
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func ReadInstancesCache(db *gorm.DB, projectId string) (*gcetypes.GCEAggregatedInstances, error) {
@@ -74,9 +76,37 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 	projectDBs := make([]gcetypes.ProjectDB, 0, len(resp.Projects))
 
 	for _, v := range resp.Projects {
-		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &v))
+		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &v, 0))
 	}
 	for _, projectDB := range projectDBs {
 		db.FirstOrCreate(&projectDB)
+	}
+}
+
+func ReadProjectsCache2(db *gorm.DB, user types.User) ([]gcetypes.ProjectDB, error) {
+	var projectDBs []gcetypes.ProjectDB
+	result := db.Where("email = ?", user.Email).Find(&projectDBs)
+	if result.Error != nil {
+		fmt.Printf("Query failed\n")
+		return nil, fmt.Errorf("Query failed")
+	}
+
+	if len(projectDBs) == 0 {
+		fmt.Printf("Cache miss\n")
+		return nil, fmt.Errorf("Cache miss")
+	}
+	fmt.Printf("Cache hit\n")
+
+	return projectDBs, nil
+}
+
+func WriteProjectsCache2(db *gorm.DB, user types.User, projects []gcetypes.ProjectDB) {
+	if len(projects) == 0 {
+		return
+	}
+	for _, projectDB := range projects {
+		db.Clauses(clause.OnConflict{
+			UpdateAll: true,
+		}).Create(&projectDB)
 	}
 }

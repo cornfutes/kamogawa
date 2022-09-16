@@ -15,7 +15,7 @@ type Project struct {
 }
 
 type ListProjectResponse struct {
-	Projects []Project
+	Projects []Project `json:"projects"`
 }
 
 type ErrorResponse struct {

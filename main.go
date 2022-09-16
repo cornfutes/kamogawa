@@ -78,8 +78,8 @@ func main() {
 		authed.GET("/search", handler.Search(db))
 
 		authed.GET("/overview", handler.Overview(db))
-		authed.GET("/gcetypes", handler.GCE(db))
-		authed.GET("/gaetypes", handler.GAE(db))
+		authed.GET("/gce", handler.GCE(db))
+		authed.GET("/gae", handler.GAE(db))
 		authed.GET("/sql", handler.SQL(db))
 		authed.GET("/functions", handler.Functions(db))
 

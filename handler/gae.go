@@ -22,7 +22,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		user := identity.CheckSessionForUser(c, db)
 		var email, _ = c.Get(identity.IdentityContextKey)
 		if user.AccessToken == nil {
-			core.HTMLWithGlobalState(c, "gaetypes.html", gin.H{
+			core.HTMLWithGlobalState(c, "gae.html", gin.H{
 				"Email":        email,
 				"Unauthorized": true,
 				"APICallCount": "-1",
@@ -34,7 +34,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		var apiCallCount = 1
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-			core.HTMLWithGlobalState(c, "gaetypes.html", gin.H{
+			core.HTMLWithGlobalState(c, "gae.html", gin.H{
 				"MissingScopes": true,
 			})
 			return
@@ -100,7 +100,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			htmlLines = append(htmlLines, "</ul>")
 		}
 
-		core.HTMLWithGlobalState(c, "gaetypes.html", gin.H{
+		core.HTMLWithGlobalState(c, "gae.html", gin.H{
 			"Email":        email,
 			"AssetLines":   template.HTML(strings.Join(htmlLines[:], "")),
 			"APICallCount": strconv.Itoa(apiCallCount),

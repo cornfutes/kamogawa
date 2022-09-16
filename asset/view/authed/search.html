@@ -1,5 +1,4 @@
 {{define "page"}}
-
 <div class="🐉 💪 🪜" id="search-hero">
   <div class="💪 🦠">
     <h3 id="search-header">Search Results for: <span id="search-original-query"></span></h3>
@@ -7,8 +6,7 @@
       <span id="search-redo-cta" class="🐕 ⚡" tabindex="0" onkeyup="">
         search
       </span>
-      <span tabindex="0" class="🐕 arrow down" id="search-advanced">modifier<i></i>
-      </span>
+      <span tabindex="0" class="🐕 arrow down" id="s-mod">modifier<i></i></span>
     </nav>
   </div>
   <input id="query" value="{{.Query}}"></input>
@@ -34,23 +32,19 @@
       </select>
     </div>
     <div>
-      <span class="🐕 🥷" id="search-builder-reset">reset</spn>
+      <span class="🐕 🥷" id="s-b-r">reset</spn>
     </div>
   </div>
 </div>
-
 {{if .IsRegex}}
 <p style="font-style: italic;">warning: regex is not supported in the demo</p>
 {{end}}
-
 {{if .HasFilter}}
 <p style="font-style: italic;">warning: in the demo, we ignore the search filter (everything after the ':::') </p>
 {{end}}
-
 {{if .Error }}
 <p>{{.Error}}</p>
 {{else if .HasResults}}
-
 <div class="💪 🪜" style="padding: 10px;">
   {{ range .Results }}
   <div class="🎴" style="overflow:hidden">
@@ -76,5 +70,4 @@
 {{else}}
 <p>No results found</p>
 {{end}}
-
 {{end}}

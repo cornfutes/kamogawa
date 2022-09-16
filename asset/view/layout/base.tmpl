@@ -109,43 +109,43 @@ const lNav = $("nav-gcp"); if (lNav) {
   lNav[z]("toggle", _ => localStorage.setItem('nav-gcp-open', lNav.open));
 } 
 
-console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size: 24px;background: #67b26f; background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd); color: white;text-align: center; padding: 10px 15px; width: 100%;border-radius: 20px;");   
+console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
 
 {{if eq .IsSearch "yes" }}
 let           sqb = false,
                 f = ['all', 'substring', 'lastmonth'],
                 r = $("query"),
- elSearchAdvanced = $("search-advanced"),
+               $m = $('s-mod'),
             elSoq = $('search-original-query'),
-          elSbrId = 'search-builder-reset',
-            elSbr = $(elSbrId),
+              $r  = $('s-b-r'), 
         elSrctaId = 'search-redo-cta',
             srcta = $(elSrctaId),
            elQbId = 'query-builder',
             elHId = 'search-header', 
-               dd = 'down';
+               dd = 'down',
+                s = q => window.location.href = `/search?q=${encodeURI(q)}`,
+              o$m = _ => {
+                      if(sqb) ad2($m, dd), ad(elQbId, "🥷");
+                      else    rm2($m, dd), rm(elQbId, "🥷");
+                      sqb = !sqb;
+                    };
+
 {{if .Query}}q = '{{.Query}}' {{end}};
 o = q || '';
 
-elSearchAdvanced[z](c, _ => {
-  if(sqb) ad2(elSearchAdvanced, dd), ad(elQbId, "🥷");
-  else    rm2(elSearchAdvanced, dd), rm(elQbId, "🥷");
-  sqb = !sqb;
-}); 
-elSearchAdvanced[z](u, (e) => {
-  if(e.code == 'Enter') { event[p]();
-    if(sqb) ad2(elSearchAdvanced, dd), ad(elQbId, "🥷");
-    else    rm2(elSearchAdvanced, dd), rm(elQbId, "🥷");
-    sqb = !sqb;
-  }
+$m[z](c, o$m); 
+$m[z](u, e => {
+  if(e.code != 'Enter') return;
+  event[p]();
+  o$m();
 });
 
-elSbr[z](c, _ => { r.value = o, reset() });
+$r[z](c, _ => { r.value = o, reset() });
     
 function reset() {
   rm(elHId, '⚡');
   ad(elSrctaId, '⚡');
-  ad(elSbrId, '🥷');
+  ad2($r, '🥷');
   elSoq.innerText = '';
 }
 function updateQuery(tk = []) {
@@ -165,7 +165,7 @@ function updateQuery(tk = []) {
       ad(elHId, '⚡');
       elSoq.innerText = o;
       rm(elSrctaId, '⚡');
-      rm(elSbrId, '🥷');
+      rm2($r, '🥷');
     }
   }
 }
@@ -179,7 +179,7 @@ r[z](u, e => {
     ad(elHId, '⚡');
     elSoq.innerText = o;
     rm(elSrctaId, '⚡');
-    rm(elSbrId, '🥷');
+    rm2($r, '🥷');
   }
 });
 srcta[z](c, e => {
@@ -198,5 +198,4 @@ lnl && lnl.forEach(el => {
     return;
   }
 });
-function s(q) { window.location.href = '/search?q=' + encodeURI(q); }
 </script>

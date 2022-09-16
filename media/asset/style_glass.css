@@ -1058,13 +1058,26 @@ body.light-mode .video-bg:before {
   justify-content: space-between;
 }
 
-#account-settings a {
+a {
   color: #FF6600;
   text-decoration: none;
 }
 
-#account-settings a:hover {
+a:hover {
   opacity: .7;
-  transition: text-decoration 1s;
+  transition: opacity 1s;
   text-decoration: underline;
+}
+
+.🍜 {
+  margin: 0;
+}
+
+.apps-card {
+  align-items: flex-start
+}
+
+.link_with_arrow:after {
+  content: "❯";
+  padding-left: .3rem;
 }

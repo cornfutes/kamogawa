@@ -1,114 +1,215 @@
 {{define "page"}}
 <div class="main-header">
-  <a class="menu-link-main" href="#">Search results</a>
-  <!-- <div class="header-menu">
-    <a class="main-header-link is-active" href="#">Desktop</a>
-    <a class="main-header-link" href="#">Mobile</a>
-    <a class="main-header-link" href="#">Web</a>
-  </div> -->
+  <a class="menu-link-main" href="#">GCP Overview</a>
 </div>
 <div class="content-wrapper">
+  <div class="content-section 🍜">
+    {{if.HasErrors}}
+    <p>
+      There was an unexpected error requesting the data containing the message:
+    </p>
+    <code style="background-color: black">{{.Error.Error.Message}}</code>
+    <p>
+      <a href="/bug" class="link_with_arrow">Please help us improve and report a bug</a>
+    </p>
+    {{else if .Unauthorized}}
+    <p>
+      You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
+    </p>
+    {{else if .MissingScopes}}
+    <p>
+      The following OAuth2 Scopes are needed but not yet granted:
 
-<h2 class=🍜>GCP Overview</h2>
-<div>
-  {{if.HasErrors}}
+    <ul>
+      <li>https://www.googleapis.com/auth/cloud-platform.read-only
+    </ul>
+
+    <a href="authorization">Securely grant access</a>
+    </p>
+    {{else if .MissingScopes}}
+    <p>
+      At a minimum (different resources need more scopes), the following OAuth2 Scopes are needed but not yet granted:
+
+    <ul>
+      <li>https://www.googleapis.com/auth/cloud-platform.read-only
+    </ul>
+
+    <a href="authorization">Securely grant access</a>
+    (note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
+    requested. write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
+    </p>
+    {{else}}
+    <p>
+      We indexed up to the first 50 Projects and their assets.
+      <a href="{{.EapUrl}}" class="link_with_arrow">Increase this limit with Premium</a>
+    </p>
+    {{if .HasProjects}}
+    <ul id="account-settings">
+      <li class="💪 🦠">
+        <div class="content-section-title">Project name</div>
+        <div class="content-section-title">Project ID</div>
+      </li>
+
+      {{ range .Projects }}
+      <li class="💪 🦠">
+        <div>
+          {{.Name}}
+        </div>
+        <div class="button-wrapper">
+          {{.ProjectId}}
+          <div class="menu">
+            <button class="dropdown">
+              <ul>
+                <li><a href="#">View in GCP</a></li>
+                <li><a href="#">Rename Project</a></li>
+                <li><a href="#">Delete</a></li>
+              </ul>
+            </button>
+          </div>
+        </div>
+      </li>
+      {{ end }}
+    </ul>
+    {{else}}
+    You don't have any projects.
+    {{end}}
+    {{end}}
+  </div>
+  <div class="content-section">
+    <!-- <div class="content-section-title">Update Cache Graph</div> -->
+    <h2>Update Cache Graph</h2>
+    <p>
+      Our system schedules periodic traversals of your entire resource graph,
+      descending into all the ancestor nodes of Projects recursively.
+    </p>
+    <ul id="account-settings">
+      <li class="💪 🦠">
+        <div>
+          Time since last indexing:
+        </div>
+        <span>
+          {{.LastRunTime}} ago
+        </span>
+      </li>
+      <li class="💪 🦠">
+        <div>
+          Last indexing initiated by:
+        </div>
+        <span>
+          scheduler
+        </span>
+      </li>
+      <li class="💪 🦠">
+        <div>
+          Next indexing scheduled in:
+        </div>
+        <span>
+          {{.NextRunTime}}
+        </span>
+      </li>
+      <li class="💪 🦠">
+        <div>
+          Indexing schedule every:
+        </div>
+        <div style="text-align: right;">
+          <div class="button-wrapper">
+            24 hours
+            <div class="menu">
+              <button class="dropdown">
+                <ul>
+                  <li><a href="#">Edit</a></li>
+                </ul>
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <br />
+  <button class="content-button status-button">Perform ad-hoc run immediately</button>
+  <div class="pop-up">
+    <div class="pop-up__title">Update This App
+      <svg class="close" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M15 9l-6 6M9 9l6 6" />
+      </svg>
+    </div>
+    <div class="pop-up__subtitle">Adjust your selections for advanced options as desired before
+      continuing. <a href="#">Learn more</a></div>
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="check1" class="checkbox">
+      <label for="check1">Import previous settings and preferences</label>
+    </div>
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="check2" class="checkbox">
+      <label for="check2">Remove old versions</label>
+    </div>
+    <div class="content-button-wrapper">
+      <button class="content-button status-button open close">Cancel</button>
+      <button class="content-button status-button">Continue</button>
+    </div>
+  </div>
+
   <p>
-    There was an unexpected error requesting the data containing the message:
+    You can manually bust the cache for individual resource types for free.
+    In this case, that's the list of projects.
   </p>
-  <code style="background-color: black">{{.Error.Error.Message}}</code>
-  <p>
-    <a href="/bug" class="link_with_arrow">Please help us improve and report a bug</a>
-  </p>
-  {{else if .Unauthorized}}
-  <p>
-    You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
-  </p>
-  {{else if .MissingScopes}}
-  <p>
-    The following OAuth2 Scopes are needed but not yet granted:
+  <!-- TODO button class="content-button status-button">Refresh projects cache</button> -->
+  <button class="content-button status-button open">Disabled in demo</button>
 
-  <ul>
-    <li>https://www.googleapis.com/auth/cloud-platform.read-only
-  </ul>
+  <div class="content-section">
+    <h2>Starter Tasks</h2>
 
-  <a href="authorization">Securely grant access</a>
-  </p>
-  {{else if .MissingScopes}}
-  <p>
-    At a minimum (different resources need more scopes), the following OAuth2 Scopes are needed but not yet granted:
+    <div class="apps-card">
+      <div class="app-card">
+        <span>
+          <svg viewBox="0 0 512 512" style="border: 1px solid #a059a9">
+            <path xmlns="http://www.w3.org/2000/svg"
+              d="M480 0H32C14.368 0 0 14.368 0 32v448c0 17.664 14.368 32 32 32h448c17.664 0 32-14.336 32-32V32c0-17.632-14.336-32-32-32z"
+              fill="#210027" data-original="#7b1fa2" />
+            <g xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M192 64h-80c-8.832 0-16 7.168-16 16v352c0 8.832 7.168 16 16 16s16-7.168 16-16V256h64c52.928 0 96-43.072 96-96s-43.072-96-96-96zm0 160h-64V96h64c35.296 0 64 28.704 64 64s-28.704 64-64 64zM400 256h-32c-18.08 0-34.592 6.24-48 16.384V272c0-8.864-7.168-16-16-16s-16 7.136-16 16v160c0 8.832 7.168 16 16 16s16-7.168 16-16v-96c0-26.464 21.536-48 48-48h32c8.832 0 16-7.168 16-16s-7.168-16-16-16z"
+                fill="#f6e7fa" data-original="#e1bee7" />
+            </g>
+          </svg>
+          Need a new project?
+        </span>
+        <div class="app-card__subtext">Create a new project</div>
+        <div class="app-card-buttons">
+          <!--TODO: <a href="https://console.cloud.google.com/projectcreate" class="link_with_arrow"> Via GCP Web Console</a> -->
+          <button class="content-button status-button">Via GCP Console</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <span>
+          <svg viewBox="0 0 52 52" style="border: 1px solid #c1316d">
+            <g xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M40.824 52H11.176C5.003 52 0 46.997 0 40.824V11.176C0 5.003 5.003 0 11.176 0h29.649C46.997 0 52 5.003 52 11.176v29.649C52 46.997 46.997 52 40.824 52z"
+                fill="#2f0015" data-original="#6f2b41" />
+              <path
+                d="M18.08 39H15.2V13.72l-2.64-.08V11h5.52v28zM27.68 19.4c1.173-.507 2.593-.761 4.26-.761s3.073.374 4.22 1.12V11h2.88v28c-2.293.32-4.414.48-6.36.48-1.947 0-3.707-.4-5.28-1.2-2.08-1.066-3.12-2.92-3.12-5.561v-7.56c0-2.799 1.133-4.719 3.4-5.759zm8.48 3.12c-1.387-.746-2.907-1.119-4.56-1.119-1.574 0-2.714.406-3.42 1.22-.707.813-1.06 1.847-1.06 3.1v7.12c0 1.227.44 2.188 1.32 2.88.96.719 2.146 1.079 3.56 1.079 1.413 0 2.8-.106 4.16-.319V22.52z"
+                fill="#e1c1cf" data-original="#ff70bd" />
+            </g>
+          </svg>
+          Starter VM
+        </span>
+        <div class="app-card__subtext">
+          The GCP Web UI to create a Compute VM is overwhelming.
+          We've handpicked the settings to create
+          the cheapest instance which costs about ~$5 a month.
+        </div>
+        <div class="app-card-buttons">
+          <!--TODO: <a href="https://console.cloud.google.com/projectcreate" class="link_with_arrow"> Via GCP Web Console</a> -->
+          <button class="content-button status-button">Create F1-micro instance</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <ul>
-    <li>https://www.googleapis.com/auth/cloud-platform.read-only
-  </ul>
-
-  <a href="authorization">Securely grant access</a>
-  (note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
-  requested. write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
-  </p>
-  {{else}}
-  <p>
-    We indexed up to the first 50 Projects and their assets.
-    <a href="{{.EapUrl}}" class="link_with_arrow">Increase this limit with Premium</a>
-  </p>
-
-  {{if .HasProjects}}
-  <table>
-    <thead>
-      <td>
-        Project Name
-      </td>
-      <td>
-        ID
-      </td>
-    </thead>
-    {{ range .Projects }}
-    <tr>
-      <td>
-        {{.Name}}
-      </td>
-      <td>
-        {{.ProjectId}}
-      </td>
-    </tr>
-    {{ end }}
-  </table>
-
-  {{else}}
-  You don't have any projects.
-  {{end}}
-  {{end}}
-</div><br />
-
-<h2 class="🍜">Update Project Cache</h2>
-<p>
-  The full-graph traversal / cache invalidation runs on schedule.
-</p>
-<ul class=🍕>
-  <li>Last indexing occured: {{.LastRunTime}} ago. (triggered by scheduler) </li>
-  <li>Next indexing scheduled in: {{.NextRunTime}}.
-    <a href="{{.EapUrl}}" class="link_with_arrow">Perform ad-hoc run immediately</a>
-  </li>
-  <li>Indexing schedule every 24 hours.
-    <a href="{{.EapUrl}}" class="link_with_arrow">Increase this limit with Premium</a>
-  </li>
-</ul>
-<p>
-  You can manually refresh the cache for individual services for free.
-</p>
-
-<button class="disabled">Refresh</button> <span style="color:red">(disabled in demo)</span>
-<br />
-<br />
-
-<h2 class="🍜">Create a Project</h2> <br />
-
-<a href="https://console.cloud.google.com/projectcreate" class="link_with_arrow">Via GCP Web
-  Console</a>
-
-<br />
-<br />
-
-
-</div>
 </div>
 {{end}}

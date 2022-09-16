@@ -224,7 +224,7 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 			"Query":      originalQ,
 			"HasResults": searchResults != nil,
 			"Results":    searchResults,
-			"IsSearch":   true,
+			"IsSearch":   "yes",
 		})
 	}
 }
@@ -236,7 +236,7 @@ func validateQuery(c *gin.Context, q string) bool {
 			"Query":      q,
 			"HasResults": false,
 			"Results":    nil,
-			"IsSearch":   true,
+			"IsSearch":   "yes",
 		})
 		return false
 	}
@@ -246,7 +246,7 @@ func validateQuery(c *gin.Context, q string) bool {
 			"Query":      q,
 			"HasResults": false,
 			"Results":    nil,
-			"IsSearch":   true,
+			"IsSearch":   "yes",
 		})
 		return false
 	}

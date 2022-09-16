@@ -56,73 +56,63 @@
     </ul>
   </footer>
 <script>
-
-let $ = l => document.getElementById(l);
-let rm = (l, c) => $(l).classList.remove(c);
-let ad = (l, c) => $(l).classList.add(c);
-let searchBoxInFocus = false,
-                   c = 'click',
-                   u = 'keyup',
-                   z = 'addEventListener',
-                   p = 'preventDefault';
+let d = document,
+    $ = l => d.getElementById(l),
+   rm = (l, c) => $(l).classList.remove(c),
+   ad = (l, c) => $(l).classList.add(c),
+  rm2 = (l, c) => l.classList.remove(c),
+  ad2 = (l, c) => l.classList.add(c),
+    j = false,
+    c = 'click',
+    u = 'keyup',
+    z = 'addEventListener',
+    p = 'preventDefault',
+   si = $('search-input'),
+   sb = $('search-box');
+   tn = $('top-nav'),
+   m  = $('main'),
+   l  = $('logo'),
+   ss = $('search-start'),
+    q = '';
     
-function fo(q) {
-  searchBoxInFocus = true;
-  rm('search-box', '👻');
-  ad('top-nav', '👻');
-  ad('main', '🌃');
-  ad('logo', '🌃');
-  if(q && q.length > 0) $('search-input').value = q;
-  $('search-input').focus();
-}
+function   fo() { j=true ; rm2(sb, '👻'); ad2(tn, '👻'); ad2(m, '🌃'); ad2(l, '🌃'); if(q && q.length > 0) si.value= q; si.focus(); }
+function defo() { j=false; ad2(sb, '👻'); rm2(tn, '👻'); rm2(m, '🌃'); rm2(l, '🌃');                       si.value=''; }
 
-function defo() {
-  searchBoxInFocus = false;
-  ad('search-box', '👻');
-  rm('top-nav', '👻');
-  rm('main', '🌃');
-  rm('logo', '🌃');
-  $('search-input').value = '';
-}
-
-const ss = $('search-start');
-if(ss)  {
+if(ss) {
   ss[z](c, fo);
-  ss[z](u, e => e.code == 'Enter' && e[p]() && fo());
+  ss[z](u, e => {
+    if (e.code == 'Enter') {
+      e[p]();
+      fo();
+    }
+  });
 }
 
-    document[z]('keydown', e => {
-      if (!searchBoxInFocus && e.code == 'Backslash') e[p](), fo(e);
-    });
-    $('search-input')[z]('keydown', e => {
-      if(!searchBoxInFocus) return;
-      if (e.code == 'Escape') e[p](), defo();
-      else if (e.code == 'Enter') {
-        {{if not .IsLoggedIn}}
-          window.location.href = '/login?error=4';
-        {{else}}
-          e[p]();
-          s($('search-input').value);
-        {{end}}
-      } else if (e.code == 'Tab') e[p]();
-    });
-    $('search-cancel')[z](c, defo);
-    
-    const elNavGcp = $("nav-gcp");
-    if (elNavGcp) {
-      if (localStorage.getItem('nav-gcp-open') == 'true') elNavGcp.open = true;
+d[z]('keydown', e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
 
-      elNavGcp[z]("toggle", _ => {
-        localStorage.setItem('nav-gcp-open', elNavGcp.open);
-      });
-    } 
+si[z]('keydown', e => {
+  if(!j) return;
+  if (e.code == 'Escape') e[p](), defo();
+  else if (e.code == 'Enter') {
+    {{if not .IsLoggedIn}}
+      window.location.href = '/login?error=4';
+    {{else}}
+      e[p]();
+      s($('search-input').value);
+    {{end}}
+  } else if (e.code == 'Tab') e[p]();
+});
+$('search-cancel')[z](c, defo);
+
+const lNav = $("nav-gcp"); if (lNav) {
+  if (localStorage.getItem('nav-gcp-open') == 'true') lNav.open = true;
+  lNav[z]("toggle", _ => localStorage.setItem('nav-gcp-open', lNav.open));
+} 
 
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size: 24px;background: #67b26f; background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd); color: white;text-align: center; padding: 10px 15px; width: 100%;border-radius: 20px;");   
 
-{{if .IsSearch}}
-let             q = '';
-              sqb = false,
-        baseQuery = (q.length > 0 && q.split(':::')[0] ) || '',
+{{if eq .IsSearch "yes" }}
+let           sqb = false,
                 f = ['all', 'substring', 'lastmonth'],
                 r = $("query"),
  elSearchAdvanced = $("search-advanced"),
@@ -134,31 +124,25 @@ let             q = '';
            elQbId = 'query-builder',
             elHId = 'search-header', 
                dd = 'down';
- {{if .Query}}  q = '{{.Query}}' {{end}};
-                o = q || '';
-
+{{if .Query}}q = '{{.Query}}' {{end}};
+o = q || '';
 
 elSearchAdvanced[z](c, _ => {
-  if(sqb) elSearchAdvanced.classList.add(dd), ad(elQbId, "🥷");
-  else elSearchAdvanced.classList.remove(dd), rm(elQbId, "🥷");
+  if(sqb) ad2(elSearchAdvanced, dd), ad(elQbId, "🥷");
+  else    rm2(elSearchAdvanced, dd), rm(elQbId, "🥷");
   sqb = !sqb;
 }); 
 elSearchAdvanced[z](u, (e) => {
   if(e.code == 'Enter') { event[p]();
-    if(sqb)
-      elSearchAdvanced.classList.add(dd),
-      sqb = false,
-      ad(elQbId, "🥷");
-    else
-      elSearchAdvanced.classList.remove(dd),
-      sqb = true,
-      rm(elQbId, "🥷");
+    if(sqb) ad2(elSearchAdvanced, dd), ad(elQbId, "🥷");
+    else    rm2(elSearchAdvanced, dd), rm(elQbId, "🥷");
+    sqb = !sqb;
   }
 });
 
-elSbr[z](c, _ => { r.value = o, resetSearchState() });
+elSbr[z](c, _ => { r.value = o, reset() });
     
-function resetSearchState() {
+function reset() {
   rm(elHId, '⚡');
   ad(elSrctaId, '⚡');
   ad(elSbrId, '🥷');
@@ -170,12 +154,12 @@ function updateQuery(tk = []) {
   if(f[2] != "lastmonth") tk.push("time:" + f[2]);
   if(tk.length == 0) {
     r.value = r.value.split(":::")[0].trim()
-    if(r.value == o) resetSearchState();
+    if(r.value == o) reset();
   } else {
     q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
     if (q == o) {
       r.value = o;
-      resetSearchState();
+      reset();
     } else {
       r.value = q;
       ad(elHId, '⚡');
@@ -189,7 +173,7 @@ function change(e, i) { f[i] = e.target.value, updateQuery() }
 r[z](u, e => {
   e[p]();
   if(e.code == 'Enter') s(e.target.value);
-  else if(e.target.value == o) q = e.target.value, resetSearchState();
+  else if(e.target.value == o) q = e.target.value, reset();
   else {
     q = e.target.value;
     ad(elHId, '⚡');
@@ -198,11 +182,16 @@ r[z](u, e => {
     rm(elSbrId, '🥷');
   }
 });
-srcta[z](c, e => q != o && e[p]() && s(q));  
-srcta[z](u, e => event.code == 'Enter' && q != o && e[p]() && s(q));
+srcta[z](c, e => {
+  if(q != o) {
+    e[p]();
+    s(q);  
+  }
+});
+srcta[z](u, e => e.code == 'Enter' && q != o && e[p]() && s(q));
 {{end}}
 
-const lnl = document.querySelectorAll('.left-nav-link');
+const lnl = d.querySelectorAll('.left-nav-link');
 lnl && lnl.forEach(el => {
   if (el.querySelector('a').href.split('?')[0] == window.location.href.split('?')[0]) {
     el.classList.add('active');

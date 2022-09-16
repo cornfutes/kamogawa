@@ -10,7 +10,7 @@ import (
 	"github.com/gin-contrib/multitemplate"
 )
 
-const baseLayoutPath = "view/layout/base.tmpl"
+const baseLayoutPath = "view/layout/*.tmpl"
 const unauthedLayoutsPath = "view/layout/unauthed/*.html"
 const unauthedViewsGlob = "view/unauthed/*.html"
 const authedLayoutsPath = "view/layout/authed/*.html"

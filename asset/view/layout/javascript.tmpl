@@ -1,0 +1,143 @@
+{{define "javascript"}}
+<script>
+let $d = document,
+    rm = (l, c) => l.classList.remove(c),
+    ad = (l, c) => l.classList.add(c),
+     $ = l => $d.getElementById(l),
+     z = 'addEventListener',
+     p = 'preventDefault',
+     c = 'click',
+     u = 'keyup',
+     k = 'Enter',
+     j = false,
+     q = '',
+    $i = $('s-i'),
+    $m = $('main'),
+    $l = $('logo'),
+    $t = $('top-nav'),
+    $s = $('search-box'),
+    $a = $('search-start'),
+     v = e => e.target.value,
+     s = q => window.location.href = `/search?q=${encodeURI(q)}`,
+    fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
+  defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
+
+if($a) {
+  $a[z](c, fo);
+  $a[z](u, e => {
+    if (e.code == k) {
+      e[p]();
+      fo();
+    }
+  });
+}
+
+$d[z](u, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
+
+$i[z](u, e => {
+  if(!j) return;
+  if(e.code == 'Escape') e[p](), defo();
+  else if (e.code == k) {
+    {{if .IsLoggedIn}}
+      e[p]();
+      s($('s-i').value);
+    {{else}}
+      window.location.href = '/login?error=4';
+    {{end}}
+  } else if (e.code == 'Tab') e[p]();
+});
+$('search-cancel')[z](c, defo);
+
+const lNav = $("nav-gcp"); if (lNav) {
+  if (localStorage.getItem('nav-gcp-open') == 'true') lNav.open = true;
+  lNav[z]("toggle", _ => localStorage.setItem('nav-gcp-open', lNav.open));
+} 
+
+console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
+
+{{if eq .IsSearch "yes" }}
+ let            f = ['all', 'substring', 'lastmonth'],
+            elSoq = $('search-original-query'),
+              $qb = $('query-builder'),
+              $r  = $('s-b-r'), 
+                r = $("query"),
+              $sm = $('s-mod'),
+              $re = $('s-re'),
+               $h = $('s-h'),
+               dd = 'down',
+              sqb = false,
+             o$sm = _ => {
+                      if(sqb) ad($sm, dd), ad($qb, "🥷");
+                      else    rm($sm, dd), rm($qb, "🥷");
+                      sqb = !sqb;
+                    },
+            reset = _ => { 
+                      elSoq.innerText = ''; ad($r, '🥷'); 
+                      rm($h, '⚡'); ad($re, '⚡'); 
+                    };
+{{if .Query}}q = '{{.Query}}' {{end}};
+o = q || '';
+
+$sm[z](c, o$sm); 
+$sm[z](u, e => {
+  if(e.code != k) return;
+  event[p]();
+  o$sm();
+});
+
+$r[z](c, _ => { r.value = o, reset() });
+
+function change(e, i) { 
+  f[i] = v(e)
+
+  let tk = [];
+  if(f[0] != "all"      ) tk.push("provider:" + f[0]);
+  if(f[1] != "substring") tk.push(    "algo:" + f[1]);
+  if(f[2] != "lastmonth") tk.push(    "time:" + f[2]);
+  if(tk.length) {
+    q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
+    if (q == o) {
+      r.value = o;
+      reset();
+    } else {
+      r.value = q;
+      ad($h, '⚡');
+      elSoq.innerText = o;
+      rm($re, '⚡');
+      rm($r, '🥷');
+    }
+  } else {
+    r.value = r.value.split(":::")[0].trim();
+    if(r.value == o) reset();
+  }
+}
+r[z](u, e => {
+  e[p]();
+  if(e.code == k) s(v(e));
+  else if(v(e) == o) q = v(e), reset();
+  else {
+    q = v(e);
+    ad($h, '⚡');
+    elSoq.innerText = o;
+    rm($re, '⚡');
+    rm($r, '🥷');
+  }
+});
+$re[z](c, e => {
+  if(q != o) {
+    e[p]();
+    s(q);  
+  }
+});
+$re[z](u, e => e.code == k && q != o && e[p]() && s(q));
+{{end}}
+
+const lnl = $d.querySelectorAll('.left-nav-link');
+lnl && lnl.forEach(el => {
+  if (el.querySelector('a').href.split('?')[0] == window.location.href.split('?')[0]) {
+    el.classList.add('active');
+    return;
+  }
+});
+</script>
+{{end}}

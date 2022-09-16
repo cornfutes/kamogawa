@@ -39,7 +39,7 @@ func init() {
 
 	Theme = os.Getenv("THEME")
 	if Theme != "glass" {
-		Theme = "matrix"
+		Theme = "requiem"
 	}
 
 	RedirectUri = os.Getenv("REDIRECT_URI")

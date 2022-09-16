@@ -26,41 +26,46 @@
            <_-|  |_.-|                        .
       .----|   \__\  |                 .
      |     ."""   '.  |                       .
-      .___|        |__|  (c) NamelessOne
+      .___|        |__|  credits to ASCII artist: NamelessOne
           '.__..."""
 
 A word from the founder  
 =========================================================================
-My teams held a disarray of cloud resources and, due to bad hygiene, found
-things difficult to locate later. 
+My teams amassed a disarray of cloud resources and, due to bad hygiene,
+faced difficulties retrieving things when we needed it the most.
  
 I've spent 6 years incubating the idea, tackling subproblems YoY, and everything
 has finally lined up. I’ve successfully sold my best friend, now co-founder, to
-quit their gig on Wall Street to join me in productionising the solution. We’re
-seasoned with the gaps in GCPs’ and AWS' Information Retrieval mechanisms but
-imagined beyond this. We elected boring tech to deliver stability, performance,
-security and, most importantly, on customer needs.
+quit their Wall Street gig to join me in productionising the solution. 
+We elected boring tech to deliver stability, performance,
+security and, most importantly, on customer needs. We’re
+seasoned with GCP/AWS and, more specifically, their friction points.
  
-We've built a decent search engine for cloud. Not the fancy AI; our secret sauce
+We've built a decent search engine for cloud. Without fancy AI; our secret sauce
 is domain experience wearing both SWE and SREs hats, as both consumer and producer
 of cloud services, shepherding O(10^5) multi-cloud systems with strict performance
-and compliance requirements. Search is a means to an end, but it forms the basis o
-all workflows.
+and compliance requirements. Search is a means to an end but it forms the basis of
+all user journeys.
  
-Our web app is on an SPA diet. We believe (((SSR is simpler) is faster) is faster).
-Collectively, we've tweaked 500k+ LoC of JavaScript, love it, but opted for Go as
-it is better adapted to serving  CPU-bound work and to serving customers.
- 
+Our web app is on a strict SPA diet. We believe (((SSR is simpler) is faster) is faster).
+Between the two of us, we've tweaked 500k+ LoC of JavaScript, love it, but opted for Go
+this time as is better suited for CPU-bound work and, ultimately, serving customers.
+For example, security is a requirement, not a nice-to-have, and this needs strong crypto.
+Another example, we wanted our pages to render fast, even on mobile and older devices.
+
 We aspire to the UX of Craigslist/HackerNews.
 I was an art student, actually, but we are in the business of service design.
-It’s not in coding nor in design that we take pride, but in our capacity for empathy
+It’s not in coding nor in design that we take pride, but in our capacity for empathy.
 Milliseconds, kilobytes and, ultimately, costs matter. This is a tool by
 engineers for engineers, and also folks who use spreadsheets.
  
-The proof will be in the pudding. 
+The proof is be in the pudding. 
 I hope we and our product can be of service. 
 
 =========================================================================
-For red tape reasons with cloud providers, we are limiting early access to 100.
+
+For red tape reasons with cloud providers, we are limiting early access to 500.
 We could technically lift this limit, but believe it's vital to ensure all of
 our customers are happy.
+
+

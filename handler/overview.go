@@ -52,15 +52,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 		useCache := len(c.Query("r")) == 0
 
-		var email, exists = c.Get(identity.IdentityContextkey)
-		if !exists {
-			panic("Unexpected")
-		}
-		var user types.User
-		err := db.First(&user, "email = ?", email).Error
-		if err != nil {
-			panic("Unvalid DB state")
-		}
+		user := identity.CheckSessionForUser(c, db)
 		if user.AccessToken == nil {
 			core.HTMLWithGlobalState(c, "overview.html", gin.H{
 				"Unauthorized": true,

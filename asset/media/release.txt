@@ -7,25 +7,24 @@
      "=:
 
 ------------------------------------------------------------------------
-Date: 2022/9/6
+Date: 2022/9/9
 
-* feat: provide more  detailed incremental scope messaging 
+* feat: provide more detailed incremental scope messaging 
 * feat: new query builder UI for search 
-
 ------------------------------------------------------------------------
-Date: 2022/9/5
+Date: 2022/9/8
 
 * perf: enable HTTP caching and chunked gzip minification
 * feat(gcp): add GCF, CloudSQL integrations
 
 ------------------------------------------------------------------------
-Date: 2022/9/4
+Date: 2022/9/7
 
 * Add release notes
 * perf: add caching layer 
 
 ------------------------------------------------------------------------
-Date: 2022/9/2
+Date: 2022/9/6
 
 * perf: served minified CSS 
 * perf: serve static files in-memory
@@ -33,7 +32,7 @@ Date: 2022/9/2
 * feat(gcp): cross VM 
 
 ------------------------------------------------------------------------
-Date: 2022/9/1
+Date: 2022/9/5
 
 * Add release notes
 * feat(identity): add flow to revoke credentials
@@ -47,4 +46,4 @@ Date: 2022/9/1
 .
 .
 
-Entry before 2022/9/6 omitted 
+Entries before 2022/9/5 omitted 

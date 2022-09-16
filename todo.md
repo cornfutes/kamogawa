@@ -1,11 +1,11 @@
 # TODO
 
-  [ ] display warning if regex 
+  [x] display warning if regex 
   [ ] add UI codes 
-- [ ] make top global search actually do its job
+- [x] make top global search actually do its job
   - [x] make search the /search page responds given query param. don't worry 
         about the interactive UI search box in nav bar. i will hook it up.
-  - [ ] for each entity retrieved from the network, add it to the DB 
+  - [x] for each entity retrieved from the network, add it to the DB 
   - [x] in DB, start with just two colums: id (string)  kind (string)
   - [x] figure out how to do full text search with postgres
   - [x] update /search?q=foobar web page route handler
@@ -15,12 +15,12 @@
       search for 'foobar' in postgres
   - [x] don't worry about pagination or length. just render a html list
 - [x] add page to export data ( SQLLite. DuckDB comin soon)
-- [ ] export CSV, SQLite, DuckDb ( future )
-- [ ] refactor the ad-hoc retrieval of user from DB on demand.
-      for demo, we can load it on server start to speed up time.
+- [x] export CSV, SQLite, DuckDb ( future )
+- [x] refactor the ad-hoc retrieval of user from DB on demand.
+      obsolete(we need multiple users). for demo, we can load it on server start to speed up time.
 - [ ] demo: use in memory data for all API data requests for test user.
 - [x] boilerplate the security and vulnerability disclosure page 
-- [ ] add a Google Survey / Forms to request access
+- [x] add a Google Survey / Forms to request access
 - [x] fix: "you have no projects" when missing scope 
 
 Low priority
@@ -67,11 +67,11 @@ quality
 - [x] display error if q.length < 3
 
 qa 
-- [ ] ensure all pages covered
+- [x] ensure all pages covered
   - [x] show release notes
 - [x] add HN news account settings-like page to /account page. 
   - [x] show account tier
-  - [ ]  add account tier page
+  - [x] obsolete: add account tier page
 
 polish 
 - [x] add some CSS polish

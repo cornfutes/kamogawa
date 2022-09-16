@@ -4,17 +4,18 @@ import (
 	"embed"
 	"html/template"
 	"io/fs"
+	"kamogawa/config"
 	"log"
 	"path/filepath"
 
 	"github.com/gin-contrib/multitemplate"
 )
 
-const baseLayoutPath = "view/layout/matrix/*.tmpl"
-const unauthedLayoutsPath = "view/layout/matrix/unauthed/*.html"
-const authedLayoutsPath = "view/layout/matrix/authed/*.html"
-const unauthedViewsGlob = "view/unauthed/*.html"
-const authedViewsGlob = "view/authed/*.html"
+var baseLayoutPath = "view/layout/" + config.Theme + "/*.tmpl"
+var unauthedLayoutsPath = "view/layout/" + config.Theme + "/unauthed/*.html"
+var authedLayoutsPath = "view/layout/" + config.Theme + "/authed/*.html"
+var unauthedViewsGlob = "view/unauthed/*.html"
+var authedViewsGlob = "view/authed/*.html"
 
 //go:embed view/*
 var views embed.FS

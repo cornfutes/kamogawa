@@ -23,6 +23,7 @@ services:
       EAP_URL: http://google.com
       CONTACT_EMAIL: diceduckmonk@gmail.com
       BRAND_NAME: DiceDuckMonk
+      # THEME: glass
   shimogawa_service:
     image: postgres:13.8-alpine
     volumes:

@@ -27,6 +27,7 @@ var (
 	ContactEmail    string
 	BrandName       string
 	CookieHttpsOnly bool
+	Theme           string
 )
 
 func init() {
@@ -35,6 +36,11 @@ func init() {
 		panic("Missing $HOST env variable")
 	}
 	fmt.Printf("Host=%v\n", Host)
+
+	Theme = os.Getenv("THEME")
+	if Theme != "glass" {
+		Theme = "matrix"
+	}
 
 	RedirectUri = os.Getenv("REDIRECT_URI")
 	if len(RedirectUri) == 0 {

@@ -87,6 +87,11 @@ func main() {
 	{
 		authed.GET("release.txt", asset.TXT(asset.Release))
 
+		authed.GET("/glass_sample", func(c *gin.Context) {
+			core.HTMLWithGlobalState(c, "glass_sample.html", gin.H{})
+			c.Abort()
+		})
+
 		// ******** Begin left nav
 		authed.GET("/search", handler.Search(db))
 

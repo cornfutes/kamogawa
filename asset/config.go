@@ -88,6 +88,7 @@ func Config(r *gin.Engine) {
 	// Register static assets.
 	if config.Env == config.Dev {
 		r.StaticFile("/style.css", "asset/media/style.css")
+		r.StaticFile("/style_glass.css", "asset/media/style_glass.css")
 	} else {
 		r.GET("style.css", css(styleCssMin))
 	}

@@ -140,7 +140,7 @@ body.light-mode .video-bg:before {
 .app {
   background-color: var(--theme-bg-color);
   max-width: 1250px;
-  min-height: 95vh;
+  min-height: 98vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1052,6 +1052,10 @@ body.light-mode .video-bg:before {
 
 .💪 {
   display: flex;
+}
+
+.🪜 {
+  flex-flow: column;
 }
 
 .🦠 {

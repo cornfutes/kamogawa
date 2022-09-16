@@ -2,7 +2,6 @@ package gaetypes
 
 import (
 	"fmt"
-	"strings"
 )
 
 type GAEServiceDB struct {
@@ -14,8 +13,10 @@ type GAEServiceDB struct {
 type GAEVersionDB struct {
 	Name          string
 	Id            string `gorm:"primaryKey"`
+	ProjectId     string
+	ServiceName   string
+	ServiceId     string
 	ServingStatus string
-	ParentId      string `gorm:"primaryKey"`
 }
 
 type GAEInstanceDB struct {
@@ -38,8 +39,13 @@ func (in *GAEVersionDB) ToSearchString() string {
 }
 
 func (in *GAEVersionDB) ToLink() string {
-	var parentPath = strings.Split(in.ParentId, "/services/")
-	var projectId = strings.Split(parentPath[0], "apps/")[1]
-	var serviceName = parentPath[1]
-	return fmt.Sprintf("https://console.cloud.google.com/appengine/versions?serviceId=%v&project=%v", serviceName, projectId)
+	return fmt.Sprintf("https://console.cloud.google.com/appengine/versions?project=%v&serviceId=%v", in.ProjectId, in.ServiceName)
+}
+
+func ToServiceId(projectId string, serviceName string) string {
+	return fmt.Sprintf("apps/%v/services/%v", projectId, serviceName)
+}
+
+func ToVersionId(projectId string, serviceName string, versionName string) string {
+	return fmt.Sprintf("apps/%v/services/%v/versions/%v", projectId, serviceName, versionName)
 }

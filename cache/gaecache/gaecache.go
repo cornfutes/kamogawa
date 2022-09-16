@@ -2,10 +2,8 @@ package gaecache
 
 import (
 	"fmt"
-	"kamogawa/types/gcp/gaetypes"
-	"strings"
-
 	"gorm.io/gorm"
+	"kamogawa/types/gcp/gaetypes"
 )
 
 func ReadServicesCache(db *gorm.DB, projectId string) (*gaetypes.GAEListServicesResponse, error) {
@@ -48,10 +46,9 @@ func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListSer
 
 	for _, v := range resp.Services {
 		serviceDBs = append(serviceDBs, gaetypes.GAEServiceDB{
-			// GAE API is misleading. The ID is the name of the service, not its unique resource path.
-			Name: v.Id,
-			// The name of the service is the unique resource name
-			Id:        v.Name,
+			// GAE API is misleading
+			Name:      v.Id,   // The ID is the name, not its unique resource name e.g. default
+			Id:        v.Name, // The name is the ID, the unique resource name e.g. apps/linear-cinema-360910/services/default
 			ProjectId: projectId,
 		})
 	}
@@ -63,7 +60,7 @@ func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListSer
 
 func ReadVersionsCache(db *gorm.DB, projectId string, serviceName string) (*gaetypes.GAEListVersionsResponse, error) {
 	var versionDBs []gaetypes.GAEVersionDB
-	result := db.Where("parent_id = ?", fmt.Sprintf("apps/%v/services/%v", projectId, serviceName)).Find(&versionDBs)
+	result := db.Where("service_id = ?", gaetypes.ToServiceId(projectId, serviceName)).Find(&versionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -78,6 +75,7 @@ func ReadVersionsCache(db *gorm.DB, projectId string, serviceName string) (*gaet
 	versions := make([]gaetypes.GAEVersion, 0, len(versionDBs))
 	for _, versionDB := range versionDBs {
 		versions = append(versions, gaetypes.GAEVersion{
+			// GAE API is misleading
 			Id:            versionDB.Name,
 			Name:          versionDB.Id,
 			ServingStatus: versionDB.ServingStatus,
@@ -99,10 +97,13 @@ func WriteVersionsCache(db *gorm.DB, projectId string, serviceName string, resp 
 
 	for _, v := range resp.Versions {
 		versionDBs = append(versionDBs, gaetypes.GAEVersionDB{
-			Name:          v.Id,   // GCP's Version.ID is just the versio name
-			Id:            v.Name, // GCP's Version.Name is unique
+			// GAE API is misleading
+			Name:          v.Id,   // The ID is the name, not its unique resource name e.g. 20220830t021415
+			Id:            v.Name, // The name is the ID, the unique resource name e.g. apps/linear-cinema-360910/services/default/versions/20220830t021415
+			ProjectId:     projectId,
+			ServiceName:   serviceName,
+			ServiceId:     gaetypes.ToServiceId(projectId, serviceName),
 			ServingStatus: v.ServingStatus,
-			ParentId:      strings.Split(v.Name, "/versions/")[0],
 		})
 	}
 
@@ -130,7 +131,8 @@ func ReadInstancesCache(db *gorm.DB, versionName string) (*gaetypes.GAEListInsta
 		instances = append(instances, gaetypes.GAEInstance{
 			Name:   instanceDB.Id,
 			Id:     instanceDB.Name,
-			VMName: instanceDB.VMName})
+			VMName: instanceDB.VMName,
+		})
 	}
 
 	return &gaetypes.GAEListInstancesResponse{Instances: instances}, nil

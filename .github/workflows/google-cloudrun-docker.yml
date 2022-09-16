@@ -35,9 +35,12 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v0'
         with:
+          # The service account needs IAM role "Service Account Token Creator" for this build step to work.
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
           token_format: 'access_token'
-          access_token_scopes: https://www.googleapis.com/auth/devstorage.read_write
+          # by default, this auth thing request all read/write scopes to GCP 
+          # https://cloud.google.com/storage/docs/authentication
+          # access_token_scopes: https://www.googleapis.com/auth/devstorage.read_write
 
       - name: Docker Auth
         id: docker-auth

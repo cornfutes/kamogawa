@@ -24,19 +24,19 @@ var (
 	pngAzure []byte
 	//go:embed media/graphql.png
 	pngGraphQl []byte
-	//go:embed media/blog_traffic.png
+	//go:embed media/blog_traffic.gif
 	pngBlog1 []byte
-	//go:embed media/blog_search.png
+	//go:embed media/blog_search.gif
 	pngBlog2 []byte
-	//go:embed media/blog_splash.png
+	//go:embed media/blog_splash.jpg
 	pngBlog3 []byte
-	//go:embed media/blog_login_error.png
+	//go:embed media/blog_login_error.gif
 	pngBlog4 []byte
-	//go:embed media/blog_simple.png
+	//go:embed media/blog_simple.gif
 	pngBlog5 []byte
-	//go:embed media/blog_widget.png
+	//go:embed media/blog_widget.gif
 	pngBlog6 []byte
-	//go:embed media/blog_docker.png
+	//go:embed media/blog_docker.gif
 	pngBlog7 []byte
 
 	//go:embed media/splash_landing.gif
@@ -94,13 +94,13 @@ func Config(r *gin.Engine) {
 	r.GET("cloud_logo_gcp.png", png(pngGCP))
 	r.GET("cloud_logo_azure.png", png(pngAzure))
 	r.GET("graphql.png", png(pngGraphQl))
-	r.GET("blog_traffic.png", png(pngBlog1))
-	r.GET("blog_search.png", png(pngBlog2))
-	r.GET("blog_splash.png", png(pngBlog3))
-	r.GET("blog_login_error.png", png(pngBlog4))
-	r.GET("blog_simple.png", png(pngBlog5))
-	r.GET("blog_widget.png", png(pngBlog6))
-	r.GET("blog_docker.png", png(pngBlog7))
+	r.GET("blog_traffic.gif", gif(pngBlog1))
+	r.GET("blog_search.gif", gif(pngBlog2))
+	r.GET("blog_splash.jpg", jpg(pngBlog3))
+	r.GET("blog_login_error.gif", gif(pngBlog4))
+	r.GET("blog_simple.gif", png(pngBlog5))
+	r.GET("blog_widget.gif", png(pngBlog6))
+	r.GET("blog_docker.gif", gif(pngBlog7))
 
 	r.GET("splash_landing.gif", gif(splashLanding))
 	r.GET("splash_fuji.gif", gif(splashFuji))
@@ -151,6 +151,10 @@ func css(contents []byte) func(c *gin.Context) {
 
 func png(contents []byte) func(c *gin.Context) {
 	return data("image/png", contents)
+}
+
+func jpg(contents []byte) func(c *gin.Context) {
+	return data("image/jpg", contents)
 }
 
 func gif(contents []byte) func(c *gin.Context) {

@@ -4,22 +4,22 @@
   - [x] make search the /search page responds given query param. don't worry 
         about the interactive UI search box in nav bar. i will hook it up.
   - [ ] for each entity retrieved from the network, add it to the DB 
-  - [ ] in DB, start with just two colums: id (string)  kind (string)
-  - [ ] figure out how to do full text search with postgres
-  - [ ] update /search?q=foobar web page route handler
+  - [x] in DB, start with just two colums: id (string)  kind (string)
+  - [x] figure out how to do full text search with postgres
+  - [x] update /search?q=foobar web page route handler
       - [x] extract query param 'q'
       - [x] call function to get list of results for 'q', render results to html 
-      - [ ] DAVID: replace the fake with real one. see /Users/louis/workspace/kamogawa/handler/search.go
+      - [x] DAVID: replace the fake with real one. see /Users/louis/workspace/kamogawa/handler/search.go
       search for 'foobar' in postgres
   - [x] don't worry about pagination or length. just render a html list
 - [ ] add page to export data ( SQLLite. DuckDB comin soon)
+- [ ] export CSV, SQLite, DuckDb ( future )
 - [ ] refactor the ad-hoc retrieval of user from DB on demand.
       for demo, we can load it on server start to speed up time.
 - [ ] demo: use in memory data for all API data requests for test user.
-- [ ] boilerplate the security and vulnerability disclosure page 
+- [x] boilerplate the security and vulnerability disclosure page 
 - [ ] add a Google Survey / Forms to request access
-- [ ] fix: "you have no projects" when missing scope 
-- [ ] export CSV, SQLite, DuckDb ( future )
+- [x] fix: "you have no projects" when missing scope 
 
 Low priority
 - [x] minor bug. when logged in, /login route give immpression you are logged out

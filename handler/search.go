@@ -30,7 +30,7 @@ func getFakeData(q string) []SearchResult {
 // TODO(david): implement
 func getRealData(db *gorm.DB, q string) []SearchResult {
 	var searchResults []SearchResult
-	r, err := searchInstances(db, q)
+	r, err := SearchInstances(db, q)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
@@ -43,7 +43,7 @@ func getRealData(db *gorm.DB, q string) []SearchResult {
 	return searchResults
 }
 
-func searchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
+func SearchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
 	var gceInstanceDBs []types.GCEInstanceDB
 	result := db.Raw(""+
 		" SELECT * "+

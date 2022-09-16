@@ -1,5 +1,71 @@
 {{define "page"}}
 <h2>Export</h2>
-<div>
+
+<h3 class="🍜">Search Index</h3>
+<p>
+  <button onclick="alert('Disabled on account type DEMO')">Download as SQLite</button>
+</p>
+
+<h3 class="🍜">Business Intelligence</h3>
+
+<p>
+  Select the resources you want to export:
+</p>
+
+<div class="💪 🦠" style="padding-bottom: 20px">
+  <div class="💪 🪜">
+    <label class="container">
+      <input type="checkbox" checked="checked">
+      <span class="checkmark"></span>
+      Projects
+    </label>
+    <label class="container">
+      <input type="checkbox">
+      <span class="checkmark"></span>GCE Zones
+    </label>
+    <label class="container">
+      <input type="checkbox" checked="checked">
+      <span class="checkmark"></span>GCE Instances
+    </label>
+  </div>
+  <div class="💪 🪜">
+    <label class="container">
+      <input type="checkbox">
+      <span class="checkmark"></span>
+      GAE Services
+    </label>
+    <label class="container">
+      <input type="checkbox" checked="checked">
+      <span class="checkmark"></span>
+      GAE Versions
+    </label>
+    <label class="container">
+      <input type="checkbox">
+      <span class="checkmark"></span>
+      GAE Instances
+    </label>
+  </div>
+  <div class="💪 🪜">
+    <label class="container">
+      <input type="checkbox">
+      <span class="checkmark"></span>
+      CloudRun services
+    </label>
+    <label class="container">
+      <input type="checkbox" checked="checked">
+      <span class="checkmark"></span>
+      CloudSQL instances
+    </label>
+    <label class="container">
+      <input type="checkbox">
+      <span class="checkmark"></span>
+      Cloud Functions
+    </label>
+  </div>
 </div>
+
+<p>
+  <button onclick="alert('Disabled on account type DEMO')">Download as CSV</button>
+  <button onclick="alert('Disabled on account type DEMO')">Download as DuckDB</button>
+</p>
 {{end}}

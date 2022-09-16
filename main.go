@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"kamogawa/asset"
 	"kamogawa/core"
 	"kamogawa/handler"
@@ -53,6 +54,13 @@ func main() {
 	r.Use(identity.SetAuthContext())
 	asset.Config(r)
 
+	r.GET("/ping", func(c *gin.Context) {
+		q := c.Query("q")
+		fmt.Printf("Query: %v\n", q)
+		handler.SearchInstances(db, q)
+		c.JSON(http.StatusOK, "{'result': 'pong'}")
+	})
+
 	r.GET("/login", handler.Login)
 	r.GET("/reset", handler.Reset)
 	r.POST("/login", identity.HandleLogin)
@@ -104,6 +112,7 @@ func main() {
 			core.HTMLWithGlobalState(c, "2fa.html", gin.H{})
 			c.Abort()
 		})
+
 	}
 
 	r.Run(":3000")

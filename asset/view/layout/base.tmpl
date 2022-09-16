@@ -215,10 +215,13 @@
       });
     }
 
-  $('search-builder-reset').addEventListener('click', () => {
-    $("query").value = originalQuery;
-    resetSearchState();
-  });
+  const sbr = $('search-builder-reset');
+  if(sbr) {
+    sbr.addEventListener('click', () => {
+      $("query").value = originalQuery;
+      resetSearchState();
+    });
+  }
 
   function resetSearchState() {
     rm('search-header', '⚡');
@@ -227,34 +230,40 @@
     $('search-original-query').innerText = '';
   }
 
-  $('query').addEventListener('keyup', e => {
-     e.preventDefault();
-    if(e.code == 'Enter') {
-      search(e.target.value);
-    } else if(e.target.value == originalQuery) {
-      q = e.target.value;
-      resetSearchState();
-    } else {
-      q = e.target.value;
-      ad('search-header', '⚡');
-      $('search-original-query').innerText = originalQuery;
-      rm('search-redo-cta', '⚡');
-      rm('search-builder-reset', '🥷');
-    }
-  });
+  const elQuery = $('query');
+  if(elQuery) {
+    elQuery.addEventListener('keyup', e => {
+      e.preventDefault();
+      if(e.code == 'Enter') {
+        search(e.target.value);
+      } else if(e.target.value == originalQuery) {
+        q = e.target.value;
+        resetSearchState();
+      } else {
+        q = e.target.value;
+        ad('search-header', '⚡');
+        $('search-original-query').innerText = originalQuery;
+        rm('search-redo-cta', '⚡');
+        rm('search-builder-reset', '🥷');
+      }
+    });
+  }
 
-  $('search-redo-cta').addEventListener('click', e => {
-    if(q != originalQuery) {
-      e.preventDefault();
-      search(q);
-    }
-  });  
-  $('search-redo-cta').addEventListener('keyup', e => {
-    if(event.code == 'Enter' && q != originalQuery) {
-      e.preventDefault();
-      search(q);
-    }
-  });
+  const srcta = $('search-redo-cta');
+  if(srcta) {
+    srcta.addEventListener('click', e => {
+      if(q != originalQuery) {
+        e.preventDefault();
+        search(q);
+      }
+    });  
+    srcta.addEventListener('keyup', e => {
+      if(event.code == 'Enter' && q != originalQuery) {
+        e.preventDefault();
+        search(q);
+      }
+    });
+  }
 
   function search(q) {
      window.location.href = '/search?q=' + q;

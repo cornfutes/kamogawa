@@ -137,6 +137,75 @@ func getSearchResults(db *gorm.DB, q string) []SearchResult {
 	return searchResults
 }
 
+func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
+	var projectDBs []gcetypes.ProjectDB
+	result := db.Raw(""+
+		" SELECT * "+
+		" FROM project_dbs"+
+		" WHERE (name || ' ' || project_id"+
+		" ILIKE ?)"+
+		" AND email = 'null@hackernews.com'"+
+		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
+	if result.Error != nil {
+		fmt.Printf("Query failed\n")
+		return nil, fmt.Errorf("Query failed")
+	}
+
+	if len(projectDBs) == 0 {
+		fmt.Printf("No results found\n")
+		return nil, fmt.Errorf("No results found")
+	}
+
+	searchResults := make([]SearchResult, 0, len(projectDBs))
+	for _, v := range projectDBs {
+		searchResults = append(searchResults,
+			SearchResult{
+				Text:     v.ToSearchString(),
+				Link:     v.ToLink(),
+				Name:     v.Name,
+				Provider: "GCP",
+				Product:  "",
+				Kind:     "Project",
+			})
+	}
+
+	return searchResults, nil
+}
+
+func SearchGCEInstances(db *gorm.DB, q string) ([]SearchResult, error) {
+	var gceInstanceDBs []gcetypes.GCEInstanceDB
+	result := db.Raw(""+
+		" SELECT * "+
+		" FROM gce_instance_dbs"+
+		" WHERE name || ' ' || id || ' ' || project_id || ' ' || zone"+
+		" ILIKE ?"+
+		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&gceInstanceDBs)
+	if result.Error != nil {
+		fmt.Printf("Query failed\n")
+		return nil, fmt.Errorf("Query failed")
+	}
+
+	if len(gceInstanceDBs) == 0 {
+		fmt.Printf("No results found\n")
+		return nil, fmt.Errorf("No results found")
+	}
+
+	searchResults := make([]SearchResult, 0, len(gceInstanceDBs))
+	for _, v := range gceInstanceDBs {
+		searchResults = append(searchResults,
+			SearchResult{
+				Text:     v.ToSearchString(),
+				Link:     v.ToLink(),
+				Name:     v.Name,
+				Provider: "GCP",
+				Product:  "GCE",
+				Kind:     "VM",
+			})
+	}
+
+	return searchResults, nil
+}
+
 func searchGAEServices(db *gorm.DB, q string) ([]SearchResult, error) {
 	var results []gaetypes.GAEServiceDB
 	result := db.Raw(""+
@@ -205,73 +274,4 @@ func searchGAEVersions(db *gorm.DB, q string) ([]SearchResult, error) {
 
 	return searchResults, nil
 
-}
-
-func SearchGCEInstances(db *gorm.DB, q string) ([]SearchResult, error) {
-	var gceInstanceDBs []gcetypes.GCEInstanceDB
-	result := db.Raw(""+
-		" SELECT * "+
-		" FROM gce_instance_dbs"+
-		" WHERE name || ' ' || id || ' ' || project_id || ' ' || zone"+
-		" ILIKE ?"+
-		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&gceInstanceDBs)
-	if result.Error != nil {
-		fmt.Printf("Query failed\n")
-		return nil, fmt.Errorf("Query failed")
-	}
-
-	if len(gceInstanceDBs) == 0 {
-		fmt.Printf("No results found\n")
-		return nil, fmt.Errorf("No results found")
-	}
-
-	searchResults := make([]SearchResult, 0, len(gceInstanceDBs))
-	for _, v := range gceInstanceDBs {
-		searchResults = append(searchResults,
-			SearchResult{
-				Text:     v.ToSearchString(),
-				Link:     v.ToLink(),
-				Name:     v.Name,
-				Provider: "GCP",
-				Product:  "GCE",
-				Kind:     "VM",
-			})
-	}
-
-	return searchResults, nil
-}
-
-func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
-	var projectDBs []gcetypes.ProjectDB
-	result := db.Raw(""+
-		" SELECT * "+
-		" FROM project_dbs"+
-		" WHERE (name || ' ' || project_id"+
-		" ILIKE ?)"+
-		" AND email = 'null@hackernews.com'"+
-		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
-	if result.Error != nil {
-		fmt.Printf("Query failed\n")
-		return nil, fmt.Errorf("Query failed")
-	}
-
-	if len(projectDBs) == 0 {
-		fmt.Printf("No results found\n")
-		return nil, fmt.Errorf("No results found")
-	}
-
-	searchResults := make([]SearchResult, 0, len(projectDBs))
-	for _, v := range projectDBs {
-		searchResults = append(searchResults,
-			SearchResult{
-				Text:     v.ToSearchString(),
-				Link:     v.ToLink(),
-				Name:     v.Name,
-				Provider: "GCP",
-				Product:  "",
-				Kind:     "Project",
-			})
-	}
-
-	return searchResults, nil
 }

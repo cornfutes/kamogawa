@@ -96,7 +96,7 @@ Infrastructure Security Agency, where it will be handled under their coordinated
 vulnerability disclosure process. We will not share your name or contact
 information without express permission.
 
-We accept vulnerability reports at team@ListVMs.com. Reports may be submitted
+We accept vulnerability reports at team@listvms.com. Reports may be submitted
 anonymously. If you share contact information, we will acknowledge receipt of
 your report within 3 business days.
 

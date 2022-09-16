@@ -21,6 +21,7 @@ services:
       GCP_CLIENT_ID: <retroactively_redacted>
       GCP_CLIENT_SECRET: <retroactively_redacted>
       EAP_URL: http://google.com
+      CONTACT_EMAIL: diceduckmonk@gmail.com
   shimogawa_service:
     image: postgres:13.8-alpine
     volumes:

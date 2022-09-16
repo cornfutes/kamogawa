@@ -24,6 +24,7 @@ var (
 	Preindex        bool
 	GCPClientId     string
 	GCPClientSecret string
+	ContactEmail    string
 )
 
 func init() {
@@ -36,6 +37,11 @@ func init() {
 	RedirectUri = os.Getenv("REDIRECT_URI")
 	if len(RedirectUri) == 0 {
 		panic("Missing $REDIRECT_URI env variable")
+	}
+
+	ContactEmail = os.Getenv("CONTACT_EMAIL")
+	if len(ContactEmail) == 0 {
+		panic("Missing $CONTACT_EMAIL env variable")
 	}
 
 	if os.Getenv("RELEASE_ENV") == "dev" {

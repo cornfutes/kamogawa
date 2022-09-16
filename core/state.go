@@ -12,5 +12,6 @@ func HTMLWithGlobalState(c *gin.Context, page string, obj map[string]interface{}
 	value, _ := c.Get(identity.IdentityContextKey)
 	obj["IsLoggedIn"] = value
 	obj["EapUrl"] = config.EapUrl
+	obj["ContactEmail"] = config.ContactEmail
 	c.HTML(http.StatusOK, page, obj)
 }

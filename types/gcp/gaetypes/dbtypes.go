@@ -29,3 +29,11 @@ func (in *GAEServiceDB) ToSearchString() string {
 func (in *GAEServiceDB) ToLink() string {
 	return fmt.Sprintf("google.com/gae/service/%v", in.Id)
 }
+
+func (in *GAEVersionDB) ToSearchString() string {
+	return fmt.Sprintf("GAE version by the name %v", in.Id)
+}
+
+func (in *GAEVersionDB) ToLink() string {
+	return fmt.Sprintf("google.com/gae/version/%v", in.Id)
+}

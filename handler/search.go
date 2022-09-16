@@ -53,6 +53,11 @@ func getRealData(db *gorm.DB, q string) []SearchResult {
 		if err == nil {
 			searchResults = append(searchResults, r...)
 		}
+
+		r, err = searchGAEVersions(db, word)
+		if err == nil {
+			searchResults = append(searchResults, r...)
+		}
 	}
 	return searchResults
 }
@@ -85,6 +90,41 @@ func searchGAEServices(db *gorm.DB, q string) ([]SearchResult, error) {
 				Provider: "GCP",
 				Product:  "GAE",
 				Kind:     "Service",
+			})
+	}
+
+	return searchResults, nil
+
+}
+
+func searchGAEVersions(db *gorm.DB, q string) ([]SearchResult, error) {
+	var x []gaetypes.GAEVersionDB
+	result := db.Raw(""+
+		" SELECT * "+
+		" FROM gae_version_dbs"+
+		" WHERE id "+
+		" ILIKE ?"+
+		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&x)
+	if result.Error != nil {
+		fmt.Printf("Query failed\n")
+		return nil, fmt.Errorf("Query failed")
+	}
+
+	if len(x) == 0 {
+		fmt.Printf("No results found\n")
+		return nil, fmt.Errorf("No results found")
+	}
+
+	searchResults := make([]SearchResult, 0, len(x))
+	for _, v := range x {
+		searchResults = append(searchResults,
+			SearchResult{
+				Text:     v.ToSearchString(),
+				Link:     v.ToLink(),
+				Name:     v.Id,
+				Provider: "GCP",
+				Product:  "GAE",
+				Kind:     "Version",
 			})
 	}
 

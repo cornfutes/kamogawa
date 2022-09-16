@@ -83,21 +83,20 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 	}
 }
 
-func ReadProjectsCache2(db *gorm.DB, user types.User) ([]gcetypes.ProjectDB, error) {
+func ReadProjectsCache2(db *gorm.DB, user types.User) []gcetypes.ProjectDB {
 	var projectDBs []gcetypes.ProjectDB
 	result := db.Where("email = ?", user.Email).Find(&projectDBs)
 	if result.Error != nil {
-		fmt.Printf("Query failed\n")
-		return nil, fmt.Errorf("Query failed")
+		panic("Query failed")
 	}
 
 	if len(projectDBs) == 0 {
 		fmt.Printf("Cache miss\n")
-		return nil, fmt.Errorf("Cache miss")
+		return nil
 	}
 	fmt.Printf("Cache hit\n")
 
-	return projectDBs, nil
+	return projectDBs
 }
 
 func WriteProjectsCache2(db *gorm.DB, user types.User, projects []gcetypes.ProjectDB) {

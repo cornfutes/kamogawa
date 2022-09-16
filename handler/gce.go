@@ -30,16 +30,17 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 		identity.CheckDBAndRefreshToken(c, user, db)
+		if user.Scope == nil || !user.Scope.Valid {
+			panic("Missing scope")
+		}
+		fmt.Printf("User %v\n", user)
 
 		var responseSuccess *gcetypes.ListProjectResponse
-		var projectDBs []gcetypes.ProjectDB
+		var projectDBs []gcetypes.ProjectDB = nil
 		if config.CacheEnabled && useCache {
-			var err error
-			projectDBs, err = gcecache.ReadProjectsCache2(db, user)
-			if err != nil {
-				panic("idk")
-			}
-		} else {
+			projectDBs = gcecache.ReadProjectsCache2(db, user)
+		}
+		if projectDBs == nil {
 			var responseError *gcetypes.ErrorResponse
 			responseSuccess, responseError = gcp.GCPListProjectsMain(db, user)
 			if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
@@ -53,10 +54,6 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 				projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &p, 0))
 			}
 			fmt.Printf("len %v\n", projectDBs)
-		}
-
-		if user.Scope == nil || !user.Scope.Valid {
-			panic("Missing scope")
 		}
 
 		var htmlLines []string

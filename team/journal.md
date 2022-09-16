@@ -29,6 +29,12 @@
         - could not see "settings > CI/CD" alluded to be docs. seem to be user 
           set bit, as David could see but Louis could not. we decided to just
           abandon Gitlab altogether
+    - Build, not deploy
+      - We still want manual verification and releasing.
+      - However, with CD, we always have image ready to deploy in CloudRun
+    - Bisect
+      - We tag the build with the Git commit hash, so now we can quickly bisect
+        to a stable release
     - Got Google Cloud Build working, but preferred Github or anyone else.
       - Opaque billing and business model
       - Proprietary configuration format with less community support
@@ -36,7 +42,14 @@
       - mediocre UI
       - small nuanced of affecting CloudRun UI
     - Went with Github Actions
+      - 2,000-4,000 free CI/CD. Better than Gitlab. Better than Cloud Build?
+        - here is priceshit for Google Cloud Build. https://cloud.google.com/build/pricing
+          Why do users have to know about VM machine types?
+      - Better UI than the rest
   - Settled on Github Actions
+    - Billed for runtime
+      - Weird way of rounding up:
+        - total duration 1m 57s, but billable time 3minutes not 2minutes
   - GCP IAM
     - Finally understand:
       - Roles consist of permissions, which are the atoms
@@ -71,9 +84,27 @@
         gave the service account 'cloud-platform' ( reaad/write) permissions,
         which is far too wide and poses risk of compromised deleted our project,
         for example.
-      7. The 'Container Registry Service Agent' lacked the permissions.
+      7. The 'Container Registry Service Agent' lacked the permissions (
+          storage.buckets.get).
          This is a very misleading role. In the end, we didn't even need this 
-         role. "Storage Admin" was sufficient.
+         role. "Cloud Build Service Account" had this.
+      8. There are also project level roles versus individual resources.
+         When creating service account, it's easy to give project wide permissions
+         to read/write.
+      9. With all this complexity, imagine if a malicious party owned this 
+         3rd Github Actions template / repo and now have access to the entire
+         project.
+  - GCP DevRel
+    - GitHub actions template was broken, stale outdated. The property we used 
+      is deprecated. So the deprecated option is the only one that works.
+    - Zero mention of "Cloud Build Service Account" or role for GCR 
+    - leaky abstraction of storage buckets permission. GCP should add that 
+      permission to "Cloud Build Service Account"
+    - Supply chain risk given that GCP docs are terrible, and humans are human,
+      will err on the side of trust and accidentally grant access to a malicious 
+      fake repo
+  - Cloud Build
+    - here's a priceshit https://cloud.google.com/build/pricing
   - Github 
     - user-owned repos can only have one owner, everyone else is maintainer
     - maintainer cannot see settings such as secrets used by Github Actions

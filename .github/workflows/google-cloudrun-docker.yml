@@ -1,24 +1,18 @@
-# This workflow build and push a Docker container to Google Artifact Registry and deploy it on Cloud Run when a commit is pushed to the "main" branch
+# This workflow build and push a Docker container to Google Artifact Registry
 #
-# Overview:
-#
-# 1. Authenticate to Google Cloud
+# 1. Get authorization from Google Cloud
 # 2. Authenticate Docker to GCR
-# 3. Build a docker container
-# 4. Publish it to Google Artifact Registry
+# 3. Build docker container
+# 4. Publish docker container  Google Artifact Registry
 #
-# To configure this workflow:
-#
-# 2. Ensure the required IAM permissions are granted
-#
-#    Artifact Registry
-#      roles/artifactregistry.admin     (project or repository level)
-# 
-# 3. 
-# 
-# 4. Create GitHub Actions secret with key GCP_CREDENTIALS, value is the service account credentials
+# Prerequisites 
+# 1. Create Service Account with these service account roles 
+#     - Service Account Token Creator
+#     - Cloud Build Service Account
+# 2. In UI for GitHub Actions Secret, add key GCP_CREDENTIALS with JSON of
+#    service account's key
 
-name: Build and push to Google COntainer Registry
+name: Build and Push to GCR ( Google Container Registry )
 
 on:
   push:
@@ -26,7 +20,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # TODO: check back in 2023 when they support Alpine. Will run faster.
+    runs-on: ubuntu-latest # TODO(2023): poll for Alpine availability
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,7 +29,7 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v0'
         with:
-          # The service account needs IAM role "Service Account Token Creator" for this build step to work.
+          #  IAM role "Service Account Token Creator" for this build step to work.
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
           token_format: 'access_token'
 
@@ -47,6 +41,7 @@ jobs:
           password: '${{ steps.auth.outputs.access_token }}' # from previous Google Step
           registry: 'gcr.io'
 
+      # IAM role "Cloud Build Service Account" needed for this step.
       - name: Build and Push Container
         run: |-
           docker build -t "gcr.io/linear-cinema-360910/niigata:${{ github.sha }}" ./

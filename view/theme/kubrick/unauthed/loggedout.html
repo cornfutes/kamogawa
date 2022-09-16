@@ -1,26 +1,18 @@
 {{define "page"}}
-<div class="main-header">
-  <a class="menu-link-main" href="#">Search results</a>
-  <!-- <div class="header-menu">
-    <a class="main-header-link is-active" href="#">Desktop</a>
-    <a class="main-header-link" href="#">Mobile</a>
-    <a class="main-header-link" href="#">Web</a>
-  </div> -->
-</div>
 <div class="content-wrapper">
-<div class="landing 💪 🪜">
-  <div class="splash-container">
-    <img src="/splash_fuji.gif" style="border-radius: 12px; width: 100%"
-      alt="Illustration of sakura framing Mount Fuji in the background. Courtesy of https://www.pixeltrue.com/scenic-illustrations">
-    <h1 class="splash-text">Thank you for your continued patronage.</h1>
+  <div class="landing 💪 🪜">
+    <div class="splash-container">
+      <img src="/splash_fuji.gif" style="border-radius: 12px; width: 100%"
+        alt="Illustration of sakura framing Mount Fuji in the background. Courtesy of https://www.pixeltrue.com/scenic-illustrations">
+      <h1 class="splash-text">Thank you for your continued patronage.</h1>
+    </div>
+    <!-- https://ux.stackexchange.com/questions/103274/what-page-should-be-shown-to-the-user-after-s-he-sign-out-->
+    <div class="content content-narrow">
+      <p>
+        You've successfully logged out.
+      </p>
+      <a href="/login" class="link_with_arrow">Login</a>
+    </div>
   </div>
-  <!-- https://ux.stackexchange.com/questions/103274/what-page-should-be-shown-to-the-user-after-s-he-sign-out-->
-  <div class="content content-narrow">
-    <p>
-      You've successfully logged out.
-    </p>
-    <a href="/login" class="link_with_arrow">Login</a>
-  </div>
-</div>
 </div>
 {{end}}

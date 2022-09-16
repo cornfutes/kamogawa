@@ -45,7 +45,7 @@
 {{if .Error }}
 <p>{{.Error}}</p>
 {{else if .HasResults}}
-<p>About {{.CountTotalResults}} results ({{.Duration}})</p>
+<p>{{.CountTotalResults}} results ({{.Duration}})</p>
 <div class="💪 🪜" style="padding: 10px;">
   {{ range .Results }}
   <div class="🎴" style="overflow:hidden">

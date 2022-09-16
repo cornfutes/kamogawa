@@ -22,7 +22,7 @@ type SearchResult struct {
 	Name     string
 }
 
-const SERPPageeSize = 10
+const SERPPageSize = 10
 
 func getRealData(db *gorm.DB, q string) []SearchResult {
 	var searchResults []SearchResult
@@ -207,17 +207,17 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 		}
 
 		start := time.Now()
-		searchResults := getRealData(db, q)
+		allSearchResults := getRealData(db, q)
 		duration := time.Since(start)
-
-		numTotalResults := len(searchResults)
+		results := allSearchResults[:SERPPageSize]
+		numTotalResults := len(allSearchResults)
 		core.HTMLWithGlobalState(c, "search.html", gin.H{
 			"HasFilter":         originalQ != q,
 			"Error":             nil,
 			"IsRegex":           queryIsRegex(q),
 			"Query":             originalQ,
-			"HasResults":        searchResults != nil,
-			"Results":           searchResults,
+			"HasResults":        results != nil,
+			"Results":           results,
 			"CountTotalResults": numTotalResults,
 			"Duration":          duration,
 			"IsSearch":          "yes",

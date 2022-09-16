@@ -1062,6 +1062,10 @@ body.light-mode .video-bg:before {
   justify-content: space-between;
 }
 
+.🌳 {
+  flex: 1;
+}
+
 a {
   color: #FF6600;
   text-decoration: none;
@@ -1224,4 +1228,29 @@ hr {
   background-color: grey;
   border: none;
   height: 1px;
+}
+
+.badge {
+  padding: 4px 8px;
+  text-align: center;
+  border-radius: 5px;
+  margin-right: 5px;
+  color: white;
+  display: inline-block;
+}
+
+.🔥 {
+  background-color: #4285F4;
+}
+
+.🎭 {
+  background-color: #34A853;
+}
+
+.💕 {
+  background-color: #EA4336;
+}
+
+.🍺 {
+  background-color: black;
 }

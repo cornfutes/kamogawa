@@ -24,3 +24,6 @@
 [ ] refactor
   [ ] all places where we parse response success and error response can be refactored.
     check responseStatus code and branch respectively
+[ ] derisk universality of Auth user ( only one globally refresh token )
+  [ ] local environment can break prod
+    [x] add ability to disconnect google account, without revoking the refresh token

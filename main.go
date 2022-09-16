@@ -108,6 +108,7 @@ func main() {
 		// ******** End left nav
 
 		authed.GET("/revokegcp", identity.RevokeGCP(db))
+		authed.GET("/disconnectgcp", identity.DisconnectGCP(db))
 		authed.GET("/google/oauth2", identity.GoogleOAuth2Callback(db))
 
 		// Fake privileged routes for demo

@@ -36,6 +36,13 @@
 </ul>
 {{end}}
 
+{{if .ShowRevoke}}
+<h4 class="🍜">Disconnect ( without revoking refresh token )</h4>
+<p>
+  <a href="/disconnectgcp">Disconnect email</a>
+</p>
+{{end}}
+
 <h4 class="🍜">Revoke access</h4>
 <p>
   {{if .ShowRevoke}}

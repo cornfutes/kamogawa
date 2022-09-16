@@ -5,23 +5,23 @@ go 1.17
 require (
 	github.com/Jeffail/gabs v1.4.0
 	github.com/ederinbay/GoogleIdTokenVerifier v0.0.0-20210909115417-ccc014775cfb
+	github.com/gin-contrib/gzip v0.0.6
 	github.com/gin-contrib/multitemplate v0.0.0-20220705015713-e21a0ba39de3
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-jwt/jwt/v4 v4.4.2
+	github.com/google/uuid v1.3.0
 	github.com/tdewolff/minify v2.3.6+incompatible
 	gorm.io/driver/postgres v1.3.9
 	gorm.io/gorm v1.23.8
 )
 
 require (
-	github.com/gin-contrib/gzip v0.0.6 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.12.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

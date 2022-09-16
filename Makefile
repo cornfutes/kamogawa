@@ -18,7 +18,7 @@ dev: ## start local environment
 	docker compose up
 
 build: ## Build and tag for GCR.
-	docker build -t gcr.io/linear-cinema-360910/diceduckmonk --platform linux/amd64 .
+	docker build -t gcr.io/linear-cinema-360910/diceduckmonk --platform linux/amd64 ./src
 
 deploy: build ## Build and Deploy to GCR.
 	docker push gcr.io/linear-cinema-360910/diceduckmonk

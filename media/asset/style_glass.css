@@ -1081,3 +1081,25 @@ a:hover {
   content: "❯";
   padding-left: .3rem;
 }
+
+ul.breadcrumb {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-left: 30px;
+}
+
+ul.breadcrumb li {
+  display: inline;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+ul.breadcrumb li+li:before {
+  padding: 5px;
+  color: var(--theme-color);
+  content: ">\00a0";
+}
+
+ul.breadcrumb li .menu-link-main {
+  padding: 0;
+}

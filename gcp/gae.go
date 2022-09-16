@@ -42,7 +42,7 @@ import (
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services/list
 func GAEListServices(db *gorm.DB, user types.User, projectId string, useCache bool) (*gaetypes.GAEListServicesResponse, *gaetypes.ErrorAdminAPI) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gaecache.ReadServicesCache(db, projectId)
+		responseSuccess, err := gaecache.ReadServicesCache(db, user, projectId)
 		if err == nil {
 			return responseSuccess, &gaetypes.ErrorAdminAPI{}
 		}
@@ -54,7 +54,7 @@ func GAEListServices(db *gorm.DB, user types.User, projectId string, useCache bo
 	}
 
 	if config.CacheEnabled {
-		gaecache.WriteServicesCache(db, projectId, responseSuccess)
+		gaecache.WriteServicesCache(db, user, projectId, responseSuccess)
 	}
 
 	return responseSuccess, responseError

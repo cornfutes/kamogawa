@@ -3,25 +3,30 @@ package gaecache
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"kamogawa/types"
 	"kamogawa/types/gcp/gaetypes"
 )
 
-func ReadServicesCache(db *gorm.DB, projectId string) (*gaetypes.GAEListServicesResponse, error) {
-	var serviceDBs []gaetypes.GAEServiceDB
-	result := db.Where("project_id = ?", projectId).Find(&serviceDBs)
+func ReadServicesCache(db *gorm.DB, user types.User, projectId string) (*gaetypes.GAEListServicesResponse, error) {
+	var gaeServiceDBs []gaetypes.GAEServiceDB
+	result := db.Joins(
+		" INNER JOIN gae_service_auths"+
+			" ON gae_service_auths.id = gae_service_dbs.id"+
+			" AND gae_service_auths.gmail = ?"+
+			" AND gae_service_dbs.project_id = ?", user.Gmail.String, projectId).Find(&gaeServiceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
 	}
 
-	if len(serviceDBs) == 0 {
+	if len(gaeServiceDBs) == 0 {
 		fmt.Printf("Cache miss\n")
 		return nil, fmt.Errorf("Cache miss")
 	}
 	fmt.Printf("Cache hit\n")
 
-	services := make([]gaetypes.GAEService, 0, len(serviceDBs))
-	for _, serviceDB := range serviceDBs {
+	services := make([]gaetypes.GAEService, 0, len(gaeServiceDBs))
+	for _, serviceDB := range gaeServiceDBs {
 		services = append(services,
 			gaetypes.GAEService{
 				// GCP nomenclature is misleading.
@@ -34,7 +39,7 @@ func ReadServicesCache(db *gorm.DB, projectId string) (*gaetypes.GAEListServices
 	return &gaetypes.GAEListServicesResponse{Services: services}, nil
 }
 
-func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListServicesResponse) {
+func WriteServicesCache(db *gorm.DB, user types.User, projectId string, resp *gaetypes.GAEListServicesResponse) {
 	if resp == nil {
 		panic("Unexpected list of projects")
 	}
@@ -43,7 +48,6 @@ func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListSer
 	}
 
 	serviceDBs := make([]gaetypes.GAEServiceDB, 0, len(resp.Services))
-
 	for _, v := range resp.Services {
 		serviceDBs = append(serviceDBs, gaetypes.GAEServiceDB{
 			// GAE API is misleading
@@ -55,6 +59,22 @@ func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListSer
 
 	for _, serviceDB := range serviceDBs {
 		db.FirstOrCreate(&serviceDB)
+	}
+
+	WriteServicesAuth(db, user, serviceDBs)
+}
+
+func WriteServicesAuth(db *gorm.DB, user types.User, gaeServiceDBs []gaetypes.GAEServiceDB) {
+	if len(gaeServiceDBs) == 0 {
+		return
+	}
+
+	gaeServiceAuths := make([]gaetypes.GAEServiceAuth, 0, len(gaeServiceDBs))
+	for _, v := range gaeServiceDBs {
+		gaeServiceAuths = append(gaeServiceAuths, gaetypes.GAEServiceAuth{Gmail: user.Gmail.String, Id: v.Id})
+	}
+	for _, v := range gaeServiceAuths {
+		db.FirstOrCreate(&v)
 	}
 }
 

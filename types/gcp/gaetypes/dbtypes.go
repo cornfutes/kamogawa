@@ -4,10 +4,20 @@ import (
 	"fmt"
 )
 
+type GAEServiceAuth struct {
+	Gmail string `gorm:"primaryKey:idx"`
+	Id    string `gorm:"primaryKey:idx"`
+}
+
 type GAEServiceDB struct {
 	Name      string
 	Id        string `gorm:"primaryKey"`
 	ProjectId string `gorm:"primaryKey"`
+}
+
+type GAEVersionAuth struct {
+	Gmail string `gorm:"primaryKey:idx"`
+	Id    string `gorm:"primaryKey:idx"`
 }
 
 type GAEVersionDB struct {
@@ -17,6 +27,11 @@ type GAEVersionDB struct {
 	ServiceName   string
 	ServiceId     string
 	ServingStatus string
+}
+
+type GAEInstanceAuth struct {
+	Gmail string `gorm:"primaryKey:idx"`
+	Id    string `gorm:"primaryKey:idx"`
 }
 
 type GAEInstanceDB struct {

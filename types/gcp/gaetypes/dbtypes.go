@@ -12,7 +12,7 @@ type GAEVersionDB struct {
 	Name          string
 	Id            string `gorm:"primaryKey"`
 	ServingStatus string
-	ServiceId     string `gorm:"primaryKey"`
+	ParentId      string `gorm:"primaryKey"`
 }
 
 type GAEInstanceDB struct {

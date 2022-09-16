@@ -63,7 +63,7 @@ func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListSer
 
 func ReadVersionsCache(db *gorm.DB, projectId string, serviceId string) (*gaetypes.GAEListVersionsResponse, error) {
 	var versionDBs []gaetypes.GAEVersionDB
-	result := db.Where("service_id = ?", fmt.Sprintf("apps/%v/services/%v", projectId, serviceId)).Find(&versionDBs)
+	result := db.Where("parent_id = ?", fmt.Sprintf("apps/%v/services/%v", projectId, serviceId)).Find(&versionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -99,10 +99,10 @@ func WriteVersionsCache(db *gorm.DB, projectId string, serviceId string, resp *g
 
 	for _, v := range resp.Versions {
 		versionDBs = append(versionDBs, gaetypes.GAEVersionDB{
-			Name:          v.Id,
-			Id:            v.Name,
+			Name:          v.Id,   // GCP's Version.ID is just the versio name
+			Id:            v.Name, // GCP's Version.Name is unique
 			ServingStatus: v.ServingStatus,
-			ServiceId:     strings.Split(v.Name, "/versions/")[0],
+			ParentId:      strings.Split(v.Name, "/versions/")[0],
 		})
 	}
 

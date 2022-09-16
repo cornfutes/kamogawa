@@ -78,5 +78,5 @@ func HandleLogin(c *gin.Context) {
 	// httpOnly flag set to true, preventing cookie being accessed by JavaScript
 	c.SetCookie(sessionCookieKey, tokenString, 3600, "/", config.Host, false, true)
 
-	c.Redirect(http.StatusFound, "/search?q=test%20:::%20time:last24")
+	c.Redirect(http.StatusFound, "/search?q=test")
 }

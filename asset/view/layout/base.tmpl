@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang=en-US>
 <title>{{.BrandName}}</title>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="The best way to access your cloud infrastructure.">
+<meta name=viewport content=width=device-width,initial-scale=1>
+<meta name=description content="Search engine for GCP, plus more.">
 <link rel=stylesheet href=style.css>
-<link rel=icon href="data:,">
+<link rel=icon href=data:,>
 
 <body class="💪 🪜 🍜 📜 🚫">
   <header class="💪 🎯">
-    <div class="💪" id="header-child">
-      <div class="💪">
-        <h1 id=logo class=🍜>
+    <div class=💪 id="header-child">
+      <div class=💪>
+        <h1 id=logo>
           <a href=/><span id="logo-image">川</span></a>
           <span id="tag-beta"><a href="{{.EapUrl}}">Early Access</a></span>
         </h1>
@@ -25,7 +25,7 @@
           id="s-i">
         <span id="search-cancel"></span>
       </div>
-      <ul class="🍜 💪 🦷 ⚖️ top-nav" id="top-nav" >
+      <ul class="🍜 💪 🦷 ⚖️ top-nav" id="top-nav">
         {{if .IsLoggedIn}}
         <span class="top-link" id="search-start" tabindex=0></span>
         <form method="post" action="/logout" id="top-link">
@@ -41,9 +41,7 @@
   </header>
   <div class="💪 🌳 ⚖️">{{template "main" .}}</div>
   <footer class="💪 🪜">
-    <p class="📞">
-      <a href="{{.EapUrl}}">Join our Early Access Program!</a>
-    </p>
+    <p class="📞"><a href="{{.EapUrl}}">Join our Early Access Program!</a>
     <ul class="🔫 🍜 🚫 footer-links">
       <li><a href="about.txt">About</a>
       <li><a href="api.txt">API</a>

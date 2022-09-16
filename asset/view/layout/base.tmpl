@@ -58,8 +58,8 @@
 <script>
 let $d = document,
      $ = l => $d.getElementById(l),
-   rm2 = (l, c) => l.classList.remove(c),
-   ad2 = (l, c) => l.classList.add(c),
+    rm = (l, c) => l.classList.remove(c),
+    ad = (l, c) => l.classList.add(c),
      j = false,
      c = 'click',
      u = 'keyup',
@@ -75,8 +75,8 @@ let $d = document,
      q = '',
      s = q => window.location.href = `/search?q=${encodeURI(q)}`;
     
-function   fo() { j=true ; rm2($s, '👻'); ad2($t, '👻'); ad2($m, '🌃'); ad2($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
-function defo() { j=false; ad2($s, '👻'); rm2($t, '👻'); rm2($m, '🌃'); rm2($l, '🌃');                       $i.value=''; }
+function   fo() { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
+function defo() { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value=''; }
 
 if($a) {
   $a[z](c, fo);
@@ -123,8 +123,8 @@ let           sqb = false,
                $h = $('s-h'),
                dd = 'down',
              o$sm = _ => {
-                      if(sqb) ad2($sm, dd), ad2($qb, "🥷");
-                      else    rm2($sm, dd), rm2($qb, "🥷");
+                      if(sqb) ad($sm, dd), ad($qb, "🥷");
+                      else    rm($sm, dd), rm($qb, "🥷");
                       sqb = !sqb;
                     };
 
@@ -141,9 +141,9 @@ $sm[z](u, e => {
 $r[z](c, _ => { r.value = o, reset() });
     
 function reset() {
-  rm2($h, '⚡');
-  ad2($re, '⚡');
-  ad2($r, '🥷');
+  rm($h, '⚡');
+  ad($re, '⚡');
+  ad($r, '🥷');
   elSoq.innerText = '';
 }
 function change(e, i) { 
@@ -160,10 +160,10 @@ function change(e, i) {
       reset();
     } else {
       r.value = q;
-      ad2($h, '⚡');
+      ad($h, '⚡');
       elSoq.innerText = o;
-      rm2($re, '⚡');
-      rm2($r, '🥷');
+      rm($re, '⚡');
+      rm($r, '🥷');
     }
   } else {
     r.value = r.value.split(":::")[0].trim();
@@ -176,10 +176,10 @@ r[z](u, e => {
   else if(e.target.value == o) q = e.target.value, reset();
   else {
     q = e.target.value;
-    ad2($h, '⚡');
+    ad($h, '⚡');
     elSoq.innerText = o;
-    rm2($re, '⚡');
-    rm2($r, '🥷');
+    rm($re, '⚡');
+    rm($r, '🥷');
   }
 });
 $re[z](c, e => {

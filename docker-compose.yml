@@ -18,6 +18,7 @@ services:
       JWT_SECRET_KEY: <retroactively_redacted>
       DEV: true
       CACHE_ENABLED: true
+      EAP_URL: http://google.com
   shimogawa_service:
     image: postgres:13.8-alpine
     volumes:

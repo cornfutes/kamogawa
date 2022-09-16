@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type EnvEnum int
@@ -16,6 +17,7 @@ const (
 var (
 	Host         string
 	RedirectUri  string
+	EapUrl       string
 	Env          EnvEnum
 	CacheEnabled bool
 	Preindex     bool
@@ -51,4 +53,16 @@ func init() {
 		Preindex, _ = strconv.ParseBool(v)
 	}
 	fmt.Printf("Preindex=%v\n", Preindex)
+
+	EapUrl = os.Getenv("EAP_URL")
+	if len(EapUrl) == 0 {
+		panic("Missing $EAP_URL env variable")
+	}
+	if !strings.HasPrefix(EapUrl, "http") {
+		panic("URL must start with HTTP")
+	}
+	fmt.Printf("EAP_URL=%v\n", EapUrl)
+
+	fmt.Printf("EAP_URL =%v\n", CacheEnabled)
+
 }

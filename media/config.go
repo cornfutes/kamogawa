@@ -1,4 +1,4 @@
-package asset
+package media
 
 import (
 	_ "embed"
@@ -27,60 +27,60 @@ const (
 )
 
 var (
-	//go:embed media/style.css
+	//go:embed asset/style.css
 	styleCss    []byte
 	styleCssMin []byte
-	//go:embed media/screensaver.mp4
+	//go:embed asset/screensaver.mp4
 	mp4Screensaver []byte
-	//go:embed media/cloud_logo_aws.png
+	//go:embed asset/cloud_logo_aws.png
 	pngAWS []byte
-	//go:embed media/cloud_logo_gcp.png
+	//go:embed asset/cloud_logo_gcp.png
 	pngGCP []byte
-	//go:embed media/cloud_logo_azure.png
+	//go:embed asset/cloud_logo_azure.png
 	pngAzure []byte
-	//go:embed media/graphql.png
+	//go:embed asset/graphql.png
 	pngGraphQl []byte
-	//go:embed media/blog_traffic.gif
+	//go:embed asset/blog_traffic.gif
 	pngBlog1 []byte
-	//go:embed media/blog_search.gif
+	//go:embed asset/blog_search.gif
 	pngBlog2 []byte
-	//go:embed media/blog_splash.jpg
+	//go:embed asset/blog_splash.jpg
 	pngBlog3 []byte
-	//go:embed media/blog_login_error.gif
+	//go:embed asset/blog_login_error.gif
 	pngBlog4 []byte
-	//go:embed media/blog_simple.gif
+	//go:embed asset/blog_simple.gif
 	pngBlog5 []byte
-	//go:embed media/blog_widget.gif
+	//go:embed asset/blog_widget.gif
 	pngBlog6 []byte
-	//go:embed media/blog_docker.gif
+	//go:embed asset/blog_docker.gif
 	pngBlog7 []byte
 
-	//go:embed media/splash_landing.gif
+	//go:embed asset/splash_landing.gif
 	splashLanding []byte
-	//go:embed media/splash_fuji.gif
+	//go:embed asset/splash_fuji.gif
 	splashFuji []byte
-	//go:embed media/splash_ship.gif
+	//go:embed asset/splash_ship.gif
 	splashShip []byte
-	//go:embed media/console.svg
+	//go:embed asset/console.svg
 	console []byte
-	//go:embed media/phone.svg
+	//go:embed asset/phone.svg
 	phone []byte
-	//go:embed media/release.txt
+	//go:embed asset/release.txt
 	Release []byte
-	//go:embed media/security.txt
+	//go:embed asset/security.txt
 	security []byte
-	//go:embed media/legal.txt
+	//go:embed asset/legal.txt
 	legal []byte
-	//go:embed media/about.txt
+	//go:embed asset/about.txt
 	about []byte
-	//go:embed media/api.txt
+	//go:embed asset/api.txt
 	api []byte
-	//go:embed media/nft.gif
+	//go:embed asset/nft.gif
 	gifProfile []byte
-	//go:embed media/big_sur.jpg
+	//go:embed asset/big_sur.jpg
 	jpgBigSur []byte
 
-	//go:embed media/consent.png
+	//go:embed asset/consent.png
 	consent []byte
 
 	staticHtml = map[string]string{
@@ -102,13 +102,13 @@ func init() {
 }
 
 // Wire up HTML, css and media assets
-func Config(r *gin.Engine) {
+func Register(r *gin.Engine) {
 	r.HTMLRender = view.HTMLRenderer()
 
 	// Register static assets.
 	if config.Env == config.Dev {
-		r.StaticFile("/style.css", "asset/media/style.css")
-		r.StaticFile("/style_glass.css", "asset/media/style_glass.css")
+		r.StaticFile("/style.css", "media/asset/style.css")
+		r.StaticFile("/style_glass.css", "media/asset/style_glass.css")
 	} else {
 		r.GET("style.css", Data(MimeTypeCSS, styleCssMin))
 	}

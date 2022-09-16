@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"kamogawa/asset"
 	"kamogawa/cache/gcecache"
 	"kamogawa/core"
 	"kamogawa/handler"
 	"kamogawa/identity"
+	"kamogawa/media"
 	"kamogawa/types"
 	"log"
 	"strings"
@@ -54,14 +53,7 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(identity.SetAuthContext())
-	asset.Config(r)
-
-	r.GET("/ping", func(c *gin.Context) {
-		q := c.Query("q")
-		fmt.Printf("Query: %v\n", q)
-		handler.SearchInstances(db, q)
-		c.JSON(http.StatusOK, "{'result': 'pong'}")
-	})
+	media.Register(r)
 
 	r.GET("/demo", handler.Demo)
 	r.GET("/blog", handler.Blog)
@@ -85,7 +77,7 @@ func main() {
 
 	authed := r.Group("/", identity.GateAuth())
 	{
-		authed.GET("release.txt", asset.Data(asset.MimeTypeTXT, asset.Release))
+		authed.GET("release.txt", media.Data(media.MimeTypeTXT, media.Release))
 
 		authed.GET("/glass_sample", func(c *gin.Context) {
 			core.HTMLWithGlobalState(c, "glass_sample.html", gin.H{})

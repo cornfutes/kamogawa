@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -35,12 +36,12 @@ func init() {
 		panic("Missing $REDIRECT_URI env variable")
 	}
 
-	if len(os.Getenv("DEV")) > 0 {
+	if os.Getenv("RELEASE_ENV") == "dev" {
 		Env = Dev
 	} else {
 		Env = Prod
 	}
-	fmt.Printf("Env=%v\n", Env)
+	log.Printf("Env=%v\n", Env)
 
 	v, present := os.LookupEnv("CACHE_ENABLED")
 	if present {

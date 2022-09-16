@@ -73,9 +73,9 @@ func Config(r *gin.Engine) {
 
 	// Register static assets.
 	if config.Env == config.Dev {
-		r.GET("style.css", css(styleCss))
-	} else {
 		r.StaticFile("/style.css", "asset/media/style.css")
+	} else {
+		r.GET("style.css", css(styleCss))
 	}
 	r.GET("cloud_logo_aws.png", png(pngAWS))
 	r.GET("cloud_logo_gcp.png", png(pngGCP))

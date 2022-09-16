@@ -16,7 +16,7 @@ services:
       REDIRECT_URI: http://localhost:3000/google/oauth2
       SHIMOGAWA_URL: postgres://local-dev@shimogawa_service:5432/shimogawa_db
       JWT_SECRET_KEY: <retroactively_redacted>
-      DEV: true
+      RELEASE_ENV: dev
       CACHE_ENABLED: true
       EAP_URL: http://google.com
   shimogawa_service:

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kamogawa/core"
 	"kamogawa/types"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -30,16 +31,18 @@ func getFakeData(q string) []SearchResult {
 // TODO(david): implement
 func getRealData(db *gorm.DB, q string) []SearchResult {
 	var searchResults []SearchResult
-	r, err := SearchInstances(db, q)
-	if err == nil {
-		searchResults = append(searchResults, r...)
-	}
 
-	r, err = searchProjects(db, q)
-	if err == nil {
-		searchResults = append(searchResults, r...)
-	}
+	for _, word := range strings.Fields(q) {
+		r, err := SearchInstances(db, word)
+		if err == nil {
+			searchResults = append(searchResults, r...)
+		}
 
+		r, err = searchProjects(db, word)
+		if err == nil {
+			searchResults = append(searchResults, r...)
+		}
+	}
 	return searchResults
 }
 

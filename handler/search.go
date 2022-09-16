@@ -130,22 +130,7 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 		originalQ := c.Query("q")
 		q := strings.Split(originalQ, ":::")[0]
 
-		if len(q) < minQueryLength {
-			core.HTMLWithGlobalState(c, "search.html", gin.H{
-				"Error":      minQueryError,
-				"Query":      q,
-				"HasResults": false,
-				"Results":    nil,
-			})
-			return
-		}
-		if len(q) > maxQueryLength {
-			core.HTMLWithGlobalState(c, "search.html", gin.H{
-				"Error":      maxQueryError,
-				"Query":      q,
-				"HasResults": false,
-				"Results":    nil,
-			})
+		if !validateQuery(c, q) {
 			return
 		}
 
@@ -160,6 +145,29 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 			"Results":    searchResults,
 		})
 	}
+}
+
+func validateQuery(c *gin.Context, q string) bool {
+	if len(q) < minQueryLength {
+		core.HTMLWithGlobalState(c, "search.html", gin.H{
+			"Error":      minQueryError,
+			"Query":      q,
+			"HasResults": false,
+			"Results":    nil,
+		})
+		return false
+	}
+	if len(q) > maxQueryLength {
+		core.HTMLWithGlobalState(c, "search.html", gin.H{
+			"Error":      maxQueryError,
+			"Query":      q,
+			"HasResults": false,
+			"Results":    nil,
+		})
+		return false
+	}
+
+	return true
 }
 
 // For displaying warning that we ignore regex right now.

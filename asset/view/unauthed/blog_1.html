@@ -17,7 +17,8 @@
 
     <img src="blog_search.png">
 
-  <p>We have a login system. On the demo landing page, which is linked on ShowHN,
+  <p>We have an IAM ( identity, acccess management ) aka login system.
+    On the demo landing page, which is linked on ShowHN,
     there is a CTA (call to action) / link that allows people to login with a demo user.
     We put it in size 42px font with the message "Proceed to demo".
     We thought this was straightforward enough.
@@ -32,15 +33,6 @@
 
     <img src="blog_splash.png">
 
-  <p>We created a commit, triggered a Docker build, push to the remote
-    container registry. We run this app on CloudRun, Google's container-as-service
-    serverless offering, which pulls from container registry and serves the app
-    We felt safe because CloudRun allows us to rollback to last stable
-    version in seconds, but even before this, traffic is not rolled over to the
-    new build until we verify things aren't broken.
-    For all the crap we give GCP, things runs great once you can get it to run.
-    The problem is getting to that stage. We want to help others get there.
-  </p>
   <p>
     Going back to the logs, ultimately a 20-30% of people who got on the landing
     page proceeded through the funnel to something that required a login.
@@ -77,6 +69,20 @@
   </p>
 
   <img src="blog_simple.png">
+
+  <p>It's relatively easy for us to push changes ( straight to prod, for now ).
+    We od Docker build then push to the container registry.
+    We run this app on CloudRun, Google's container-as-service
+    serverless offering, which pulls from container registry and serves the app
+    We felt safe because CloudRun allows us to rollback to last stable
+    version in seconds, but even before this, traffic is not rolled over to the
+    new build until we verify things aren't broken.
+    For all the crap we give GCP, things runs great once you can get it to run.
+    The problem is getting to that stage. We want to help others get there.
+  </p>
+
+  <img src="blog_docker.png">
+
   <p>
     The key takeaway is that if you tell people you are building a search engine
     for X, they will immediately try the search icon and ignore the "Proceed to demo"

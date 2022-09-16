@@ -36,6 +36,8 @@ var (
 	pngBlog5 []byte
 	//go:embed media/blog_widget.png
 	pngBlog6 []byte
+	//go:embed media/blog_docker.png
+	pngBlog7 []byte
 
 	//go:embed media/splash.gif
 	splash []byte
@@ -98,6 +100,7 @@ func Config(r *gin.Engine) {
 	r.GET("blog_login_error.png", png(pngBlog4))
 	r.GET("blog_simple.png", png(pngBlog5))
 	r.GET("blog_widget.png", png(pngBlog6))
+	r.GET("blog_docker.png", png(pngBlog7))
 
 	r.GET("splash.gif", gif(splash))
 	r.GET("fuji.gif", gif(fuji))

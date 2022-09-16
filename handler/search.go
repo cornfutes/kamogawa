@@ -90,8 +90,9 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 	result := db.Raw(""+
 		" SELECT * "+
 		" FROM project_dbs"+
-		" WHERE name || ' ' || project_id || ' ' || project_number"+
-		" ILIKE ?"+
+		" WHERE (name || ' ' || project_id || ' ' || project_number"+
+		" ILIKE ?)"+
+		" AND email = '1337gamer@gmail.com'"+
 		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")

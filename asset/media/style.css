@@ -258,7 +258,6 @@ header {
 
 header>div {
   flex: 0 0 var(--width);
-  align-items: center;
 }
 
 #logo {

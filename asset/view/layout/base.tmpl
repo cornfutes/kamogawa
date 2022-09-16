@@ -56,27 +56,36 @@
     </ul>
   </footer>
   <script>
-    let GlobalState = {
-      searchBoxInFocus: false,
-    };
-    $ = id => document.getElementById(id);
-    rm = (id, c) => $(id).classList.remove(c);
-    ad = (id, c) => $(id).classList.add(c);
+    $ = l => document.getElementById(l);
+    rm = (l, c) => $(l).classList.remove(c);
+    ad = (l, c) => $(l).classList.add(c);
+
+    let searchBoxInFocus = showingQueryBuilder = false,
+        c = 'click',
+        u = 'keyup',
+        q = '';
+    {{if .Query}} 
+      q = {{.Query}} || '';
+    {{end}}
+    let originalQuery = q || '',
+      baseQuery = (q.length > 0 && q.split(':::')[0] ) || '',
+      provider = 'all',
+      algo = 'substring',
+      time = 'all';
+
 
     function eventHandlerSearchBoxFocus(q) {
-      GlobalState.searchBoxInFocus = true;
+      searchBoxInFocus = true;
       rm('search-box', '👻');
       ad('top-nav', '👻');
       ad('main', '🌃');
       ad('logo', '🌃');
-      if(q && q.length > 0) {
-        $('search-input').value = q;
-      }
+      if(q && q.length > 0) $('search-input').value = q;
       $('search-input').focus();
     }
 
     function eventHandlerSearchBoxDefocus() {
-      GlobalState.searchBoxInFocus = false;
+      searchBoxInFocus = false;
       ad('search-box', '👻');
       rm('top-nav', '👻');
       rm('main', '🌃');
@@ -84,21 +93,16 @@
       $('search-input').value = '';
     }
 
-    $('search-start').addEventListener('click', eventHandlerSearchBoxFocus);
-    $('search-start').addEventListener('keyup', e => {
-      if(e.code == 'Enter') {
-        e.preventDefault();
-        eventHandlerSearchBoxFocus();
-      }
+    $('search-start').addEventListener(c, eventHandlerSearchBoxFocus);
+    $('search-start').addEventListener(u, e => {
+      if(e.code == 'Enter') e.preventDefault(), eventHandlerSearchBoxFocus();
     });
 
     document.addEventListener('keydown', e => {
-      if (!GlobalState.searchBoxInFocus && e.code == 'Backslash') e.preventDefault(), eventHandlerSearchBoxFocus(e);
+      if (!searchBoxInFocus && e.code == 'Backslash') e.preventDefault(), eventHandlerSearchBoxFocus(e);
     });
     $('search-input').addEventListener('keydown', e => {
-      if(!GlobalState.searchBoxInFocus) {
-        return;
-      }
+      if(!searchBoxInFocus) return;
       if (e.code == 'Escape') e.preventDefault(), eventHandlerSearchBoxDefocus();
       else if (e.code == 'Enter') {
         {{if not .IsLoggedIn}}
@@ -107,44 +111,22 @@
           e.preventDefault();
           search($('search-input').value);
         {{end}}
-      } else if (e.code == 'Tab') {
-        e.preventDefault();
-      }
+      } else if (e.code == 'Tab') e.preventDefault();
     });
-    $('search-cancel').addEventListener('click', eventHandlerSearchBoxDefocus);
+    $('search-cancel').addEventListener(c, eventHandlerSearchBoxDefocus);
+    
     const elNavGcp = $("nav-gcp");
     if (elNavGcp) {
-      // fix, since stored as string 
-      if (localStorage.getItem('nav-gcp-open') == 'true') {
-        elNavGcp.open = true;
-      }
+      if (localStorage.getItem('nav-gcp-open') == 'true') elNavGcp.open = true;
 
       elNavGcp.addEventListener("toggle", _ => {
         localStorage.setItem('nav-gcp-open', elNavGcp.open);
       });
     } 
 
-    var style = "font-size: 24px;" +
-      "background: #67b26f; /* fallback for old browsers */" + 
-      "background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); /* Chrome 10-25, Safari 5.1-6 */" +
-      "background: linear-gradient(to right, #67b26f, #4ca2cd); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" +
-      "color: white;" +
-      "text-align: center;" +
-      "padding: 10px 15px;" +
-      "width: 100%;" +
-      "border-radius: 20px;";
-    var text = "%c Hello Y = f => (x => x(x))(x => f(y => x(x)(y))) "
-    console.log(text, style);
+    console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))",
+      "font-size: 24px;background: #67b26f; background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd); color: white;text-align: center; padding: 10px 15px; width: 100%;border-radius: 20px;");
 
-    var q = '';
-    {{if .Query}} 
-      q = {{.Query}} || '';
-    {{end}}
-    var originalQuery = q || '';
-    var baseQuery = (q.length > 0 && q.split(':::')[0] ) || '';
-    let provider = 'all';
-    let algo = 'substring';
-    let time = 'all';
     function changeProvider(e) {
       provider = e.target.value;
       updateQuery();
@@ -158,20 +140,11 @@
       updateQuery();
     }
 
-    function updateQuery() {
-      tokens = [];
-      if(provider != "all") {
-        tokens.push("provider:" + provider);
-      }
-      if(algo != "substring") {
-        tokens.push("algo:" + algo);
-      }
-      if(time != "all") {
-        tokens.push("time:" + time);
-      }
-      if(tokens.length > 0) {
-        q = [$("query").value.split(":::")[0].trim(), ":::", ...tokens].join(" ");
-      } 
+    function updateQuery(tk = []) {
+      if(provider != "all") tk.push("provider:" + provider);
+      if(algo != "substring") tk.push("algo:" + algo);
+      if(time != "all") tk.push("time:" + time);
+      if(tk.length > 0) q = [$("query").value.split(":::")[0].trim(), ":::", ...tk].join(" ");
       if(q == originalQuery) { 
         $("query").value = originalQuery;
         resetSearchState();
@@ -184,41 +157,34 @@
       }
     }
 
-    let showingQueryBuilder = false;
     const elSearchAdvanced = $("search-advanced");
     if(elSearchAdvanced) {
-      elSearchAdvanced.addEventListener('click', () => {
-          if(showingQueryBuilder) {
-            elSearchAdvanced.classList.add('down');
-            showingQueryBuilder = false;
-            ad("query-builder", "🥷");
-          } else {
-            elSearchAdvanced.classList.remove('down');
-            showingQueryBuilder = true;
-            rm("query-builder", "🥷");
-          }
+      elSearchAdvanced.addEventListener(c, _ => {
+          if(showingQueryBuilder)
+            elSearchAdvanced.classList.add('down'), ad("query-builder", "🥷");
+          else
+            elSearchAdvanced.classList.remove('down'), rm("query-builder", "🥷");
+          showingQueryBuilder = !showingQueryBuilder;
         }); 
-        elSearchAdvanced.addEventListener('keyup', (e) => {
+        elSearchAdvanced.addEventListener(u, (e) => {
           if(e.code == 'Enter') {
             event.preventDefault();
-             if(showingQueryBuilder) {
-              elSearchAdvanced.classList.add('down');
-              showingQueryBuilder = false;
+             if(showingQueryBuilder)
+              elSearchAdvanced.classList.add('down'),
+              showingQueryBuilder = false,
               ad("query-builder", "🥷");
-            } else {
-              elSearchAdvanced.classList.remove('down');
-              showingQueryBuilder = true;
+            else
+              elSearchAdvanced.classList.remove('down'),
+              showingQueryBuilder = true,
               rm("query-builder", "🥷");
-            }
           }
       });
     }
 
   const sbr = $('search-builder-reset');
   if(sbr) {
-    sbr.addEventListener('click', () => {
-      $("query").value = originalQuery;
-      resetSearchState();
+    sbr.addEventListener(c, _ => {
+      $("query").value = originalQuery, resetSearchState();
     });
   }
 
@@ -231,7 +197,7 @@
 
   const elQuery = $('query');
   if(elQuery) {
-    elQuery.addEventListener('keyup', e => {
+    elQuery.addEventListener(u, e => {
       e.preventDefault();
       if(e.code == 'Enter') {
         search(e.target.value);
@@ -250,17 +216,11 @@
 
   const srcta = $('search-redo-cta');
   if(srcta) {
-    srcta.addEventListener('click', e => {
-      if(q != originalQuery) {
-        e.preventDefault();
-        search(q);
-      }
+    srcta.addEventListener(c, e => {
+      if(q != originalQuery) e.preventDefault(), search(q);
     });  
-    srcta.addEventListener('keyup', e => {
-      if(event.code == 'Enter' && q != originalQuery) {
-        e.preventDefault();
-        search(q);
-      }
+    srcta.addEventListener(u, e => {
+      if(event.code == 'Enter' && q != originalQuery) e.preventDefault(), search(q);
     });
   }
 
@@ -274,7 +234,5 @@
     });
   }
 
-  function search(q) {
-     window.location.href = '/search?q=' + encodeURI(q);
-  }
+  function search(q) { window.location.href = '/search?q=' + encodeURI(q); }
   </script>

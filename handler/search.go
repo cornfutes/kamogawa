@@ -117,7 +117,7 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 	return searchResults, nil
 }
 
-var minQueryLength int = 4
+var minQueryLength int = 1
 var minQueryError string = "Query must be 4 characters or more."
 var maxQueryLength int = 80
 var maxQueryError string = "Query must be 80 characters or less."

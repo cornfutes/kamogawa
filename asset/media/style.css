@@ -270,7 +270,7 @@ main>div {
 }
 
 aside {
-  flex: 0 14rem;
+  width: 14em;
   border-right: var(--frame-thickness) solid var(--h);
 }
 

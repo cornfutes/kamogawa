@@ -24,6 +24,8 @@ services:
       CONTACT_EMAIL: diceduckmonk@gmail.com
       BRAND_NAME: DiceDuckMonk
       # THEME: glass
+    env_file:
+      - config.env
   shimogawa_service:
     image: postgres:13.8-alpine
     volumes:

@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"kamogawa/core"
+	"kamogawa/types/gcp/gaetypes"
 	"kamogawa/types/gcp/gcetypes"
 	"strings"
 
@@ -33,10 +34,10 @@ func getFakeData(q string) []SearchResult {
 	return searchResults[:]
 }
 
-// TODO(david): implement
 func getRealData(db *gorm.DB, q string) []SearchResult {
 	var searchResults []SearchResult
 
+	// This will be buggy. duplicate results?
 	for _, word := range strings.Fields(q) {
 		r, err := SearchInstances(db, word)
 		if err == nil {
@@ -47,8 +48,48 @@ func getRealData(db *gorm.DB, q string) []SearchResult {
 		if err == nil {
 			searchResults = append(searchResults, r...)
 		}
+
+		r, err = searchGAEServices(db, word)
+		if err == nil {
+			searchResults = append(searchResults, r...)
+		}
 	}
 	return searchResults
+}
+
+func searchGAEServices(db *gorm.DB, q string) ([]SearchResult, error) {
+	var x []gaetypes.GAEServiceDB
+	result := db.Raw(""+
+		" SELECT * "+
+		" FROM gae_service_dbs"+
+		" WHERE name || ' ' || id || ' ' || project_id"+
+		" ILIKE ?"+
+		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&x)
+	if result.Error != nil {
+		fmt.Printf("Query failed\n")
+		return nil, fmt.Errorf("Query failed")
+	}
+
+	if len(x) == 0 {
+		fmt.Printf("No results found\n")
+		return nil, fmt.Errorf("No results found")
+	}
+
+	searchResults := make([]SearchResult, 0, len(x))
+	for _, v := range x {
+		searchResults = append(searchResults,
+			SearchResult{
+				Text:     v.ToSearchString(),
+				Link:     v.ToLink(),
+				Name:     v.Id,
+				Provider: "GCP",
+				Product:  "GAE",
+				Kind:     "Service",
+			})
+	}
+
+	return searchResults, nil
+
 }
 
 func SearchInstances(db *gorm.DB, q string) ([]SearchResult, error) {

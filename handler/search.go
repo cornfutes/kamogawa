@@ -7,6 +7,7 @@ import (
 	"kamogawa/core"
 	"kamogawa/identity"
 	"kamogawa/types"
+	"kamogawa/types/gcp/coretypes"
 	"kamogawa/types/gcp/gaetypes"
 	"kamogawa/types/gcp/gcetypes"
 	"strings"
@@ -141,7 +142,7 @@ func getSearchResults(db *gorm.DB, user types.User, q string) []SearchResult {
 }
 
 func searchProjects(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
-	var projectDBs []gcetypes.ProjectDB
+	var projectDBs []coretypes.ProjectDB
 	result := db.Raw(
 		" SELECT project_dbs.* "+
 			" FROM project_dbs"+

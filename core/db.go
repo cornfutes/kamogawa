@@ -2,6 +2,7 @@ package core
 
 import (
 	"kamogawa/types"
+	"kamogawa/types/gcp/coretypes"
 	gaetypes "kamogawa/types/gcp/gaetypes"
 	"kamogawa/types/gcp/gcetypes"
 	"log"
@@ -19,8 +20,8 @@ func InitDB(url string) *gorm.DB {
 
 	db.AutoMigrate(
 		&types.User{},
-		&gcetypes.ProjectAuth{},
-		&gcetypes.ProjectDB{},
+		&coretypes.ProjectAuth{},
+		&coretypes.ProjectDB{},
 		&gcetypes.GCEInstanceAuth{},
 		&gcetypes.GCEInstanceDB{},
 		&gaetypes.GAEServiceAuth{},

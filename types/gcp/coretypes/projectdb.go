@@ -1,7 +1,8 @@
-package gcetypes
+package coretypes
 
 import (
 	"fmt"
+	"kamogawa/types/gcp/gcetypes"
 	"time"
 
 	"gorm.io/gorm"
@@ -16,14 +17,14 @@ type ProjectDB struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
-	Project
+	gcetypes.Project
 	ProjectId     string `gorm:"primaryKey:idx"`
 	HasGCEEnabled bool
 	//Parent         ProjectParent
 }
 
-func (in *ProjectDB) ToProject() Project {
-	return Project{
+func (in *ProjectDB) ToProject() gcetypes.Project {
+	return gcetypes.Project{
 		ProjectNumber:  in.ProjectNumber,
 		ProjectId:      in.ProjectId,
 		LifeCycleState: in.LifeCycleState,
@@ -40,7 +41,7 @@ func (in *ProjectDB) ToLink() string {
 	return fmt.Sprintf("https://console.cloud.google.com/welcome?project=%v", in.ProjectId)
 }
 
-func ProjectToProjectDB(in *Project, hasGceEnabled bool) ProjectDB {
+func ProjectToProjectDB(in *gcetypes.Project, hasGceEnabled bool) ProjectDB {
 	var out ProjectDB
 	out.ProjectNumber = in.ProjectNumber
 	out.ProjectId = in.ProjectId

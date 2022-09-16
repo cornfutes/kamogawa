@@ -8,6 +8,7 @@ import (
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
+	"kamogawa/types/gcp/coretypes"
 	"kamogawa/types/gcp/gcetypes"
 	"strconv"
 	"strings"
@@ -38,7 +39,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 
 		var start = time.Now()
 		var responseSuccess *gcetypes.ListProjectResponse
-		var projectDBs []gcetypes.ProjectDB = nil
+		var projectDBs []coretypes.ProjectDB = nil
 		if config.CacheEnabled && useCache {
 			projectDBs = gcecache.ReadProjectsCache2(db, user)
 		}
@@ -51,9 +52,9 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 				})
 				return
 			}
-			projectDBs = make([]gcetypes.ProjectDB, 0, len(responseSuccess.Projects))
+			projectDBs = make([]coretypes.ProjectDB, 0, len(responseSuccess.Projects))
 			for _, p := range responseSuccess.Projects {
-				projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(&p, true))
+				projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&p, true))
 			}
 			fmt.Printf("len %v\n", projectDBs)
 		}

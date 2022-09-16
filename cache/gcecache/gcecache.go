@@ -5,11 +5,12 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"kamogawa/types"
+	"kamogawa/types/gcp/coretypes"
 	"kamogawa/types/gcp/gcetypes"
 )
 
 func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, error) {
-	var projectDBs []gcetypes.ProjectDB
+	var projectDBs []coretypes.ProjectDB
 
 	result := db.Joins(
 		" INNER JOIN project_auths "+
@@ -34,8 +35,8 @@ func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectRespo
 	return &gcetypes.ListProjectResponse{Projects: projects}, nil
 }
 
-func ReadProjectsCache2(db *gorm.DB, user types.User) []gcetypes.ProjectDB {
-	var projectDBs []gcetypes.ProjectDB
+func ReadProjectsCache2(db *gorm.DB, user types.User) []coretypes.ProjectDB {
+	var projectDBs []coretypes.ProjectDB
 
 	result := db.Joins(
 		" INNER JOIN project_auths "+
@@ -62,9 +63,9 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 		return
 	}
 
-	projectDBs := make([]gcetypes.ProjectDB, 0, len(resp.Projects))
+	projectDBs := make([]coretypes.ProjectDB, 0, len(resp.Projects))
 	for _, v := range resp.Projects {
-		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(&v, true))
+		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v, true))
 	}
 	for _, projectDB := range projectDBs {
 		db.FirstOrCreate(&projectDB)
@@ -73,7 +74,7 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 	WriteProjectsAuth(db, user, resp)
 }
 
-func WriteProjectsCache2(db *gorm.DB, user types.User, projects []gcetypes.ProjectDB) {
+func WriteProjectsCache2(db *gorm.DB, user types.User, projects []coretypes.ProjectDB) {
 	if len(projects) == 0 {
 		return
 	}
@@ -94,23 +95,23 @@ func WriteProjectsAuth(db *gorm.DB, user types.User, resp *gcetypes.ListProjectR
 		return
 	}
 
-	projectAuths := make([]gcetypes.ProjectAuth, 0, len(resp.Projects))
+	projectAuths := make([]coretypes.ProjectAuth, 0, len(resp.Projects))
 	for _, v := range resp.Projects {
-		projectAuths = append(projectAuths, gcetypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
+		projectAuths = append(projectAuths, coretypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
 	}
 	for _, v := range projectAuths {
 		db.FirstOrCreate(&v)
 	}
 }
 
-func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []gcetypes.ProjectDB) {
+func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []coretypes.ProjectDB) {
 	if len(projects) == 0 {
 		return
 	}
 
-	projectAuths := make([]gcetypes.ProjectAuth, 0, len(projects))
+	projectAuths := make([]coretypes.ProjectAuth, 0, len(projects))
 	for _, v := range projects {
-		projectAuths = append(projectAuths, gcetypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
+		projectAuths = append(projectAuths, coretypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
 	}
 	for _, v := range projectAuths {
 		db.FirstOrCreate(&v)

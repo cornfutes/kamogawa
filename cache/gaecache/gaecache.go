@@ -76,7 +76,11 @@ func ReadVersionsCache(db *gorm.DB, serviceId string) (*gaetypes.GAEListVersions
 
 	versions := make([]gaetypes.GAEVersion, 0, len(versionDBs))
 	for _, versionDB := range versionDBs {
-		versions = append(versions, gaetypes.GAEVersion{Name: versionDB.Name, Id: versionDB.Id, ServingStatus: versionDB.ServingStatus})
+		versions = append(versions, gaetypes.GAEVersion{
+			Id:            versionDB.Name,
+			Name:          versionDB.Id,
+			ServingStatus: versionDB.ServingStatus,
+		})
 	}
 
 	return &gaetypes.GAEListVersionsResponse{Versions: versions}, nil
@@ -93,7 +97,12 @@ func WriteVersionsCache(db *gorm.DB, serviceId string, resp *gaetypes.GAEListVer
 	versionDBs := make([]gaetypes.GAEVersionDB, 0, len(resp.Versions))
 
 	for _, v := range resp.Versions {
-		versionDBs = append(versionDBs, gaetypes.GAEVersionDB{Name: v.Name, Id: v.Id, ServingStatus: v.ServingStatus, ServiceId: serviceId})
+		versionDBs = append(versionDBs, gaetypes.GAEVersionDB{
+			Name:          v.Id,
+			Id:            v.Name,
+			ServingStatus: v.ServingStatus,
+			ServiceId:     serviceId,
+		})
 	}
 
 	for _, versionDB := range versionDBs {
@@ -117,7 +126,10 @@ func ReadInstancesCache(db *gorm.DB, versionId string) (*gaetypes.GAEListInstanc
 
 	instances := make([]gaetypes.GAEInstance, 0, len(instanceDBs))
 	for _, instanceDB := range instanceDBs {
-		instances = append(instances, gaetypes.GAEInstance{Name: instanceDB.Name, Id: instanceDB.Id, VMName: instanceDB.VMName})
+		instances = append(instances, gaetypes.GAEInstance{
+			Name:   instanceDB.Id,
+			Id:     instanceDB.Name,
+			VMName: instanceDB.VMName})
 	}
 
 	return &gaetypes.GAEListInstancesResponse{Instances: instances}, nil
@@ -134,7 +146,7 @@ func WriteInstancesCache(db *gorm.DB, versionId string, resp *gaetypes.GAEListIn
 	instanceDBs := make([]gaetypes.GAEInstanceDB, 0, len(resp.Instances))
 
 	for _, v := range resp.Instances {
-		instanceDBs = append(instanceDBs, gaetypes.GAEInstanceDB{Name: v.Name, Id: v.Id, VMName: v.VMName, VersionId: versionId})
+		instanceDBs = append(instanceDBs, gaetypes.GAEInstanceDB{Name: v.Id, Id: v.Name, VMName: v.VMName, VersionId: versionId})
 	}
 
 	for _, instanceDB := range instanceDBs {

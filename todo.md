@@ -6,6 +6,7 @@
 [ ] cache 
   [x] fix GCE VMs page not caching case where project doesn't have GCE API enabled 
   [ ] fix cache behavior for GAE 
+  [ ] cache bit on Project that no instances 
 [ ] improve SERP ( search results page )
   [x] show total results count and duration 
   [ ] paginate. show 10 results per page.
@@ -27,3 +28,10 @@
 [ ] derisk universality of Auth user ( only one globally refresh token )
   [ ] local environment can break prod
     [x] add ability to disconnect google account, without revoking the refresh token
+[ ] product 
+  [ ] project details page
+    [ ] apis page 
+    [ ] todo, increment cache count 
+
+App Engine states 
+  zero state 

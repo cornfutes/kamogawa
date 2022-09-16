@@ -24,6 +24,19 @@ var (
 	pngAzure []byte
 	//go:embed media/graphql.png
 	pngGraphQl []byte
+	//go:embed media/blog_traffic.png
+	pngBlog1 []byte
+	//go:embed media/blog_search.png
+	pngBlog2 []byte
+	//go:embed media/blog_splash.png
+	pngBlog3 []byte
+	//go:embed media/blog_login_error.png
+	pngBlog4 []byte
+	//go:embed media/blog_simple.png
+	pngBlog5 []byte
+	//go:embed media/blog_widget.png
+	pngBlog6 []byte
+
 	//go:embed media/splash.gif
 	splash []byte
 	//go:embed media/fuji.gif
@@ -79,6 +92,13 @@ func Config(r *gin.Engine) {
 	r.GET("cloud_logo_gcp.png", png(pngGCP))
 	r.GET("cloud_logo_azure.png", png(pngAzure))
 	r.GET("graphql.png", png(pngGraphQl))
+	r.GET("blog_traffic.png", png(pngBlog1))
+	r.GET("blog_search.png", png(pngBlog2))
+	r.GET("blog_splash.png", png(pngBlog3))
+	r.GET("blog_login_error.png", png(pngBlog4))
+	r.GET("blog_simple.png", png(pngBlog5))
+	r.GET("blog_widget.png", png(pngBlog6))
+
 	r.GET("splash.gif", gif(splash))
 	r.GET("fuji.gif", gif(fuji))
 	r.GET("ship.gif", gif(ship))

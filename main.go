@@ -64,6 +64,9 @@ func main() {
 	})
 
 	r.GET("/demo", handler.Demo)
+	r.GET("/blog", handler.Blog)
+	r.GET("/blog_showhn", handler.Blog1)
+
 	r.GET("/login", handler.Login)
 	r.GET("/reset", handler.Reset)
 	r.POST("/login", identity.HandleLogin)

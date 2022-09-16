@@ -162,16 +162,25 @@ function updateQuery(tk = []) {
   if(f[0] != "all") tk.push("provider:" + f[0]);
   if(f[1] != "substring") tk.push("algo:" + f[1]);
   if(f[2] != "lastmonth") tk.push("time:" + f[2]);
-  if(tk.length > 0) q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ");
-  if(baseQ == originalQuery) {
-    r.value = originalQuery;
-    resetSearchState();
+  if(tk.length == 0) {
+    r.value = r.value.split(":::")[0].trim()
+    if(r.value == originalQuery) {
+      console.log('originalQuery', originalQuery);
+      resetSearchState();
+    }
   } else {
-    r.value = q;
-    ad('search-header', '⚡');
-    elSoq.innerText = originalQuery;
-    rm(elSrctaId, '⚡');
-    rm(elSbrId, '🥷');
+    q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
+    console.log("q", q, originalQuery);
+    if (q == originalQuery) {
+      r.value = originalQuery;
+      resetSearchState();
+    } else {
+      r.value = q;
+      ad('search-header', '⚡');
+      elSoq.innerText = originalQuery;
+      rm(elSrctaId, '⚡');
+      rm(elSbrId, '🥷');
+    }
   }
 }
 function change(e, i) { f[i] = e.target.value, updateQuery() }

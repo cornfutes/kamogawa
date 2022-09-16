@@ -19,7 +19,7 @@ var ScopeGCE = "https://www.googleapis.com/auth/compute.readonly"
 
 func GCEListInstances(db *gorm.DB, user types.User, projectId string) (*types.GCEAggregatedInstances, *types.ErrorGCEListInstance) {
 	if config.CacheEnabled {
-		responseSuccess, err := cache.ReadInstancesCache(db, user, projectId)
+		responseSuccess, err := cache.ReadInstancesCache(db, projectId)
 		if err == nil {
 			return responseSuccess, &types.ErrorGCEListInstance{}
 		}

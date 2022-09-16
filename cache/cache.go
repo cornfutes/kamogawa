@@ -6,9 +6,9 @@ import (
 	"kamogawa/types"
 )
 
-func ReadInstancesCache(db *gorm.DB, user types.User, projectId string) (*types.GCEAggregatedInstances, error) {
+func ReadInstancesCache(db *gorm.DB, projectId string) (*types.GCEAggregatedInstances, error) {
 	var gceInstanceDBs []types.GCEInstanceDB
-	result := db.Where("email = ? AND project_id = ?", user.Email, projectId).Find(&gceInstanceDBs)
+	result := db.Where("project_id = ?", projectId).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

@@ -9,7 +9,6 @@ import (
 type GCEInstanceDB struct {
 	gorm.Model
 	GCEInstance
-	Email     string `gorm:"primaryKey:idx"`
 	Id        string `gorm:"primaryKey:idx"`
 	ProjectId string
 	Zone      string
@@ -50,7 +49,6 @@ func GCEAggregatedInstancesToGCEInstanceDB(user User, projectId string, in GCEAg
 	for _, zone := range in.Zones {
 		for _, instance := range zone.Instances {
 			var gceInstanceDB GCEInstanceDB
-			gceInstanceDB.Email = user.Email
 			gceInstanceDB.Id = instance.Id
 			gceInstanceDB.ProjectId = projectId
 			gceInstanceDB.Zone = zone.Zone

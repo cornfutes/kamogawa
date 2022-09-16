@@ -12,6 +12,7 @@ import (
 	"kamogawa/types/gcp/gcetypes"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/Jeffail/gabs"
 	"gorm.io/gorm"
@@ -76,7 +77,7 @@ func GCEListInstancesMain(user types.User, projectId string) (*gcetypes.GCEAggre
 		if jsonParsed.ExistsP("items." + key + ".warning") {
 		} else {
 			zone := gcetypes.ZoneMetadata{}
-			zone.Zone = key
+			zone.Zone = strings.Split(key, "/")[1]
 			json.Unmarshal(jsonParsed.Search("items", key, "instances").Bytes(), &zone.Instances)
 			result.Zones = append(result.Zones, zone)
 		}

@@ -1,4 +1,14 @@
 {{define "page"}}
+<div class="main-header">
+  <a class="menu-link-main" href="#">Search results</a>
+  <!-- <div class="header-menu">
+    <a class="main-header-link is-active" href="#">Desktop</a>
+    <a class="main-header-link" href="#">Mobile</a>
+    <a class="main-header-link" href="#">Web</a>
+  </div> -->
+</div>
+<div class="content-wrapper">
+
 <div class="💪 🪜 📞 login landing">
   {{if .IsDev}}
   <form action="/login" method="POST">
@@ -54,4 +64,5 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => { document.getElementById('current-email').focus(); }, false);
 </script>
+</div>
 {{end}}

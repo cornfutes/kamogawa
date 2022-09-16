@@ -200,11 +200,11 @@ img {
   text-decoration: underline;
 }
 
-#search-redo-cta {
+#s-re {
   border-bottom: 5px solid var(--f);
 }
 
-.⚡, #search-redo-cta.⚡ {
+.⚡, #s-re.⚡ {
   border-bottom: 0;
   opacity: .65;
   border-top: none;
@@ -212,7 +212,7 @@ img {
   color: var(--i);
 }
 
-#search-redo-cta.⚡:hover {
+#s-re.⚡:hover {
   cursor: not-allowed;
 }
 

@@ -120,8 +120,7 @@ let           sqb = false,
                $m = $('s-mod'),
             elSoq = $('search-original-query'),
               $r  = $('s-b-r'), 
-        elSrctaId = 'search-redo-cta',
-              $re = $(elSrctaId),
+              $re = $('s-re'),
            elQbId = 'query-builder',
             elHId = 'search-header', 
                dd = 'down',
@@ -145,7 +144,7 @@ $r[z](c, _ => { r.value = o, reset() });
     
 function reset() {
   rm(elHId, '⚡');
-  ad(elSrctaId, '⚡');
+  ad2($re, '⚡');
   ad2($r, '🥷');
   elSoq.innerText = '';
 }
@@ -165,7 +164,7 @@ function change(e, i) {
       r.value = q;
       ad(elHId, '⚡');
       elSoq.innerText = o;
-      rm(elSrctaId, '⚡');
+      rm2($re, '⚡');
       rm2($r, '🥷');
     }
   } else {
@@ -181,7 +180,7 @@ r[z](u, e => {
     q = e.target.value;
     ad(elHId, '⚡');
     elSoq.innerText = o;
-    rm(elSrctaId, '⚡');
+    rm2($re, '⚡');
     rm2($r, '🥷');
   }
 });

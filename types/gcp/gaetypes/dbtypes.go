@@ -20,10 +20,13 @@ type GAEVersionDB struct {
 }
 
 type GAEInstanceDB struct {
-	Name      string
-	Id        string `gorm:"primaryKey"`
-	VMName    string
-	VersionId string `gorm:"primaryKey"`
+	Name        string
+	Id          string `gorm:"primaryKey"`
+	ProjectId   string
+	ServiceName string
+	VersionName string
+	VersionId   string
+	VMName      string
 }
 
 func (in *GAEServiceDB) ToSearchString() string {

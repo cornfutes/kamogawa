@@ -112,9 +112,9 @@ func WriteVersionsCache(db *gorm.DB, projectId string, serviceName string, resp 
 	}
 }
 
-func ReadInstancesCache(db *gorm.DB, versionName string) (*gaetypes.GAEListInstancesResponse, error) {
+func ReadInstancesCache(db *gorm.DB, projectId string, serviceName string, versionName string) (*gaetypes.GAEListInstancesResponse, error) {
 	var instanceDBs []gaetypes.GAEInstanceDB
-	result := db.Where("version_id = ?", versionName).Find(&instanceDBs)
+	result := db.Where("version_id = ?", gaetypes.ToVersionId(projectId, serviceName, versionName)).Find(&instanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -129,6 +129,7 @@ func ReadInstancesCache(db *gorm.DB, versionName string) (*gaetypes.GAEListInsta
 	instances := make([]gaetypes.GAEInstance, 0, len(instanceDBs))
 	for _, instanceDB := range instanceDBs {
 		instances = append(instances, gaetypes.GAEInstance{
+			// GAE API is misleading
 			Name:   instanceDB.Id,
 			Id:     instanceDB.Name,
 			VMName: instanceDB.VMName,
@@ -138,7 +139,7 @@ func ReadInstancesCache(db *gorm.DB, versionName string) (*gaetypes.GAEListInsta
 	return &gaetypes.GAEListInstancesResponse{Instances: instances}, nil
 }
 
-func WriteInstancesCache(db *gorm.DB, versionName string, resp *gaetypes.GAEListInstancesResponse) {
+func WriteInstancesCache(db *gorm.DB, projectId string, serviceName string, versionName string, resp *gaetypes.GAEListInstancesResponse) {
 	if resp == nil {
 		panic("Unexpected list of projects")
 	}
@@ -149,7 +150,16 @@ func WriteInstancesCache(db *gorm.DB, versionName string, resp *gaetypes.GAEList
 	instanceDBs := make([]gaetypes.GAEInstanceDB, 0, len(resp.Instances))
 
 	for _, v := range resp.Instances {
-		instanceDBs = append(instanceDBs, gaetypes.GAEInstanceDB{Name: v.Id, Id: v.Name, VMName: v.VMName, VersionId: versionName})
+		instanceDBs = append(instanceDBs, gaetypes.GAEInstanceDB{
+			// GAE API is misleading
+			Name:        v.Id,
+			Id:          v.Name,
+			ProjectId:   projectId,
+			ServiceName: serviceName,
+			VersionName: versionName,
+			VersionId:   gaetypes.ToVersionId(projectId, serviceName, versionName),
+			VMName:      v.VMName,
+		})
 	}
 
 	for _, instanceDB := range instanceDBs {

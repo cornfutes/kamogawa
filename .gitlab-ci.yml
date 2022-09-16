@@ -24,7 +24,7 @@ deploy:
     # Login to Gitlab registry
     - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token registry.gitlab.com --password-stdin
     # Login to Google Cloud Registry
-    - echo $GOOGLE_CLOUD_ACCOUNT | docker login -u _json_key --password-stdin https://eu.gcr.io
+    - echo $GOOGLE_CLOUD_ACCOUNT | docker login -u _json_key --password-stdin https://gcr.io
   script:
     - docker pull $GITLAB_IMAGE:$CI_COMMIT_SHA
     - docker tag $GITLAB_IMAGE:$CI_COMMIT_SHA $GCR_IMAGE:latest

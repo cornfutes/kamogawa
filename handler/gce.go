@@ -11,6 +11,7 @@ import (
 	"kamogawa/types/gcp/gcetypes"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -35,6 +36,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		}
 		fmt.Printf("User %v\n", user)
 
+		var start = time.Now()
 		var responseSuccess *gcetypes.ListProjectResponse
 		var projectDBs []gcetypes.ProjectDB = nil
 		if config.CacheEnabled && useCache {
@@ -99,7 +101,9 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			htmlLines = append(htmlLines, "</ul>")
 		}
 
+		duration := time.Since(start)
 		core.HTMLWithGlobalState(c, "gce.html", gin.H{
+			"Duration":       duration,
 			"NumCachedCalls": cachedCalls,
 			"AssetLines":     template.HTML(strings.Join(htmlLines[:], "")),
 		})

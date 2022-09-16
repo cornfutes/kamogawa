@@ -42,5 +42,7 @@
   [ ] project details page
     [ ] apis page 
     [ ] fixed increment cache count when getting from cached 
-
+[ ] add 404, 500 page 
+[ ] look into this gin warning about proxies trusting all
+[ ] look into removing plans.html and tbd.html as it seems like deadcode
 

@@ -38,8 +38,7 @@ var (
 	pngGCP []byte
 	//go:embed asset/cloud_logo_azure.png
 	pngAzure []byte
-	//go:embed asset/graphql.png
-	pngGraphQl []byte
+
 	//go:embed asset/blog_traffic.gif
 	pngBlog1 []byte
 	//go:embed asset/blog_search.gif
@@ -101,6 +100,8 @@ func init() {
 	etag = id.String()
 }
 
+const MediaBaseUrl = "static/"
+
 // Wire up HTML, css and media assets
 func Register(r *gin.Engine) {
 	r.HTMLRender = view.HTMLRenderer()
@@ -112,31 +113,31 @@ func Register(r *gin.Engine) {
 	} else {
 		r.GET("style.css", Data(MimeTypeCSS, styleCssMin))
 	}
-	r.GET("screensaver.mp4", Data(MimeTypeMP4, mp4Screensaver))
-	r.GET("cloud_logo_aws.png", Data(MimeTypePNG, pngAWS))
-	r.GET("cloud_logo_gcp.png", Data(MimeTypePNG, pngGCP))
-	r.GET("cloud_logo_azure.png", Data(MimeTypePNG, pngAzure))
-	r.GET("graphql.png", Data(MimeTypePNG, pngGraphQl))
-	r.GET("blog_traffic.gif", Data(MimeTypeGIF, pngBlog1))
-	r.GET("blog_search.gif", Data(MimeTypeGIF, pngBlog2))
-	r.GET("blog_splash.jpg", Data(MimeTypeJPG, pngBlog3))
-	r.GET("blog_login_error.gif", Data(MimeTypeGIF, pngBlog4))
-	r.GET("blog_simple.gif", Data(MimeTypePNG, pngBlog5))
-	r.GET("blog_widget.gif", Data(MimeTypePNG, pngBlog6))
-	r.GET("blog_docker.gif", Data(MimeTypeGIF, pngBlog7))
+	r.GET(MediaBaseUrl+"screensaver.mp4", Data(MimeTypeMP4, mp4Screensaver))
+	r.GET(MediaBaseUrl+"cloud_logo_aws.png", Data(MimeTypePNG, pngAWS))
+	r.GET(MediaBaseUrl+"cloud_logo_gcp.png", Data(MimeTypePNG, pngGCP))
+	r.GET(MediaBaseUrl+"cloud_logo_azure.png", Data(MimeTypePNG, pngAzure))
+	r.GET(MediaBaseUrl+"blog_traffic.gif", Data(MimeTypeGIF, pngBlog1))
+	r.GET(MediaBaseUrl+"blog_search.gif", Data(MimeTypeGIF, pngBlog2))
+	r.GET(MediaBaseUrl+"blog_splash.jpg", Data(MimeTypeJPG, pngBlog3))
+	r.GET(MediaBaseUrl+"blog_login_error.gif", Data(MimeTypeGIF, pngBlog4))
+	r.GET(MediaBaseUrl+"blog_simple.gif", Data(MimeTypePNG, pngBlog5))
+	r.GET(MediaBaseUrl+"blog_widget.gif", Data(MimeTypePNG, pngBlog6))
+	r.GET(MediaBaseUrl+"blog_docker.gif", Data(MimeTypeGIF, pngBlog7))
 
-	r.GET("splash_landing.gif", Data(MimeTypeGIF, splashLanding))
-	r.GET("splash_fuji.gif", Data(MimeTypeGIF, splashFuji))
-	r.GET("splash_ship.gif", Data(MimeTypeGIF, splashShip))
-	r.GET("console.svg", Data(MimeTypeSVG, console))
-	r.GET("phone.svg", Data(MimeTypeSVG, phone))
-	r.GET("consent.png", Data(MimeTypePNG, consent))
+	r.GET(MediaBaseUrl+"splash_landing.gif", Data(MimeTypeGIF, splashLanding))
+	r.GET(MediaBaseUrl+"splash_fuji.gif", Data(MimeTypeGIF, splashFuji))
+	r.GET(MediaBaseUrl+"splash_ship.gif", Data(MimeTypeGIF, splashShip))
+	r.GET(MediaBaseUrl+"console.svg", Data(MimeTypeSVG, console))
+	r.GET(MediaBaseUrl+"phone.svg", Data(MimeTypeSVG, phone))
+	r.GET(MediaBaseUrl+"consent.png", Data(MimeTypePNG, consent))
+	r.GET(MediaBaseUrl+"nft.gif", Data(MimeTypeGIF, gifProfile))
+	r.GET(MediaBaseUrl+"big_sur.jpg", Data(MimeTypeJPG, jpgBigSur))
+
 	r.GET("legal.txt", Data(MimeTypeTXT, legal))
 	r.GET("security.txt", Data(MimeTypeTXT, security))
 	r.GET("about.txt", Data(MimeTypeTXT, about))
 	r.GET("api.txt", Data(MimeTypeTXT, api))
-	r.GET("nft.gif", Data(MimeTypeGIF, gifProfile))
-	r.GET("big_sur.jpg", Data(MimeTypeJPG, jpgBigSur))
 
 	// Register static views.
 	for route, file := range staticHtml {

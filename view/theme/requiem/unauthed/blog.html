@@ -9,14 +9,14 @@
       We posted our first ShowHN 24 hours ago.
       We received a stable amount of traffic and briefly reached #1 on the Show HN page.
     </p>
-    <img src="blog_traffic.gif">
+    <img src="/static/blog_traffic.gif">
     <p>
       After looking at server logs to see
       which of our pages / app routes were being accessed, we noticed people
       weren't using the feature we were most excited about: the search engine.
       Or so we thought.
     </p>
-    <img src="blog_search.gif">
+    <img src="/static/blog_search.gif">
     <p>We have an IAM ( identity, acccess management ) aka login system.
       On the demo landing page, which is linked on ShowHN,
       there is a CTA (call to action) / link that allows people to login with a demo user.
@@ -31,14 +31,14 @@
       the style.css and html, but not this image. We mocked out loading the
       demo page without the image and it turns out the page style became jank.
     </p>
-    <img src="blog_splash.jpg">
+    <img src="/static/blog_splash.jpg">
     <p>
       Going back to the logs, ultimately a 20-30% of people who got on the landing
       page proceeded through the funnel to something that required a login.
       However, there was noticeable amount of traffic to the login page where we
       expect username and password. People weren't supposed to go here.
     </p>
-    <img src="blog_login_error.gif">
+    <img src="/static/blog_login_error.gif">
     <p>We have a "search" widget in our top navigation with some sweet
       CSS JavaScript polish. When people press the 'enter' key,they are
       redirected to the search results page. When we launched the demo,
@@ -47,7 +47,7 @@
       We thought this would encourage people to login. However,
       this does not apply in the demo case and only confuses people.
     </p>
-    <img src="blog_widget.gif">
+    <img src="/static/blog_widget.gif">
     <p>
       We don't log frontend interaction, and only have visibility into which of
       our pages people are visiting. However,
@@ -64,7 +64,7 @@
       experience. Finally we removed the 3mb large splash image. The page is now just 7.6KB
       in network transfer! We hope people try our demo now.
     </p>
-    <img src="blog_simple.gif">
+    <img src="/static/blog_simple.gif">
     <p>It's relatively easy for us to push changes ( straight to prod, for now ).
       We od Docker build then push to the container registry.
       We run this app on CloudRun, Google's container-as-service
@@ -75,7 +75,7 @@
       For all the crap we give GCP, things runs great once you can get it to run.
       The problem is getting to that stage. We want to help others get there.
     </p>
-    <img src="blog_docker.gif">
+    <img src="/static/blog_docker.gif">
     <p>
       The key takeaway is that if you tell people you are building a search engine
       for X, they will immediately try the search icon and ignore the "Proceed to demo"

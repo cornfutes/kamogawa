@@ -22,8 +22,8 @@ WORKDIR /usr/bin
 USER postgres
 ENV SHIMOGAWA_URL postgres://postgres@0.0.0.0:5432/shimogawa_db
 RUN chmod 0700 /var/lib/postgresql/data &&\
-    initdb /var/lib/postgresql/data &&\
-    echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf &&\
-    echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf
+  initdb /var/lib/postgresql/data &&\
+  echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf &&\
+  echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf
 CMD pg_ctl start; psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'shimogawa_db'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE shimogawa_db"; psql -U postgres "CREATE EXTENSION pg_trgm;"; psql -U postgres "CREATE INDEX project_dbs_idx ON project_dbs USING GIN ((name || ' ' || project_id) gin_trgm_ops);"; psql -U postgres "CREATE INDEX gce_instance_dbs_idx ON gce_instance_dbs USING GIN ((id || ' ' || name || ' ' || status || ' ' || project_id || ' ' || zone) gin_trgm_ops);"; psql -U postgres "CREATE INDEX gae_service_dbs_idx ON gae_service_dbs USING GIN ((name || ' ' || id || ' ' || project_id) gin_trgm_ops);"; psql -U postgres "CREATE INDEX gae_version_dbs_idx ON gae_version_dbs USING GIN ((name || ' ' || id || ' ' || project_id || ' ' || service_name || ' ' || service_id || ' ' || serving_status) gin_trgm_ops) ;"; kamogawa-server;
 

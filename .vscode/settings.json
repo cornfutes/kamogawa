@@ -1,0 +1,21 @@
+{
+  "go.toolsEnvVars": {
+    // WORKAROUND: By default, Goinfer will try to use $GOPATH and $GOROOT, which
+    // is obsolete now that we use Go Modules. However, since go.mod files in
+    // subdirectory and they don't share same name, it confuses these tools.
+    // In our case, we aren't structuring them as subpackages. We just 
+    // happen to be a monorepo.
+    "GO111MODULE": "on"
+  },
+  "go.useLanguageServer": true,
+  "gopls": {
+    // Workaround VSCode extension expecting go.mod file at root, 
+    // or that our child modules match up. Previously, a workaround was 
+    // add the 'src' directory to the VSCode workspace, in addition to the 
+    // root directory, which is redundant.
+    "experimentalWorkspaceModule": true,
+    "ui.semanticTokens": true,
+    // Enable stricter formatter. https://github.com/mvdan/gofumpt
+    "formatting.gofumpt": true
+  }
+}

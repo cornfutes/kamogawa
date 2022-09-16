@@ -327,3 +327,5 @@ Run docker compose with no cache
 ```
 docker compose build --no-cache && docker-compose up
 ```
+
+https://code.visualstudio.com/docs/languages/go#:~:text=Using%20the%20Go%20extension%20for,from%20the%20VS%20Code%20Marketplace.

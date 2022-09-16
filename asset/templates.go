@@ -10,10 +10,10 @@ import (
 	"github.com/gin-contrib/multitemplate"
 )
 
-const baseLayoutPath = "view/layout/*.tmpl"
-const unauthedLayoutsPath = "view/layout/unauthed/*.html"
+const baseLayoutPath = "view/layout/matrix/*.tmpl"
+const unauthedLayoutsPath = "view/layout/matrix/unauthed/*.html"
+const authedLayoutsPath = "view/layout/matrix/authed/*.html"
 const unauthedViewsGlob = "view/unauthed/*.html"
-const authedLayoutsPath = "view/layout/authed/*.html"
 const authedViewsGlob = "view/authed/*.html"
 
 //go:embed view/*

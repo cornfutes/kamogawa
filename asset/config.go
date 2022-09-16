@@ -39,12 +39,12 @@ var (
 	//go:embed media/blog_docker.png
 	pngBlog7 []byte
 
-	//go:embed media/splash.gif
-	splash []byte
-	//go:embed media/fuji.gif
-	fuji []byte
-	//go:embed media/ship.gif
-	ship []byte
+	//go:embed media/splash_landing.gif
+	splashLanding []byte
+	//go:embed media/splash_fuji.gif
+	splashFuji []byte
+	//go:embed media/splash_ship.gif
+	splashShip []byte
 	//go:embed media/console.svg
 	console []byte
 	//go:embed media/phone.svg
@@ -102,9 +102,9 @@ func Config(r *gin.Engine) {
 	r.GET("blog_widget.png", png(pngBlog6))
 	r.GET("blog_docker.png", png(pngBlog7))
 
-	r.GET("splash.gif", gif(splash))
-	r.GET("fuji.gif", gif(fuji))
-	r.GET("ship.gif", gif(ship))
+	r.GET("splash_landing.gif", gif(splashLanding))
+	r.GET("splash_fuji.gif", gif(splashFuji))
+	r.GET("splash_ship.gif", gif(splashShip))
 	r.GET("console.svg", svg(console))
 	r.GET("phone.svg", svg(phone))
 	r.GET("consent.png", png(consent))

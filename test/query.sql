@@ -1,0 +1,3 @@
+psql -h localhost -p 5432 -U local-dev -d shimogawa_db -c "TRUNCATE gce_instance_dbs, project_dbs;";
+psql -h localhost -p 5432 -U local-dev -d shimogawa_db -c "COPY gce_instance_dbs ($(head -1 ./test/instances.csv)) FROM STDIN delimiter ',' CSV HEADER;" < ./test/instances.csv ;
+psql -h localhost -p 5432 -U local-dev -d shimogawa_db -c "COPY project_dbs ($(head -1 ./test/projects.csv)) FROM STDIN delimiter ',' CSV HEADER;" < ./test/projects.csv;

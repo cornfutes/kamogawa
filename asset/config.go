@@ -4,6 +4,8 @@ import (
 	_ "embed"
 	"kamogawa/config"
 	"kamogawa/core"
+	"kamogawa/view"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -89,7 +91,7 @@ func init() {
 
 // Wire up HTML, css and media assets
 func Config(r *gin.Engine) {
-	r.HTMLRender = ConfigureHTMLRenderer()
+	r.HTMLRender = view.HTMLRenderer()
 
 	// Register static assets.
 	if config.Env == config.Dev {

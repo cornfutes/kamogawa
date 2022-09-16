@@ -1,4 +1,4 @@
-package asset
+package view
 
 import (
 	"embed"
@@ -11,18 +11,18 @@ import (
 	"github.com/gin-contrib/multitemplate"
 )
 
-var baseLayoutPath = "view/" + config.Theme + "/layout/*.tmpl"
-var unauthedLayoutsPath = "view/" + config.Theme + "/layout/unauthed/*.html"
-var authedLayoutsPath = "view/" + config.Theme + "/layout/authed/*.html"
-var unauthedViewsGlob = "view/" + config.Theme + "/unauthed/*.html"
-var authedViewsGlob = "view/" + config.Theme + "/authed/*.html"
+var baseLayoutPath = "theme/" + config.Theme + "/layout/*.tmpl"
+var unauthedLayoutsPath = "theme/" + config.Theme + "/layout/unauthed/*.html"
+var authedLayoutsPath = "theme/" + config.Theme + "/layout/authed/*.html"
+var unauthedViewsGlob = "theme/" + config.Theme + "/unauthed/*.html"
+var authedViewsGlob = "theme/" + config.Theme + "/authed/*.html"
 
-//go:embed view/*
+//go:embed theme/*
 var views embed.FS
 
 // https://www.josephspurrier.com/how-to-embed-assets-in-go-1-16
 /** Middleware to render HTML using templates. */
-func ConfigureHTMLRenderer() multitemplate.Renderer {
+func HTMLRenderer() multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
 
 	unauthedViews, err := fs.Glob(views, unauthedViewsGlob)

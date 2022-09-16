@@ -315,3 +315,8 @@ if it is cloud run or hosted domain.
 *** Logging 
 
 Use log, not fmt.Printf
+
+***  Debugging 
+
+psql -h localhost -p 5432 -U local-dev -d shimogawa_db
+psql -h <retroactively_redacted> -p 5432 -U postgres -d shimogawa_db

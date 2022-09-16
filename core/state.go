@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TODO: have gin middleware that intercepts and adsd these binds.
 func HTMLWithGlobalState(c *gin.Context, page string, obj map[string]interface{}) {
 	value, _ := c.Get(identity.IdentityContextKey)
 	obj["IsLoggedIn"] = value

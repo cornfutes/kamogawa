@@ -77,6 +77,7 @@ func init() {
 	preparecss(m)
 
 	id := uuid.New()
+	// TODO: if people hit different web servers, this would be different tags
 	etag = id.String()
 }
 
@@ -139,13 +140,13 @@ func data(mime string, contents []byte) func(c *gin.Context) {
 			c.Data(http.StatusNotModified, mime, []byte{})
 		} else {
 			c.Header("ETag", etag)
-			c.Header("ETag", etag)
 			c.Data(http.StatusOK, mime, contents)
 		}
 	}
 }
 
 func css(contents []byte) func(c *gin.Context) {
+	// TODO: by default browsers utf-8
 	return data("text/css; charset=utf-8", contents)
 }
 

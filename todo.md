@@ -13,3 +13,12 @@
   [ ] evaluate issue with DB having duplicate 
   [ ] correctly implement multi-word search or go back to full-text search
   [ ] support searching last modified date 
+[ ] DB 
+  [ ] batch upsert
+  [ ] understand how GORM upsert works.. works different in different environment 
+  [ ] when people revoke, delete old projects and data
+[ ] caching model
+  [ ] by project? by gmail?
+[ ]
+  try calling api with revoked refresh token and see what happens 
+[ ] default

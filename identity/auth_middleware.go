@@ -19,11 +19,13 @@ func ExtractClaimsEmail(tokenString string, c *gin.Context) *string {
 		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
 		return jwtSecretKey, nil
 	})
+
 	if err != nil {
 		log.Printf("Error validating JWT")
 		return nil
 	}
 
+	// TODO: add some metadata to the payload.
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		emailString := fmt.Sprintf("%v", claims["email"])
 		return &emailString

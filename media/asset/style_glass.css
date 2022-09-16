@@ -1049,3 +1049,22 @@ body.light-mode .video-bg:before {
   background: var(--scrollbar-bg);
   border-radius: 10px;
 }
+
+.💪 {
+  display: flex;
+}
+
+.🦠 {
+  justify-content: space-between;
+}
+
+#account-settings a {
+  color: #FF6600;
+  text-decoration: none;
+}
+
+#account-settings a:hover {
+  opacity: .7;
+  transition: text-decoration 1s;
+  text-decoration: underline;
+}

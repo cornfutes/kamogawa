@@ -39,6 +39,9 @@
   </div>
 </div>
 
+{{if .Error }}
+<p>{{.Error}}</p>
+{{else if .HasResults}}
 <ul>
   {{ range .Results }}
   <li>
@@ -47,4 +50,8 @@
   </li>
   {{ end }}
 </ul>
+{{else}}
+<p>No results found</p>
+{{end}}
+
 {{end}}

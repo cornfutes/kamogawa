@@ -1,5 +1,7 @@
 # TODO
 
+  [ ] display warning if regex 
+  [ ] add UI codes 
 - [ ] make top global search actually do its job
   - [x] make search the /search page responds given query param. don't worry 
         about the interactive UI search box in nav bar. i will hook it up.
@@ -12,7 +14,7 @@
       - [x] DAVID: replace the fake with real one. see /Users/louis/workspace/kamogawa/handler/search.go
       search for 'foobar' in postgres
   - [x] don't worry about pagination or length. just render a html list
-- [ ] add page to export data ( SQLLite. DuckDB comin soon)
+- [x] add page to export data ( SQLLite. DuckDB comin soon)
 - [ ] export CSV, SQLite, DuckDb ( future )
 - [ ] refactor the ad-hoc retrieval of user from DB on demand.
       for demo, we can load it on server start to speed up time.
@@ -61,12 +63,15 @@ quality
   - [x] display the delta between needed and missing scopes
     - [x] can provide more granulartiy
   - [x] handle scenario where GCP not yet authorized.
+- [x] fix "zero state" for q=''
+- [x] display error if q.length < 3
 
 qa 
 - [ ] ensure all pages covered
   - [x] show release notes
-- [ ] add HN news account settings-like page to /account page. 
-  - [ ] show account tier
+- [x] add HN news account settings-like page to /account page. 
+  - [x] show account tier
+  - [ ]  add account tier page
 
 polish 
 - [x] add some CSS polish

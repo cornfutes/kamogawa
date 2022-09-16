@@ -99,16 +99,23 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 func Search(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		q := c.Query("q")
-
-		searchResults := getRealData(db, q)
-		if searchResults == nil {
-			searchResults = getFakeData(q)
+		if len(q) < 4 {
+			core.HTMLWithGlobalState(c, "search.html", gin.H{
+				"Error":      "Query must be 4 or more characters long.",
+				"Query":      q,
+				"HasResults": false,
+				"Results":    nil,
+			})
+			return
 		}
 
-		// Renders HTML
+		searchResults := getRealData(db, q)
+
 		core.HTMLWithGlobalState(c, "search.html", gin.H{
-			"Query":   q,
-			"Results": searchResults,
+			"Error":      nil,
+			"Query":      q,
+			"HasResults": searchResults != nil,
+			"Results":    searchResults,
 		})
 	}
 }

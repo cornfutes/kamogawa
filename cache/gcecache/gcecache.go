@@ -2,11 +2,11 @@ package gcecache
 
 import (
 	"fmt"
+	"gorm.io/gorm/clause"
 	"kamogawa/types"
 	"kamogawa/types/gcp/gcetypes"
 
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 func ReadInstancesCache(db *gorm.DB, projectId string) (*gcetypes.GCEAggregatedInstances, error) {
@@ -76,7 +76,7 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 	projectDBs := make([]gcetypes.ProjectDB, 0, len(resp.Projects))
 
 	for _, v := range resp.Projects {
-		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &v, 0))
+		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &v, true))
 	}
 	for _, projectDB := range projectDBs {
 		db.FirstOrCreate(&projectDB)

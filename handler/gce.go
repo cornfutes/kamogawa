@@ -53,7 +53,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			}
 			projectDBs = make([]gcetypes.ProjectDB, 0, len(responseSuccess.Projects))
 			for _, p := range responseSuccess.Projects {
-				projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &p, 0))
+				projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &p, true))
 			}
 			fmt.Printf("len %v\n", projectDBs)
 		}
@@ -61,7 +61,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		var htmlLines []string
 		var cachedCalls = 0
 		for i, p := range projectDBs {
-			if projectDBs[i].HasGCEEnabled == -1 {
+			if !projectDBs[i].HasGCEEnabled {
 				cachedCalls++
 				htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul><li>Compute Engine API has not been enabled on project.</li></ul>")
 				continue
@@ -81,7 +81,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Compute Engine API has not been used in project") {
 					htmlLines = append(htmlLines, "<li>Compute Engine API has not been enabled on project.</li>")
-					projectDBs[i].HasGCEEnabled = -1
+					projectDBs[i].HasGCEEnabled = false
 				} else {
 					htmlLines = append(htmlLines, "<li>Unknown error with code: "+strconv.Itoa(responseError.Error.Code)+"</li>")
 				}

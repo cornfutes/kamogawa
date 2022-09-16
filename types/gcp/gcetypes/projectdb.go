@@ -12,10 +12,9 @@ type ProjectDB struct {
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	Project
-	Email     string `gorm:"primaryKey:idx"`
-	ProjectId string `gorm:"primaryKey:idx"`
-	// -1 means no, 0 means maybe, 1 means yes
-	HasGCEEnabled int
+	Email         string `gorm:"primaryKey:idx"`
+	ProjectId     string `gorm:"primaryKey:idx"`
+	HasGCEEnabled bool
 	//Parent         ProjectParent
 }
 
@@ -37,7 +36,7 @@ func (in *ProjectDB) ToLink() string {
 	return fmt.Sprintf("https://console.cloud.google.com/welcome?project=%v", in.ProjectId)
 }
 
-func ProjectToProjectDB(email string, in *Project, hasGceEnabled int) ProjectDB {
+func ProjectToProjectDB(email string, in *Project, hasGceEnabled bool) ProjectDB {
 	var out ProjectDB
 	out.Email = email
 	out.ProjectNumber = in.ProjectNumber

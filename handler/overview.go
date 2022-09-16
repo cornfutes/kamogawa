@@ -20,28 +20,24 @@ func mockGCPListProjects(user types.User) (*types.ListProjectResponse, *types.Er
 
 	var projects = make([]types.Project, 5)
 	projects[0] = types.Project{
-		Name:      "ListVMs1",
-		ProjectId: "ListVMs1",
+		Name:      "demo-blue-dragon",
+		ProjectId: "demo-blue-dragon",
 	}
 	projects[1] = types.Project{
-		Name:      "ListVMs",
-		ProjectId: "ListVMs",
+		Name:      "world",
+		ProjectId: "square-dragon-450910",
 	}
 	projects[2] = types.Project{
-		Name:      "kanazawa2",
-		ProjectId: "linear-cinema-360910",
+		Name:      "saigon",
+		ProjectId: "saigon-360910",
 	}
 	projects[3] = types.Project{
-		Name:      "kanazawa",
-		ProjectId: "kanazawa-360910",
-	}
-	projects[4] = types.Project{
 		Name:      "tokyo",
-		ProjectId: "tokyo-360910",
+		ProjectId: "tokyo-780110",
 	}
 	projects[4] = types.Project{
-		Name:      "zerotheta1337",
-		ProjectId: "zerotheta1337",
+		Name:      "europe",
+		ProjectId: "square-dragon-230910",
 	}
 	listProjectResponse.Projects = projects
 

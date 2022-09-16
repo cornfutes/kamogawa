@@ -104,8 +104,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 
 		core.HTMLWithGlobalState(c, "gce.html", gin.H{
 			"NumCachedCalls": cachedCalls,
-
-			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
+			"AssetLines":     template.HTML(strings.Join(htmlLines[:], "")),
 		})
 
 		if config.CacheEnabled {

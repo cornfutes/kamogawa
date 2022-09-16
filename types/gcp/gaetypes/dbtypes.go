@@ -1,6 +1,9 @@
 package gaetypes
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type GAEServiceDB struct {
 	Name      string
@@ -27,7 +30,7 @@ func (in *GAEServiceDB) ToSearchString() string {
 }
 
 func (in *GAEServiceDB) ToLink() string {
-	return fmt.Sprintf("google.com/gae/service/%v", in.Id)
+	return fmt.Sprintf("https://console.cloud.google.com/appengine/services?project=%v", in.ProjectId)
 }
 
 func (in *GAEVersionDB) ToSearchString() string {
@@ -35,5 +38,8 @@ func (in *GAEVersionDB) ToSearchString() string {
 }
 
 func (in *GAEVersionDB) ToLink() string {
-	return fmt.Sprintf("google.com/gae/version/%v", in.Id)
+	var parentPath = strings.Split(in.ParentId, "/services/")
+	var projectId = strings.Split(parentPath[0], "apps/")[1]
+	var serviceId = parentPath[1]
+	return fmt.Sprintf("https://console.cloud.google.com/appengine/versions?serviceId=%v&project=%v", serviceId, projectId)
 }

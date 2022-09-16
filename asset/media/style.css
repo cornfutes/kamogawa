@@ -33,6 +33,10 @@ For convenience, dequeue one of these emojis when adding new class.
   --line-active: #275EFE;
 }
 
+img {
+  max-width: 100%;
+}
+
 kbd {
   background-color: #eee;
   border-radius: 3px;

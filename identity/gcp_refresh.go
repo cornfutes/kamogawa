@@ -39,7 +39,7 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) (*ResponseRefreshToken, *ErrorRefre
 	postBody, err := json.Marshal(map[string]string{
 		"client_id":     config.GCPClientId,
 		"client_secret": config.GCPClientSecret,
-		"refresh_token": "1//06A23GxR9YieFCgYIARAAGAYSNgF-L9IrzYCqn1P9MOMBL4zeJyvXbubJxhrBENOVv-G_QxWPq-VZi8WlErs0GmrfW9a9pHX7oQ",
+		"refresh_token": user.RefreshToken.String,
 		"grant_type":    "refresh_token",
 	})
 	if err != nil {
@@ -69,6 +69,7 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) (*ResponseRefreshToken, *ErrorRefre
 }
 
 func CheckDBAndRefreshToken(c *gin.Context, user types.User, db *gorm.DB) {
+	// TODO: What if we update the user for another reason, resetting the clock?
 	if time.Since(user.UpdatedAt).Seconds() > 3300 || len(user.AccessToken.String) == 0 {
 		responseRefreshToken, errorRefreshToken := GCPRefresh(c, db)
 		if errorRefreshToken != nil {

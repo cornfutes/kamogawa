@@ -26,12 +26,12 @@ func GCEListInstances(db *gorm.DB, user types.User, projectId string) (*types.GC
 	}
 
 	responseSuccess, responseError := GCEListInstancesMain(user, projectId)
-	if responseError == nil {
-		return responseSuccess, responseError
+	if responseSuccess == nil {
+		return nil, responseError
 	}
 
 	if config.CacheEnabled {
-		cache.WriteInstancesCache(db, user, projectId, *responseSuccess)
+		cache.WriteInstancesCache(db, user, projectId, responseSuccess)
 	}
 
 	return responseSuccess, responseError

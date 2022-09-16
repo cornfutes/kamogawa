@@ -42,8 +42,8 @@ func GCPListProjects(db *gorm.DB, user types.User) (*types.ListProjectResponse, 
 	}
 
 	responseSuccess, responseError := GCPListProjectsMain(db, user)
-	if responseError == nil {
-		return responseSuccess, responseError
+	if responseSuccess == nil {
+		return nil, responseError
 	}
 
 	if config.CacheEnabled {

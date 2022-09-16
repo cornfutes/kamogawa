@@ -25,7 +25,10 @@ func ReadInstancesCache(db *gorm.DB, projectId string) (*types.GCEAggregatedInst
 	return &gceAggregatedInstances, nil
 }
 
-func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp types.GCEAggregatedInstances) {
+func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *types.GCEAggregatedInstances) {
+	if resp == nil {
+		panic("Unexpected list of instances")
+	}
 	if len(resp.Zones) == 0 {
 		return
 	}
@@ -68,6 +71,9 @@ func ReadProjectsCache(db *gorm.DB, user types.User) (*types.ListProjectResponse
 }
 
 func WriteProjectsCache(db *gorm.DB, user types.User, resp *types.ListProjectResponse) {
+	if resp == nil {
+		panic("Unexpected list of projects")
+	}
 	if len(resp.Projects) == 0 {
 		return
 	}

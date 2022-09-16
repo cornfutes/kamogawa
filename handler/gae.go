@@ -5,7 +5,7 @@ import (
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
-	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 
 	"strconv"
 	"strings"
@@ -22,7 +22,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		user := identity.CheckSessionForUser(c, db)
 		var email, _ = c.Get(identity.IdentityContextKey)
 		if user.AccessToken == nil {
-			core.HTMLWithGlobalState(c, "gae.html", gin.H{
+			core.HTMLWithGlobalState(c, "gaetypes.html", gin.H{
 				"Email":        email,
 				"Unauthorized": true,
 				"APICallCount": "-1",
@@ -34,15 +34,15 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		var apiCallCount = 1
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-			core.HTMLWithGlobalState(c, "gae.html", gin.H{
+			core.HTMLWithGlobalState(c, "gaetypes.html", gin.H{
 				"MissingScopes": true,
 			})
 			return
 		}
 
-		var projectStrings []types.Project
+		var projectStrings []gcetypes.Project
 		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []types.Project{}
+			projectStrings = []gcetypes.Project{}
 		} else {
 			projectStrings = responseSuccess.Projects
 		}
@@ -51,7 +51,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		// Enumerate Projects for credentials
 		for _, p := range projectStrings {
 			apiCallCount++
-			responseSuccessService, responseErrorService := gcp.GAEListServices(user, p.ProjectId)
+			responseSuccessService, responseErrorService := gcp.GAEListServices(db, user, p.ProjectId, useCache)
 			htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul>")
 
 			if responseErrorService.Error.Code == 404 {
@@ -68,7 +68,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 				for _, service := range responseSuccessService.Services {
 					htmlLines = append(htmlLines, "<li>"+service.Id+" ( Service )<ul>")
 					apiCallCount++
-					responseSuccessVersion, responseErrorVersion := gcp.GAEListVersions(user, p.ProjectId, service.Id)
+					responseSuccessVersion, responseErrorVersion := gcp.GAEListVersions(db, user, p.ProjectId, service.Id, useCache)
 					if responseErrorVersion.Error.Code > 0 {
 						htmlLines = append(htmlLines, "<li>")
 						htmlLines = append(htmlLines, "Versions is an unknown state.")
@@ -77,7 +77,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 						// Enumerate GAE Version(s) for Service
 						for _, version := range responseSuccessVersion.Versions {
 							htmlLines = append(htmlLines, "<li>"+version.Id+" ( Version ) <ul>")
-							responseSuccessInstance, responseErrorInstance := gcp.GAEListInstances(user, p.ProjectId, service.Id, version.Id)
+							responseSuccessInstance, responseErrorInstance := gcp.GAEListInstances(db, user, p.ProjectId, service.Id, version.Id, useCache)
 							if responseErrorInstance.Error.Code > 0 {
 								htmlLines = append(htmlLines, "<li>Instances are in unknown state.</li>")
 							} else {
@@ -100,7 +100,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			htmlLines = append(htmlLines, "</ul>")
 		}
 
-		core.HTMLWithGlobalState(c, "gae.html", gin.H{
+		core.HTMLWithGlobalState(c, "gaetypes.html", gin.H{
 			"Email":        email,
 			"AssetLines":   template.HTML(strings.Join(htmlLines[:], "")),
 			"APICallCount": strconv.Itoa(apiCallCount),

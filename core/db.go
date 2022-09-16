@@ -2,6 +2,8 @@ package core
 
 import (
 	"kamogawa/types"
+	gaetypes "kamogawa/types/gcp/gaetypes"
+	"kamogawa/types/gcp/gcetypes"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -15,7 +17,14 @@ func InitDB(url string) *gorm.DB {
 		log.Fatalln(err)
 	}
 
-	db.AutoMigrate(&types.User{}, &types.ProjectDB{}, &types.GCEInstanceDB{})
+	db.AutoMigrate(
+		&types.User{},
+		&gcetypes.ProjectDB{},
+		&gcetypes.GCEInstanceDB{},
+		&gaetypes.GAEServiceDB{},
+		&gaetypes.GAEVersionDB{},
+		&gaetypes.GAEInstanceDB{},
+	)
 
 	return db
 }

@@ -1,4 +1,4 @@
-package types
+package gcetypes
 
 //type ProjectParent struct {
 //	Type string `json:"type"`

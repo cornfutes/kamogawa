@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 	"kamogawa/core"
-	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -52,7 +52,7 @@ func getRealData(db *gorm.DB, q string) []SearchResult {
 }
 
 func SearchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
-	var gceInstanceDBs []types.GCEInstanceDB
+	var gceInstanceDBs []gcetypes.GCEInstanceDB
 	result := db.Raw(""+
 		" SELECT * "+
 		" FROM gce_instance_dbs"+
@@ -86,7 +86,7 @@ func SearchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
 }
 
 func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
-	var projectDBs []types.ProjectDB
+	var projectDBs []gcetypes.ProjectDB
 	result := db.Raw(""+
 		" SELECT * "+
 		" FROM project_dbs"+

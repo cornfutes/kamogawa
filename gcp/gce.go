@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"kamogawa/cache"
+	"kamogawa/cache/gcecache"
 	"kamogawa/config"
 	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 	"log"
 	"net/http"
 
@@ -18,11 +19,11 @@ import (
 
 var ScopeGCE = "https://www.googleapis.com/auth/compute.readonly"
 
-func GCEListInstances(db *gorm.DB, user types.User, projectId string, useCache bool) (*types.GCEAggregatedInstances, *types.ErrorGCEListInstance) {
+func GCEListInstances(db *gorm.DB, user types.User, projectId string, useCache bool) (*gcetypes.GCEAggregatedInstances, *gcetypes.ErrorGCEListInstance) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := cache.ReadInstancesCache(db, projectId)
+		responseSuccess, err := gcecache.ReadInstancesCache(db, projectId)
 		if err == nil {
-			return responseSuccess, &types.ErrorGCEListInstance{}
+			return responseSuccess, &gcetypes.ErrorGCEListInstance{}
 		}
 	}
 
@@ -32,13 +33,13 @@ func GCEListInstances(db *gorm.DB, user types.User, projectId string, useCache b
 	}
 
 	if config.CacheEnabled {
-		cache.WriteInstancesCache(db, user, projectId, responseSuccess)
+		gcecache.WriteInstancesCache(db, user, projectId, responseSuccess)
 	}
 
 	return responseSuccess, responseError
 }
 
-func GCEListInstancesMain(user types.User, projectId string) (*types.GCEAggregatedInstances, *types.ErrorGCEListInstance) {
+func GCEListInstancesMain(user types.User, projectId string) (*gcetypes.GCEAggregatedInstances, *gcetypes.ErrorGCEListInstance) {
 	url := "https://compute.googleapis.com/compute/v1/projects/" + projectId + "/aggregated/instances"
 	var bearer = "Bearer " + user.AccessToken.String
 	fmt.Printf("Token %v\n", bearer)
@@ -68,20 +69,20 @@ func GCEListInstancesMain(user types.User, projectId string) (*types.GCEAggregat
 		panic(err)
 	}
 
-	result := types.GCEAggregatedInstances{}
+	result := gcetypes.GCEAggregatedInstances{}
 	// Iterating address objects
 	a, _ := jsonParsed.S("items").ChildrenMap()
 	for key := range a {
 		if jsonParsed.ExistsP("items." + key + ".warning") {
 		} else {
-			zone := types.ZoneMetadata{}
+			zone := gcetypes.ZoneMetadata{}
 			zone.Zone = key
 			json.Unmarshal(jsonParsed.Search("items", key, "instances").Bytes(), &zone.Instances)
 			result.Zones = append(result.Zones, zone)
 		}
 	}
 
-	var responseError types.ErrorGCEListInstance
+	var responseError gcetypes.ErrorGCEListInstance
 	err = json.Unmarshal(reader2, &responseError)
 	if err != nil {
 		panic(err)

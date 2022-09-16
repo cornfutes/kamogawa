@@ -5,6 +5,7 @@ import (
 	"kamogawa/gcp"
 	"kamogawa/identity"
 	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 	"strconv"
 	"strings"
 
@@ -14,28 +15,28 @@ import (
 	"gorm.io/gorm"
 )
 
-func mockGCPListProjects(user types.User) (*types.ListProjectResponse, *types.ErrorResponse) {
-	var errorResponse *types.ErrorResponse
-	var listProjectResponse *types.ListProjectResponse = &types.ListProjectResponse{}
+func mockGCPListProjects(user types.User) (*gcetypes.ListProjectResponse, *gcetypes.ErrorResponse) {
+	var errorResponse *gcetypes.ErrorResponse
+	var listProjectResponse *gcetypes.ListProjectResponse = &gcetypes.ListProjectResponse{}
 
-	var projects = make([]types.Project, 5)
-	projects[0] = types.Project{
+	var projects = make([]gcetypes.Project, 5)
+	projects[0] = gcetypes.Project{
 		Name:      "demo-blue-dragon",
 		ProjectId: "demo-blue-dragon",
 	}
-	projects[1] = types.Project{
+	projects[1] = gcetypes.Project{
 		Name:      "world",
 		ProjectId: "square-dragon-450910",
 	}
-	projects[2] = types.Project{
+	projects[2] = gcetypes.Project{
 		Name:      "saigon",
 		ProjectId: "saigon-360910",
 	}
-	projects[3] = types.Project{
+	projects[3] = gcetypes.Project{
 		Name:      "tokyo",
 		ProjectId: "tokyo-780110",
 	}
-	projects[4] = types.Project{
+	projects[4] = gcetypes.Project{
 		Name:      "europe",
 		ProjectId: "square-dragon-230910",
 	}
@@ -65,9 +66,9 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		var projectStrings []types.Project
+		var projectStrings []gcetypes.Project
 		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []types.Project{}
+			projectStrings = []gcetypes.Project{}
 		} else {
 			projectStrings = responseSuccess.Projects
 			for i, project := range projectStrings {

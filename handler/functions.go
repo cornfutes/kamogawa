@@ -5,7 +5,7 @@ import (
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
-	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -34,9 +34,9 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		var projectStrings []types.Project
+		var projectStrings []gcetypes.Project
 		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []types.Project{}
+			projectStrings = []gcetypes.Project{}
 		} else {
 			projectStrings = responseSuccess.Projects
 		}

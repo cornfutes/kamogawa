@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"kamogawa/cache"
+	"kamogawa/cache/gcecache"
 	"kamogawa/config"
 	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 	"log"
 	"net/http"
 	"strings"
@@ -33,11 +34,11 @@ import (
 //   }
 // }
 
-func GCPListProjects(db *gorm.DB, user types.User, useCache bool) (*types.ListProjectResponse, *types.ErrorResponse) {
+func GCPListProjects(db *gorm.DB, user types.User, useCache bool) (*gcetypes.ListProjectResponse, *gcetypes.ErrorResponse) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := cache.ReadProjectsCache(db, user)
+		responseSuccess, err := gcecache.ReadProjectsCache(db, user)
 		if err == nil {
-			return responseSuccess, &types.ErrorResponse{}
+			return responseSuccess, &gcetypes.ErrorResponse{}
 		}
 	}
 
@@ -47,13 +48,13 @@ func GCPListProjects(db *gorm.DB, user types.User, useCache bool) (*types.ListPr
 	}
 
 	if config.CacheEnabled {
-		cache.WriteProjectsCache(db, user, responseSuccess)
+		gcecache.WriteProjectsCache(db, user, responseSuccess)
 	}
 
 	return responseSuccess, responseError
 }
 
-func GCPListProjectsMain(db *gorm.DB, user types.User) (*types.ListProjectResponse, *types.ErrorResponse) {
+func GCPListProjectsMain(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, *gcetypes.ErrorResponse) {
 	apiProjectsUrl := "https://cloudresourcemanager.googleapis.com/v1/projects?filter=lifecycleState:ACTIVE"
 	log.Printf("User %v\n", user.AccessToken)
 	if !user.AccessToken.Valid {
@@ -81,12 +82,12 @@ func GCPListProjectsMain(db *gorm.DB, user types.User) (*types.ListProjectRespon
 	reader1, _ := ioutil.ReadAll(tee)
 	reader2, _ := ioutil.ReadAll(buf)
 
-	var responseSuccess types.ListProjectResponse
+	var responseSuccess gcetypes.ListProjectResponse
 	err = json.Unmarshal(reader1, &responseSuccess)
 	if err != nil {
 		panic(err)
 	}
-	var responseError types.ErrorResponse
+	var responseError gcetypes.ErrorResponse
 	err = json.Unmarshal(reader2, &responseError)
 	if err != nil {
 		panic(err)

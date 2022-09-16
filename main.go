@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"kamogawa/asset"
-	"kamogawa/cache"
+	"kamogawa/cache/gcecache"
 	"kamogawa/core"
 	"kamogawa/handler"
 	"kamogawa/identity"
@@ -78,8 +78,8 @@ func main() {
 		authed.GET("/search", handler.Search(db))
 
 		authed.GET("/overview", handler.Overview(db))
-		authed.GET("/gce", handler.GCE(db))
-		authed.GET("/gae", handler.GAE(db))
+		authed.GET("/gcetypes", handler.GCE(db))
+		authed.GET("/gaetypes", handler.GAE(db))
 		authed.GET("/sql", handler.SQL(db))
 		authed.GET("/functions", handler.Functions(db))
 
@@ -134,7 +134,7 @@ func main() {
 			}
 
 			var csvLines []string
-			listProjectResponse, _ := cache.ReadProjectsCache(db, user)
+			listProjectResponse, _ := gcecache.ReadProjectsCache(db, user)
 			if listProjectResponse != nil {
 				csvLines = append(csvLines, "project_id, project_name")
 				for _, v := range listProjectResponse.Projects {

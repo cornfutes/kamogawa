@@ -4,9 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"gorm.io/gorm"
 	"io"
 	"io/ioutil"
+	"kamogawa/cache/gaecache"
+	"kamogawa/config"
 	"kamogawa/types"
+	"kamogawa/types/gcp/gaetypes"
 	"log"
 	"net/http"
 )
@@ -25,24 +29,6 @@ import (
 //   ]
 // }
 
-type GAEServiceTrafficAllocation struct {
-}
-
-type GAEServiceTrafficAllocations struct {
-	Allocations GAEServiceTrafficAllocation `json:"allocations"`
-}
-
-// https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services#Service
-type GAEService struct {
-	Name  string                       `json:"name"`
-	Id    string                       `json:"id"`
-	Split GAEServiceTrafficAllocations `json:"split"`
-}
-
-type GAEListServicesResponse struct {
-	Services []GAEService `json:"services"`
-}
-
 //
 // Response {
 // 	  "error": {
@@ -52,40 +38,28 @@ type GAEListServicesResponse struct {
 // 	   }
 // 	}
 
-// https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions#Version
-type GAEVersion struct {
-	Name          string `json:"name"`
-	Id            string `json:"id"`
-	ServingStatus string `json:"servingStatus"`
-}
-
-type GAEListVersionsResponse struct {
-	Versions []GAEVersion `json:"versions"`
-}
-
-// https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions.instances#Instance
-type GAEInstance struct {
-	Name   string `json:"name"`
-	Id     string `json:"id"`
-	VMName string `json:"vmName"`
-}
-
-type GAEListInstancesResponse struct {
-	Instances     []GAEVersion `json:"instances"`
-	NextPageToken string       `json:"nextPageToken"`
-}
-
-type ErrorAdminAPI struct {
-	Error ErrorAdminAPIError `json:"error"`
-}
-type ErrorAdminAPIError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Status  string `json:"status"`
-}
-
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services/list
-func GAEListServices(user types.User, projectId string) (*GAEListServicesResponse, *ErrorAdminAPI) {
+func GAEListServices(db *gorm.DB, user types.User, projectId string, useCache bool) (*gaetypes.GAEListServicesResponse, *gaetypes.ErrorAdminAPI) {
+	if config.CacheEnabled && useCache {
+		responseSuccess, err := gaecache.ReadServicesCache(db, projectId)
+		if err == nil {
+			return responseSuccess, &gaetypes.ErrorAdminAPI{}
+		}
+	}
+
+	responseSuccess, responseError := GAEListServicesMain(user, projectId)
+	if responseSuccess == nil {
+		return nil, responseError
+	}
+
+	if config.CacheEnabled {
+		gaecache.WriteServicesCache(db, projectId, responseSuccess)
+	}
+
+	return responseSuccess, responseError
+}
+
+func GAEListServicesMain(user types.User, projectId string) (*gaetypes.GAEListServicesResponse, *gaetypes.ErrorAdminAPI) {
 	apiAdminApiUrl := "https://appengine.googleapis.com/v1/apps/" + projectId + "/services"
 	var bearer = "Bearer " + user.AccessToken.String
 	fmt.Printf("Token %v\n", bearer)
@@ -110,13 +84,13 @@ func GAEListServices(user types.User, projectId string) (*GAEListServicesRespons
 
 	fmt.Printf("Response %v \n", buf.String())
 
-	var responseSuccess GAEListServicesResponse
+	var responseSuccess gaetypes.GAEListServicesResponse
 	err = json.Unmarshal(reader1, &responseSuccess)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("Services %v\n", responseSuccess)
-	var responseError ErrorAdminAPI
+	var responseError gaetypes.ErrorAdminAPI
 	err = json.Unmarshal(reader2, &responseError)
 	if err != nil {
 		panic(err)
@@ -125,7 +99,27 @@ func GAEListServices(user types.User, projectId string) (*GAEListServicesRespons
 }
 
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions/list
-func GAEListVersions(user types.User, projectId string, serviceId string) (*GAEListVersionsResponse, *ErrorAdminAPI) {
+func GAEListVersions(db *gorm.DB, user types.User, projectId string, serviceId string, useCache bool) (*gaetypes.GAEListVersionsResponse, *gaetypes.ErrorAdminAPI) {
+	if config.CacheEnabled && useCache {
+		responseSuccess, err := gaecache.ReadVersionsCache(db, serviceId)
+		if err == nil {
+			return responseSuccess, &gaetypes.ErrorAdminAPI{}
+		}
+	}
+
+	responseSuccess, responseError := GAEListVersionsMain(user, projectId, serviceId)
+	if responseSuccess == nil {
+		return nil, responseError
+	}
+
+	if config.CacheEnabled {
+		gaecache.WriteVersionsCache(db, serviceId, responseSuccess)
+	}
+
+	return responseSuccess, responseError
+}
+
+func GAEListVersionsMain(user types.User, projectId string, serviceId string) (*gaetypes.GAEListVersionsResponse, *gaetypes.ErrorAdminAPI) {
 	apiAdminApiUrl := "https://appengine.googleapis.com/v1/apps/" + projectId + "/services/" + serviceId + "/versions/"
 	var bearer = "Bearer " + user.AccessToken.String
 	fmt.Printf("Token %v\n", bearer)
@@ -150,13 +144,13 @@ func GAEListVersions(user types.User, projectId string, serviceId string) (*GAEL
 
 	fmt.Printf("Response %v \n", buf.String())
 
-	var responseSuccess GAEListVersionsResponse
+	var responseSuccess gaetypes.GAEListVersionsResponse
 	err = json.Unmarshal(reader1, &responseSuccess)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("Services %v\n", responseSuccess)
-	var responseError ErrorAdminAPI
+	var responseError gaetypes.ErrorAdminAPI
 	err = json.Unmarshal(reader2, &responseError)
 	if err != nil {
 		panic(err)
@@ -165,7 +159,27 @@ func GAEListVersions(user types.User, projectId string, serviceId string) (*GAEL
 }
 
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions.instances/list
-func GAEListInstances(user types.User, projectId string, serviceId string, versionId string) (*GAEListInstancesResponse, *ErrorAdminAPI) {
+func GAEListInstances(db *gorm.DB, user types.User, projectId string, serviceId string, versionId string, useCache bool) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
+	if config.CacheEnabled && useCache {
+		responseSuccess, err := gaecache.ReadInstancesCache(db, versionId)
+		if err == nil {
+			return responseSuccess, &gaetypes.ErrorAdminAPI{}
+		}
+	}
+
+	responseSuccess, responseError := GAEListInstancesMain(user, projectId, serviceId, versionId)
+	if responseSuccess == nil {
+		return nil, responseError
+	}
+
+	if config.CacheEnabled {
+		gaecache.WriteInstancesCache(db, versionId, responseSuccess)
+	}
+
+	return responseSuccess, responseError
+}
+
+func GAEListInstancesMain(user types.User, projectId string, serviceId string, versionId string) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
 	apiAdminApiUrl := "https://appengine.googleapis.com/v1/apps/" + projectId + "/services/" + serviceId + "/versions/" + versionId + "/instances"
 	var bearer = "Bearer " + user.AccessToken.String
 	fmt.Printf("Token %v\n", bearer)
@@ -190,13 +204,13 @@ func GAEListInstances(user types.User, projectId string, serviceId string, versi
 
 	fmt.Printf("Response %v \n", buf.String())
 
-	var responseSuccess GAEListInstancesResponse
+	var responseSuccess gaetypes.GAEListInstancesResponse
 	err = json.Unmarshal(reader1, &responseSuccess)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("Services %v\n", responseSuccess)
-	var responseError ErrorAdminAPI
+	var responseError gaetypes.ErrorAdminAPI
 	err = json.Unmarshal(reader2, &responseError)
 	if err != nil {
 		panic(err)

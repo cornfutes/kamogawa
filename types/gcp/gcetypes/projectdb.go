@@ -1,4 +1,4 @@
-package types
+package gcetypes
 
 import (
 	"fmt"
@@ -26,7 +26,15 @@ func (in *ProjectDB) ToProject() Project {
 	}
 }
 
-func (in *Project) ToProjectDB(email string) ProjectDB {
+func (in *ProjectDB) ToSearchString() string {
+	return fmt.Sprintf("Type: Project, Name: %v, Id: %v, Number: %v", in.Name, in.ProjectId, in.ProjectNumber)
+}
+
+func (in *ProjectDB) ToLink() string {
+	return fmt.Sprintf("https://console.cloud.google.com/welcome?project=%v", in.ProjectId)
+}
+
+func ProjectToProjectDB(email string, in *Project) ProjectDB {
 	var out ProjectDB
 	out.Email = email
 	out.ProjectNumber = in.ProjectNumber
@@ -35,12 +43,4 @@ func (in *Project) ToProjectDB(email string) ProjectDB {
 	out.Name = in.Name
 	out.CreateTime = in.CreateTime
 	return out
-}
-
-func (in *ProjectDB) ToSearchString() string {
-	return fmt.Sprintf("Type: Project, Name: %v, Id: %v, Number: %v", in.Name, in.ProjectId, in.ProjectNumber)
-}
-
-func (in *ProjectDB) ToLink() string {
-	return fmt.Sprintf("https://console.cloud.google.com/welcome?project=%v", in.ProjectId)
 }

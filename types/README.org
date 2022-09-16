@@ -1,0 +1,10 @@
+* Overview
+There are currently 3 classes of types: internal (types.go), SDK (imported and used as is), and database (*db.go)
+- ex1: Send REST request to GCP for projects and convert into internal type `Project`
+- ex2: Convert `Project` into `ProjectDB` and store in database
+
+* Adding New Types
+If you want to parse a new field (e.g. REST or SDK), add to both internal and database types, and check any helper or conversion functions. For example:
+ - Add field `Foo` to `Project`
+ - Add field 'Foo' to `ProjectDB` if non-trivial i.e. you can't insert as-is into the database
+ - Update `ToProject()`, `ToSearchString()`, `ProjectToProjectDB(email string, in *Project)`

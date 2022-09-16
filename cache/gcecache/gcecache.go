@@ -1,13 +1,14 @@
-package cache
+package gcecache
 
 import (
 	"fmt"
 	"gorm.io/gorm"
 	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 )
 
-func ReadInstancesCache(db *gorm.DB, projectId string) (*types.GCEAggregatedInstances, error) {
-	var gceInstanceDBs []types.GCEInstanceDB
+func ReadInstancesCache(db *gorm.DB, projectId string) (*gcetypes.GCEAggregatedInstances, error) {
+	var gceInstanceDBs []gcetypes.GCEInstanceDB
 	result := db.Where("project_id = ?", projectId).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
@@ -20,11 +21,11 @@ func ReadInstancesCache(db *gorm.DB, projectId string) (*types.GCEAggregatedInst
 	}
 	fmt.Printf("Cache hit\n")
 
-	gceAggregatedInstances := types.GCEInstanceDBToGCEAggregatedInstances(gceInstanceDBs)
+	gceAggregatedInstances := gcetypes.GCEInstanceDBToGCEAggregatedInstances(gceInstanceDBs)
 	return &gceAggregatedInstances, nil
 }
 
-func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *types.GCEAggregatedInstances) {
+func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *gcetypes.GCEAggregatedInstances) {
 	if resp == nil {
 		panic("Unexpected list of instances")
 	}
@@ -32,7 +33,7 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *t
 		return
 	}
 
-	gceInstanceDBs := types.GCEAggregatedInstancesToGCEInstanceDB(user, projectId, resp)
+	gceInstanceDBs := gcetypes.GCEAggregatedInstancesToGCEInstanceDB(user, projectId, resp)
 
 	for _, gceInstanceDB := range gceInstanceDBs {
 		db.FirstOrCreate(&gceInstanceDB)
@@ -40,8 +41,8 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *t
 
 }
 
-func ReadProjectsCache(db *gorm.DB, user types.User) (*types.ListProjectResponse, error) {
-	var projectDBs []types.ProjectDB
+func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, error) {
+	var projectDBs []gcetypes.ProjectDB
 	result := db.Where("email = ?", user.Email).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
@@ -54,15 +55,15 @@ func ReadProjectsCache(db *gorm.DB, user types.User) (*types.ListProjectResponse
 	}
 	fmt.Printf("Cache hit\n")
 
-	projects := make([]types.Project, 0, len(projectDBs))
+	projects := make([]gcetypes.Project, 0, len(projectDBs))
 	for _, projectDB := range projectDBs {
 		projects = append(projects, projectDB.ToProject())
 	}
 
-	return &types.ListProjectResponse{Projects: projects}, nil
+	return &gcetypes.ListProjectResponse{Projects: projects}, nil
 }
 
-func WriteProjectsCache(db *gorm.DB, user types.User, resp *types.ListProjectResponse) {
+func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProjectResponse) {
 	if resp == nil {
 		panic("Unexpected list of projects")
 	}
@@ -70,12 +71,11 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *types.ListProjectRes
 		return
 	}
 
-	projectDBs := make([]types.ProjectDB, 0, len(resp.Projects))
+	projectDBs := make([]gcetypes.ProjectDB, 0, len(resp.Projects))
 
 	for _, v := range resp.Projects {
-		projectDBs = append(projectDBs, v.ToProjectDB(user.Email))
+		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &v))
 	}
-
 	for _, projectDB := range projectDBs {
 		db.FirstOrCreate(&projectDB)
 	}

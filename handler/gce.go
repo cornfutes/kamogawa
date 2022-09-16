@@ -5,7 +5,7 @@ import (
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
-	"kamogawa/types"
+	"kamogawa/types/gcp/gcetypes"
 	"strconv"
 	"strings"
 
@@ -20,7 +20,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 
 		user := identity.CheckSessionForUser(c, db)
 		if user.AccessToken == nil {
-			core.HTMLWithGlobalState(c, "gce.html", gin.H{
+			core.HTMLWithGlobalState(c, "gcetypes.html", gin.H{
 				"Unauthorized": true,
 			})
 			return
@@ -29,15 +29,15 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-			core.HTMLWithGlobalState(c, "gce.html", gin.H{
+			core.HTMLWithGlobalState(c, "gcetypes.html", gin.H{
 				"MissingScopes": true,
 			})
 			return
 		}
 
-		var projectStrings []types.Project
+		var projectStrings []gcetypes.Project
 		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []types.Project{}
+			projectStrings = []gcetypes.Project{}
 		} else {
 			projectStrings = responseSuccess.Projects
 		}
@@ -51,7 +51,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 				// Shortcircuit if missing GCE scope.
 				// TODO: refactor to do oonce utside loop
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-					core.HTMLWithGlobalState(c, "gce.html", gin.H{
+					core.HTMLWithGlobalState(c, "gcetypes.html", gin.H{
 						"MissingScopes": true,
 					})
 					return
@@ -78,7 +78,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			htmlLines = append(htmlLines, "</ul>")
 		}
 
-		core.HTMLWithGlobalState(c, "gce.html", gin.H{
+		core.HTMLWithGlobalState(c, "gcetypes.html", gin.H{
 			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
 		})
 	}

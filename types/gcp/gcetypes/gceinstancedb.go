@@ -1,9 +1,9 @@
-package types
+package gcetypes
 
 import (
 	"fmt"
-
 	"gorm.io/gorm"
+	"kamogawa/types"
 )
 
 type GCEInstanceDB struct {
@@ -44,7 +44,7 @@ func GCEInstanceDBToGCEAggregatedInstances(in []GCEInstanceDB) GCEAggregatedInst
 	return out
 }
 
-func GCEAggregatedInstancesToGCEInstanceDB(user User, projectId string, in *GCEAggregatedInstances) []GCEInstanceDB {
+func GCEAggregatedInstancesToGCEInstanceDB(user types.User, projectId string, in *GCEAggregatedInstances) []GCEInstanceDB {
 	var out []GCEInstanceDB
 	for _, zone := range in.Zones {
 		for _, instance := range zone.Instances {

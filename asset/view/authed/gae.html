@@ -14,13 +14,13 @@
 </ul>
 
 <a href="authorization">Securely grant access</a>
-( note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
+(note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
 requested.
-write scopes ( due to lazy API practices on GCP's part ) are on opt-in basis.
+write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
 
 </p>
 {{else}}
-<span style="font-style: italic;">Uncached / real-time query took 237ms involving ( {{.APICallCount}} ) API
+<span style="font-style: italic;">Uncached / real-time query took 237ms involving ({{.APICallCount}}) API
   calls.</span>
 <p>
   Assets from <span style="font-family: monospace">{{.Email}}</span>

@@ -9,7 +9,7 @@ import (
 )
 
 func HTMLWithGlobalState(c *gin.Context, page string, obj map[string]interface{}) {
-	value, _ := c.Get(identity.IdentityContextkey)
+	value, _ := c.Get(identity.IdentityContextKey)
 	obj["IsLoggedIn"] = value
 	obj["EapUrl"] = config.EapUrl
 	c.HTML(http.StatusOK, page, obj)

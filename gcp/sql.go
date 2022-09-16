@@ -11,12 +11,12 @@ import (
 	"net/http"
 )
 
-type ErrorGloudSQLListError struct {
+type ErrorCloudSQLListError struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
-type ErrorGloudSQLList struct {
+type ErrorCloudSQLList struct {
 	Error ErrorGCFListError `json:"error"`
 }
 
@@ -24,7 +24,7 @@ type CloudSQLDBInstance struct {
 	Name string `json:"name"`
 }
 
-type ResponeCloudSQLList struct {
+type ResponseCloudSQLList struct {
 	Items []CloudSQLDBInstance `json:"items"`
 }
 
@@ -32,7 +32,7 @@ var apiHostCloudSQL = "https://sqladmin.googleapis.com"
 
 var ScopeCloudSQL = "https://www.googleapis.com/auth/sqlservice.admin"
 
-func CloudSQLListInstances(user types.User, projectId string) (*ResponeCloudSQLList, *ErrorGloudSQLList) {
+func CloudSQLListInstances(user types.User, projectId string) (*ResponseCloudSQLList, *ErrorCloudSQLList) {
 	url := apiHostCloudSQL + "/v1/projects/" + projectId + "/instances"
 	var bearer = "Bearer " + user.AccessToken.String
 	fmt.Printf("Request "+url+" with token %v\n", bearer)
@@ -57,14 +57,14 @@ func CloudSQLListInstances(user types.User, projectId string) (*ResponeCloudSQLL
 	reader1, _ := ioutil.ReadAll(tee)
 	reader2, _ := ioutil.ReadAll(buf)
 
-	var responseSuccess ResponeCloudSQLList
+	var responseSuccess ResponseCloudSQLList
 	err = json.Unmarshal(reader1, &responseSuccess)
 	if err != nil {
 		log.Printf("Original %v\n", reader1)
 		panic(reader1)
 	}
 
-	var responseError ErrorGloudSQLList
+	var responseError ErrorCloudSQLList
 	err = json.Unmarshal(reader2, &responseError)
 	if err != nil {
 		panic(err)

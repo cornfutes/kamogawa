@@ -24,7 +24,7 @@ type ResponseRefreshToken struct {
 }
 
 func GCPRefresh(c *gin.Context, db *gorm.DB) ResponseRefreshToken {
-	var email, _ = c.Get(IdentityContextkey)
+	var email, _ = c.Get(IdentityContextKey)
 
 	fmt.Printf("Revoking for email: %v\n", email)
 	var user types.User
@@ -57,8 +57,8 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) ResponseRefreshToken {
 
 func CheckDBAndRefreshToken(c *gin.Context, user types.User, db *gorm.DB) {
 	if time.Now().Sub(user.UpdatedAt).Seconds() > 3300 {
-		respRefreshtoken := GCPRefresh(c, db)
-		user.AccessToken = &sql.NullString{String: respRefreshtoken.AccessToken, Valid: true}
+		respRefreshToken := GCPRefresh(c, db)
+		user.AccessToken = &sql.NullString{String: respRefreshToken.AccessToken, Valid: true}
 		db.Save(&user)
 	}
 }

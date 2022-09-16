@@ -31,14 +31,14 @@ func getUrlWithScopes(scopes string) string {
 
 func Authorization(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		var email, exists = c.Get(identity.IdentityContextkey)
+		var email, exists = c.Get(identity.IdentityContextKey)
 		if !exists {
 			panic("Unexpected")
 		}
 		var user types.User
 		err := db.First(&user, "email = ?", email).Error
 		if err != nil {
-			panic("Unvalid DB state")
+			panic("Invalid DB state")
 		}
 
 		var gmail string

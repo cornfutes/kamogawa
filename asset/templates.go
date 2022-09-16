@@ -12,9 +12,9 @@ import (
 
 const baseLayoutPath = "view/layout/base.tmpl"
 const unauthedLayoutsPath = "view/layout/unauthed/*.html"
-const unauthedviewsGlob = "view/unauthed/*.html"
+const unauthedViewsGlob = "view/unauthed/*.html"
 const authedLayoutsPath = "view/layout/authed/*.html"
-const authedviewsGlob = "view/authed/*.html"
+const authedViewsGlob = "view/authed/*.html"
 
 //go:embed view/*
 var views embed.FS
@@ -24,11 +24,11 @@ var views embed.FS
 func ConfigureHTMLRenderer() multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
 
-	unauthedviews, err := fs.Glob(views, unauthedviewsGlob)
+	unauthedViews, err := fs.Glob(views, unauthedViewsGlob)
 	if err != nil {
 		panic(err.Error())
 	}
-	for _, unauthedView := range unauthedviews {
+	for _, unauthedView := range unauthedViews {
 		t, err := template.ParseFS(views, baseLayoutPath, unauthedLayoutsPath, unauthedView)
 		if err != nil {
 			log.Fatal(err)
@@ -36,11 +36,11 @@ func ConfigureHTMLRenderer() multitemplate.Renderer {
 		r.Add(filepath.Base(unauthedView), t)
 	}
 
-	authedviews, err := fs.Glob(views, authedviewsGlob)
+	authedViews, err := fs.Glob(views, authedViewsGlob)
 	if err != nil {
 		panic(err.Error())
 	}
-	for _, authedView := range authedviews {
+	for _, authedView := range authedViews {
 		t, err := template.ParseFS(views, baseLayoutPath, authedLayoutsPath, authedView)
 		if err != nil {
 			log.Fatal(err)

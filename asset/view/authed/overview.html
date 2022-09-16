@@ -25,15 +25,15 @@
   </p>
   {{else if .MissingScopes}}
   <p>
-    At a mininum ( different resources need more scopes ), the following OAuth2 Scopes are needed but not yet granted:
+    At a minimum (different resources need more scopes), the following OAuth2 Scopes are needed but not yet granted:
 
   <ul>
     <li>https://www.googleapis.com/auth/cloud-platform.read-only
   </ul>
 
   <a href="authorization">Securely grant access</a>
-  ( note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
-  requested. write scopes ( due to lazy API practices on GCP's part ) are on opt-in basis.
+  (note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
+  requested. write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
   </p>
   {{else}}
   <p>
@@ -74,7 +74,7 @@
   The full-graph traversal / cache invalidation runs on schedule.
 </p>
 <ul style="font-style: italic;">
-  <li>Last indexing occured: {{.LastRunTime}} ago. ( triggered by scheduler ) </li>
+  <li>Last indexing occured: {{.LastRunTime}} ago. (triggered by scheduler) </li>
   <li>Next indexing scheduled in: {{.NextRunTime}}.
     <a href="/plans" class="link_with_arrow">Perform ad-hoc run immediately</a>
   </li>

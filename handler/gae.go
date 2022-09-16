@@ -20,7 +20,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		useCache := len(c.Query("r")) == 0
 
 		user := identity.CheckSessionForUser(c, db)
-		var email, _ = c.Get(identity.IdentityContextkey)
+		var email, _ = c.Get(identity.IdentityContextKey)
 		if user.AccessToken == nil {
 			core.HTMLWithGlobalState(c, "gae.html", gin.H{
 				"Email":        email,
@@ -51,12 +51,12 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		// Enumerate Projects for credentials
 		for _, p := range projectStrings {
 			apiCallCount++
-			responseSuccessService, responeErrorService := gcp.GAEListServices(user, p.ProjectId)
+			responseSuccessService, responseErrorService := gcp.GAEListServices(user, p.ProjectId)
 			htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul>")
 
-			if responeErrorService.Error.Code == 404 {
+			if responseErrorService.Error.Code == 404 {
 				htmlLines = append(htmlLines, "<li>")
-				if strings.HasPrefix(responeErrorService.Error.Message, "App does not exist.") {
+				if strings.HasPrefix(responseErrorService.Error.Message, "App does not exist.") {
 					htmlLines = append(htmlLines, "App Engine not initialized for this Project.")
 				} else {
 					htmlLines = append(htmlLines, "App engine state unknown for this Project.")

@@ -69,7 +69,7 @@ func GoogleOAuth2Callback(db *gorm.DB) func(c *gin.Context) {
 			"<retroactively_redacted>")
 		gmail := ti.Email
 
-		var email, exists = c.Get(IdentityContextkey)
+		var email, exists = c.Get(IdentityContextKey)
 		if !exists {
 			panic("Unexpected exrror lookup context")
 		}

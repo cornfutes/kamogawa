@@ -13,7 +13,7 @@ import (
 
 func RevokeGCP(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		var email, _ = c.Get(IdentityContextkey)
+		var email, _ = c.Get(IdentityContextKey)
 
 		fmt.Printf("Revoking for email: %v\n", email)
 		var user types.User

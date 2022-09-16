@@ -28,12 +28,12 @@ as to which method has superior user-perceived latency. However, the simplicity
 of the SSR rendering model, and especially not a hybrid SSR with client-side 
 hydration, frees us up to optimize critical latency paths. For one, the 
 DevEx is simple and stays simple, without having to catch up with vendoring 
-complexities and configuring woes plagueing the JavaScript / Node.JS world. 
+complexities and configuring woes plaguing the JavaScript / Node.JS world.
 
 For the persistence layer, either SQLite or Postgres DB will be used. Postgres 
 DB has a good-enough full-text search, which should be good enough for a 
 medium-term stop-gap solution before investing in tuning a search database 
-such as Apache Lucene, Amazon Elastisearch, or pricy options such as Algolia. 
+such as Apache Lucene, Amazon ElasticSearch, or pricy options such as Algolia.
 SQLIte has the benefit that we can have one shard per user, and allow them to 
 download all their indexed data. This is TBD. We will use the Go Gorm library 
 as an ORM with the DBs.
@@ -48,8 +48,8 @@ Fast crypto, security and numeric libraries. Pragmatic and simple programming
 model, as well as package management. It's minimal compared to a verbose language 
 like Java, but has much more reliable and consistent performant than Node.js. 
 It has an extensive community and well documented unlike edgy languages such as 
-Pheonix or Haskell. The language gets out of the way so we can focus on the problem 
-domain. Finally, Go forces you to write code in one way, thereby eliminating alot of 
+Phoenix or Haskell. The language gets out of the way so we can focus on the problem
+domain. Finally, Go forces you to write code in one way, thereby eliminating a lot of
 brainpower spent philosophizing.
 
 ** Development
@@ -77,7 +77,7 @@ docker compose up
 go fmt
 ``
 
-The VScode Go extension also does linting
+The VSCode Go extension also does linting
 
 *** Deploying 
 

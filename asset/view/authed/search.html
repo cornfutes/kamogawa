@@ -14,23 +14,23 @@
   <input id="query" value="{{.Query}}"></input>
   <div class="💪 🥷 🦠" id="query-builder">
     <div>
-      <label for=" provider">Provider:</label>
+      <label for="provider">Provider:</label>
       <select name="provider" id="filter-scope" onchange="changeProvider(event)">
-        <option value="all">All ( implicit ) </option>
+        <option value="all">All (implicit) </option>
         <option value="gcp">GCP</option>
         <option value="aws">AWS</option>
         <option value="azure">Azure</option>
       </select>
       <label for="algo">Algo:</label>
       <select name="algo" id="filter-scope" onchange="changeAlgo(event)">
-        <option value="substring">substring ( implicit ) </option>
+        <option value="substring">substring (implicit) </option>
         <option value="fulltext">Full-text</option>
       </select>
       <label for="time">Modified:</label>
       <select name="time" id="filter-scope" onchange="changeTime(event)">
         <option value="all">All time</option>
         <option value="last24h">Last 24h</option>
-        <option value="lastmonth">Last Month ( implicit ) </option>
+        <option value="lastmonth">Last Month (implicit) </option>
       </select>
     </div>
     <div>
@@ -44,7 +44,7 @@
 {{end}}
 
 {{if .HasFilter}}
-<p style="font-style: italic;">warning: in the demo, we ignore the search filter ( everything after the ':::' ) </p>
+<p style="font-style: italic;">warning: in the demo, we ignore the search filter (everything after the ':::') </p>
 {{end}}
 
 {{if .Error }}

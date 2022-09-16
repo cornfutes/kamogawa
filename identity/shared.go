@@ -6,4 +6,4 @@ var jwtSecretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 const sessionCookieKey = "session"
 
-const IdentityContextkey = "AuthorizedUserEmail"
+const IdentityContextKey = "AuthorizedUserEmail"

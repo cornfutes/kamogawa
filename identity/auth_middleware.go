@@ -40,14 +40,14 @@ func SetAuthContext() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		result := ExtractClaimsEmail(c)
 		if result != nil {
-			c.Set(IdentityContextkey, *result)
+			c.Set(IdentityContextKey, *result)
 		}
 	}
 }
 
 func GateAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, exists := c.Get(IdentityContextkey)
+		_, exists := c.Get(IdentityContextKey)
 		if !exists {
 			c.Redirect(http.StatusFound, "/login?&error="+strconv.Itoa(int(Unauthorized)))
 			c.Abort()

@@ -81,8 +81,8 @@ func GCPListProjectsMain(db *gorm.DB, user types.User) (*types.ListProjectRespon
 	reader1, _ := ioutil.ReadAll(tee)
 	reader2, _ := ioutil.ReadAll(buf)
 
-	var responseSucess types.ListProjectResponse
-	err = json.Unmarshal(reader1, &responseSucess)
+	var responseSuccess types.ListProjectResponse
+	err = json.Unmarshal(reader1, &responseSuccess)
 	if err != nil {
 		panic(err)
 	}
@@ -97,6 +97,6 @@ func GCPListProjectsMain(db *gorm.DB, user types.User) (*types.ListProjectRespon
 		}
 	}
 	fmt.Printf("response raw %v \n", string(reader1))
-	fmt.Printf("Fetched %v projects\n", len(responseSucess.Projects))
-	return &responseSucess, &responseError
+	fmt.Printf("Fetched %v projects\n", len(responseSuccess.Projects))
+	return &responseSuccess, &responseError
 }

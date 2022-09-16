@@ -23,14 +23,14 @@ const (
 func (s IdentityError) String() string {
 	switch s {
 	case Internal:
-		return "An internal error occured."
+		return "An internal error occurred."
 	case Incorrect:
 		return "Your email or password was incorrect."
 	case Unauthorized:
 		return "Invalid session. Please re-login."
 	}
 
-	return "An unexpected error ogiccured."
+	return "An unexpected error occurred."
 }
 
 type LoginRequest struct {

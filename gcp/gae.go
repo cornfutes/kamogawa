@@ -25,11 +25,11 @@ import (
 //   ]
 // }
 
-type GAEServiceTrafficeAllocation struct {
+type GAEServiceTrafficAllocation struct {
 }
 
 type GAEServiceTrafficAllocations struct {
-	Allocations GAEServiceTrafficeAllocation `json:"allocations"`
+	Allocations GAEServiceTrafficAllocation `json:"allocations"`
 }
 
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services#Service
@@ -67,7 +67,7 @@ type GAEListVersionsResponse struct {
 type GAEInstance struct {
 	Name   string `json:"name"`
 	Id     string `json:"id"`
-	VMNamm string `json:"vmName"`
+	VMName string `json:"vmName"`
 }
 
 type GAEListInstancesResponse struct {

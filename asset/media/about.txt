@@ -44,10 +44,10 @@ security and, most importantly, on customer needs.
 We've built a decent search engine for cloud. Not the fancy AI; our secret sauce
 is domain experience wearing both SWE and SREs hats, as both consumer and producer
 of cloud services, shepherding O(10^5) multi-cloud systems with strict performance
-and compliance requirements. Search is a means to an end but it forms the basis o
+and compliance requirements. Search is a means to an end, but it forms the basis o
 all workflows.
  
-Our web app is on a SPA diet. We believe (((SSR is simpler) is faster) is faster).
+Our web app is on an SPA diet. We believe (((SSR is simpler) is faster) is faster).
 Collectively, we've tweaked 500k+ LoC of JavaScript, love it, but opted for Go as
 it is better adapted to serving  CPU-bound work and to serving customers.
  

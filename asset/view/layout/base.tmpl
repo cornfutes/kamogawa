@@ -62,18 +62,8 @@
 
     let searchBoxInFocus = showingQueryBuilder = false,
         c = 'click',
-        u = 'keyup',
-        q = '';
-    {{if .Query}} 
-      q = {{.Query}} || '';
-    {{end}}
-    let originalQuery = q || '',
-      baseQuery = (q.length > 0 && q.split(':::')[0] ) || '',
-      provider = 'all',
-      algo = 'substring',
-      time = 'all';
-
-
+        u = 'keyup';
+    
     function eventHandlerSearchBoxFocus(q) {
       searchBoxInFocus = true;
       rm('search-box', '👻');
@@ -93,10 +83,11 @@
       $('search-input').value = '';
     }
 
-    $('search-start').addEventListener(c, eventHandlerSearchBoxFocus);
-    $('search-start').addEventListener(u, e => {
-      if(e.code == 'Enter') e.preventDefault(), eventHandlerSearchBoxFocus();
-    });
+    const ss = $('search-start');
+    if(ss)  {
+      ss.addEventListener(c, eventHandlerSearchBoxFocus);
+      ss.addEventListener(u, e => e.code == 'Enter' && e.preventDefault() && eventHandlerSearchBoxFocus());
+    }
 
     document.addEventListener('keydown', e => {
       if (!searchBoxInFocus && e.code == 'Backslash') e.preventDefault(), eventHandlerSearchBoxFocus(e);
@@ -125,40 +116,17 @@
     } 
 
     console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))",
-      "font-size: 24px;background: #67b26f; background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd); color: white;text-align: center; padding: 10px 15px; width: 100%;border-radius: 20px;");
+      "font-size: 24px;background: #67b26f; background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd); color: white;text-align: center; padding: 10px 15px; width: 100%;border-radius: 20px;");   
 
-    function changeProvider(e) {
-      provider = e.target.value;
-      updateQuery();
-    }
-    function changeAlgo(e) {
-      algo = e.target.value;
-      updateQuery();
-    }
-    function changeTime(e) {
-      time = e.target.value;
-      updateQuery();
-    }
 
-    function updateQuery(tk = []) {
-      if(provider != "all") tk.push("provider:" + provider);
-      if(algo != "substring") tk.push("algo:" + algo);
-      if(time != "all") tk.push("time:" + time);
-      if(tk.length > 0) q = [$("query").value.split(":::")[0].trim(), ":::", ...tk].join(" ");
-      if(q == originalQuery) { 
-        $("query").value = originalQuery;
-        resetSearchState();
-      } else {
-        $("query").value = q;
-        ad('search-header', '⚡');
-        $('search-original-query').innerText = originalQuery;
-        rm('search-redo-cta', '⚡');
-        rm('search-builder-reset', '🥷');
-      }
-    }
-
-    const elSearchAdvanced = $("search-advanced");
-    if(elSearchAdvanced) {
+  {{if .IsSearch}}
+      
+      {{if .Query}} 
+      let q = '{{.Query}}';
+      {{else}}
+      let q = '';
+      {{end}}
+      const elSearchAdvanced = $("search-advanced");
       elSearchAdvanced.addEventListener(c, _ => {
           if(showingQueryBuilder)
             elSearchAdvanced.classList.add('down'), ad("query-builder", "🥷");
@@ -179,14 +147,10 @@
               rm("query-builder", "🥷");
           }
       });
-    }
 
-  const sbr = $('search-builder-reset');
-  if(sbr) {
-    sbr.addEventListener(c, _ => {
+    $('search-builder-reset').addEventListener(c, _ => {
       $("query").value = originalQuery, resetSearchState();
     });
-  }
 
   function resetSearchState() {
     rm('search-header', '⚡');
@@ -195,34 +159,60 @@
     $('search-original-query').innerText = '';
   }
 
-  const elQuery = $('query');
-  if(elQuery) {
-    elQuery.addEventListener(u, e => {
-      e.preventDefault();
-      if(e.code == 'Enter') {
-        s(e.target.value);
-      } else if(e.target.value == originalQuery) {
-        q = e.target.value;
+      function updateQuery(tk = []) {
+      if(provider != "all") tk.push("provider:" + provider);
+      if(algo != "substring") tk.push("algo:" + algo);
+      if(time != "all") tk.push("time:" + time);
+      if(tk.length > 0) q = [$("query").value.split(":::")[0].trim(), ":::", ...tk].join(" ");
+      if(q == originalQuery) { 
+        $("query").value = originalQuery;
         resetSearchState();
       } else {
-        q = e.target.value;
+        $("query").value = q;
         ad('search-header', '⚡');
         $('search-original-query').innerText = originalQuery;
         rm('search-redo-cta', '⚡');
         rm('search-builder-reset', '🥷');
       }
-    });
-  }
+    }
 
+      let originalQuery = q || '',
+        baseQuery = (q.length > 0 && q.split(':::')[0] ) || '',
+        provider = 'all',
+        algo = 'substring',
+        time = 'all';
+
+    function changeProvider(e) {
+      provider = e.target.value;
+      updateQuery();
+    }
+    function changeAlgo(e) {
+      algo = e.target.value;
+      updateQuery();
+    }
+    function changeTime(e) {
+      time = e.target.value;
+      updateQuery();
+    }
+      $('query').addEventListener(u, e => {
+        e.preventDefault();
+        if(e.code == 'Enter') {
+          s(e.target.value);
+        } else if(e.target.value == originalQuery) {
+          q = e.target.value;
+          resetSearchState();
+        } else {
+          q = e.target.value;
+          ad('search-header', '⚡');
+          $('search-original-query').innerText = originalQuery;
+          rm('search-redo-cta', '⚡');
+          rm('search-builder-reset', '🥷');
+        }
+      });
   const srcta = $('search-redo-cta');
-  if(srcta) {
-    srcta.addEventListener(c, e => {
-      if(q != originalQuery) e.preventDefault(), s(q);
-    });  
-    srcta.addEventListener(u, e => {
-      if(event.code == 'Enter' && q != originalQuery) e.preventDefault(), s(q);
-    });
-  }
+  srcta.addEventListener(c, e => q != originalQuery && e.preventDefault() && s(q));  
+  srcta.addEventListener(u, e => event.code == 'Enter' && q != originalQuery && e.preventDefault() && s(q));
+  {{end}}
 
   const leftNavLinks = document.querySelectorAll('.left-nav-link');
   if(leftNavLinks) {

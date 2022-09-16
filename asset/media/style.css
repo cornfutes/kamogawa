@@ -550,7 +550,6 @@ footer {
 .footer-links legal {
   font-size: 14px;
   color: #6e6e73;
-  flex-direction: row;
 }
 
 .footer-links a {

@@ -3,21 +3,20 @@
 <title>{{.BrandName}}</title>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=description content="The best way to access your cloud infrastructure.">
-<link rel=stylesheet href="./style.css">
-<!-- Prevent fake favicon requests. https://stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests. -->
-<link rel=icon href="data:;base64,iVBORw0KGgo=">
+<link rel=stylesheet href=style.css>
+<link rel=icon href="data:,">
 
 <body class="💪 🪜 🍜 📜 🚫">
   <header class="💪 🎯">
     <div class="💪" id="header-child">
       <div class="💪">
-        <h1 id=logo class="🍜">
-          <a href="/"><span id="logo-image">川</span></a>
+        <h1 id=logo class=🍜>
+          <a href=/><span id="logo-image">川</span></a>
           <span id="tag-beta"><a href="{{.EapUrl}}">Early Access</a></span>
         </h1>
       </div>
       <div id="search-box" class="💪 🌳 👻">
-        <input class="🌳"
+        <input class=🌳
           type=text
           placeholder=Search
           spellcheck=false
@@ -40,19 +39,17 @@
       </ul>
     </div>
   </header>
-  <div class="💪 🌳 ⚖️">
-    {{template "main" .}}
-  </div>
+  <div class="💪 🌳 ⚖️">{{template "main" .}}</div>
   <footer class="💪 🪜">
-    <div class="📞" style="margin-bottom: 12px">
+    <p class="📞">
       <a href="{{.EapUrl}}">Join our Early Access Program!</a>
-    </div>
+    </p>
     <ul class="🔫 🍜 🚫 footer-links">
-      <li><a href="about.txt">About</a></li>
-      <li><a href="api.txt">API</a></li>
-      <li><a href="security.txt">Security</a></li>
-      <li><a href="legal.txt">Legal</a></li>
-      <li><a href="mailto:{{.ContactEmail}}">Contact</a></li>
+      <li><a href="about.txt">About</a>
+      <li><a href="api.txt">API</a>
+      <li><a href="security.txt">Security</a>
+      <li><a href="legal.txt">Legal</a>
+      <li><a href="mailto:{{.ContactEmail}}">Contact</a>
     </ul>
   </footer>
 <script>

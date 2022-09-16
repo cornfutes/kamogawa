@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang=en-US class=🌕>
+<title>DiceDuckMonk</title>
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="The best way to access your cloud infrastructure.">
+<link rel="stylesheet" href="./style.css">
+<!-- Prevent fake favicon requests. https://stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests. -->
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+<body class="💪 🪜 🍜 📜 🌕 🚫">
+  <header class="💪 🎯">
+    <div class="💪 🦠">
+      <div class="💪">
+        <h1 id="logo" class="🍜">
+          <a href="/"><span id="logo-image">川</span></a>
+          <span id="tag-beta">Early Access</span>
+        </h1>
+      </div>
+      <div id="search-box" class="💪 🌳 👻">
+        <input class="🌳"
+          type="text"
+          placeholder="Search"
+          spellcheck="false"
+          autocomplete="off"
+          aria-label="Search term"
+          id="search-input">
+        <span id="search-cancel"></span>
+      </div>
+      <nav class="💪 🦷 ⚖️ top-nav" id="top-nav" >
+        <a href="/status">System Status</a>
+        <a href="/release.txt">Release Notes</a>
+        <a href="/demo">Demo</a>
+        {{if .IsLoggedIn}}
+        <a href="/account">Account</a>
+        <a href="/account">Logout</a>
+        {{else}}
+        <a href="/login">Login</a>
+        {{end}}
+        <span class="top-link" id="search-start" tabindex=0></span>
+      </nav>
+    </div>
+  </header>
+  <div class="💪 🌳 ⚖️">
+    {{template "main" .}}
+  </div>
+  <footer class="💪 🪜">
+    <div class="📞" style="margin-bottom: 12px">
+      <a href="">Applications are open for the Early Access Program</a>
+    </div>
+    <ul class="🔫 🍜 🚫 footer-links">
+      <li><a href="about.txt">About</a></li>
+      <li><a href="api.txt">API</a></li>
+      <li><a href="security.txt">Security</a></li>
+      <li><a href="legal.txt">Legal</a></li>
+      <li><a href="mailto:team@diceduckmonk.com">Contact</a></li>
+    </ul>
+  </footer>
+  <script>
+    let GlobalState = {
+      searchBoxInFocus: false,
+    };
+    $ = id => document.getElementById(id);
+    rm = (id, c) => $(id).classList.remove(c);
+    ad = (id, c) => $(id).classList.add(c);
+
+    function eventHandlerSearchBoxFocus(q) {
+      GlobalState.searchBoxInFocus = true;
+      rm('search-box', '👻');
+      ad('top-nav', '👻');
+      ad('main', '🌃');
+      ad('logo', '🌃');
+      if(q && q.length > 0) {
+        $('search-input').value = q;
+      }
+      $('search-input').focus();
+    }
+
+    function eventHandlerSearchBoxDefocus() {
+      GlobalState.searchBoxInFocus = false;
+      ad('search-box', '👻');
+      rm('top-nav', '👻');
+      rm('main', '🌃');
+      rm('logo', '🌃');
+      $('search-input').value = '';
+    }
+
+    $('search-start').addEventListener('click', eventHandlerSearchBoxFocus);
+    $('search-start').addEventListener('keyup', e => {
+      if(e.code == 'Enter') {
+        e.preventDefault();
+        eventHandlerSearchBoxFocus();
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!GlobalState.searchBoxInFocus && e.code == 'Backslash') e.preventDefault(), eventHandlerSearchBoxFocus(e);
+    });
+    $('search-input').addEventListener('keydown', e => {
+      if(!GlobalState.searchBoxInFocus) {
+        return;
+      }
+      if (e.code == 'Escape') e.preventDefault(), eventHandlerSearchBoxDefocus();
+      else if (e.code == 'Enter') {
+        {{if not .IsLoggedIn}}
+          window.location.href = '/login?error=4';
+        {{else}}
+          e.preventDefault();
+          search($('search-input').value);
+        {{end}}
+      } else if (e.code == 'Tab') {
+        e.preventDefault();
+      }
+    });
+    $('search-cancel').addEventListener('click', eventHandlerSearchBoxDefocus);
+    const elNavGcp = $("nav-gcp");
+    if (elNavGcp) {
+      // fix, since stored as string 
+      if (localStorage.getItem('nav-gcp-open') == 'true') {
+        elNavGcp.open = true;
+      }
+
+      elNavGcp.addEventListener("toggle", _ => {
+        localStorage.setItem('nav-gcp-open', elNavGcp.open);
+      });
+    } 
+
+    var style = "font-size: 24px;" +
+      "background: #67b26f; /* fallback for old browsers */" + 
+      "background: -webkit-linear-gradient(to right, #67b26f, #4ca2cd); /* Chrome 10-25, Safari 5.1-6 */" +
+      "background: linear-gradient(to right, #67b26f, #4ca2cd); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */" +
+      "color: white;" +
+      "text-align: center;" +
+      "padding: 10px 15px;" +
+      "width: 100%;" +
+      "border-radius: 20px;";
+    var text = "%c Hello Y = f => (x => x(x))(x => f(y => x(x)(y))) "
+    console.log(text, style);
+
+    var q = '';
+    {{if .Query}} 
+      q = {{.Query}} || '';
+    console.log(q);
+    var originalQuery = q;
+    var baseQuery = (q.length > 0 && q.split(':::')[0] ) || '';
+    {{end}}
+    let provider = 'all';
+    let algo = 'substring';
+    let time = 'all';
+    function changeProvider(e) {
+      provider = e.target.value;
+      updateQuery();
+    }
+    function changeAlgo(e) {
+      algo = e.target.value;
+      updateQuery();
+    }
+    function changeTime(e) {
+      time = e.target.value;
+      updateQuery();
+    }
+
+    function updateQuery() {
+      tokens = [];
+      if(provider != "all") {
+        tokens.push("provider:" + provider);
+      }
+      if(algo != "substring") {
+        tokens.push("algo:" + algo);
+      }
+      if(time != "all") {
+        tokens.push("time:" + time);
+      }
+      if(tokens.length > 0) {
+        q = [$("query").value.split(":::")[0].trim(), ":::", ...tokens].join(" ");
+      } 
+      if(q == originalQuery) { 
+        $("query").value = originalQuery;
+        resetSearchState();
+      } else {
+        $("query").value = q;
+        ad('search-header', '⚡');
+        $('search-original-query').innerText = originalQuery;
+        rm('search-redo-cta', '⚡');
+        rm('search-builder-reset', '🥷');
+      }
+    }
+
+    let showingQueryBuilder = false;
+    const elSearchAdvanced = $("search-advanced");
+    if(elSearchAdvanced) {
+      elSearchAdvanced.addEventListener('click', () => {
+          if(showingQueryBuilder) {
+            elSearchAdvanced.classList.add('down');
+            showingQueryBuilder = false;
+            ad("query-builder", "🥷");
+          } else {
+            elSearchAdvanced.classList.remove('down');
+            showingQueryBuilder = true;
+            rm("query-builder", "🥷");
+          }
+        }); 
+        elSearchAdvanced.addEventListener('keyup', (e) => {
+          if(e.code == 'Enter') {
+            event.preventDefault();
+             if(showingQueryBuilder) {
+              elSearchAdvanced.classList.add('down');
+              showingQueryBuilder = false;
+              ad("query-builder", "🥷");
+            } else {
+              elSearchAdvanced.classList.remove('down');
+              showingQueryBuilder = true;
+              rm("query-builder", "🥷");
+            }
+          }
+      });
+    }
+
+  $('search-builder-reset').addEventListener('click', () => {
+    $("query").value = originalQuery;
+    resetSearchState();
+  });
+
+  function resetSearchState() {
+    rm('search-header', '⚡');
+    ad('search-redo-cta', '⚡');
+    ad('search-builder-reset', '🥷');
+    $('search-original-query').innerText = '';
+  }
+
+  $('query').addEventListener('keyup', e => {
+     e.preventDefault();
+    if(e.code == 'Enter') {
+      search(e.target.value);
+    } else if(e.target.value == originalQuery) {
+      q = e.target.value;
+      resetSearchState();
+    } else {
+      q = e.target.value;
+      ad('search-header', '⚡');
+      $('search-original-query').innerText = originalQuery;
+      rm('search-redo-cta', '⚡');
+      rm('search-builder-reset', '🥷');
+    }
+  });
+
+  $('search-redo-cta').addEventListener('click', e => {
+    if(q != originalQuery) {
+      e.preventDefault();
+      search(q);
+    }
+  });  
+  $('search-redo-cta').addEventListener('keyup', e => {
+    if(event.code == 'Enter' && q != originalQuery) {
+      e.preventDefault();
+      search(q);
+    }
+  });
+
+  function search(q) {
+     window.location.href = '/search?q=' + q;
+  }
+  </script>

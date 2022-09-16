@@ -1,0 +1,134 @@
+Google Auth is really unforgiving, has fragmented docs and zero to no feedback mechanism.
+
+First, attempted tweaking the requested scopes of the Consent Screen via the GCP web console.
+Does not see the consent screen updated. 
+
+It turns out that what actually show on consent screen is based on the consent screen URL.
+Meaning, we have to update the url generation code here to include the scopes.
+
+
+# When requesting scope "openid".
+
+Auth redirects and gives us 'auth' code ( url param ), which we invoke 
+google at https://oauth2.googleapis.com/token and get a JSON back containing 
+access token and refresh token.
+
+If we included openid scope, it will also include an 'IdToken' field.
+This is a JWT.
+
+Using jwt.io, we can see the contents of this encoded JSON. Email field was not there.
+
+# Adding email scope 
+
+Mistakes were made when trying to get email scope added.
+First, the scopes must be url encoded like so:
+
+"scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform.read-only%20openid&20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email" 
+
+Originally, accidentally did &20 instead of %20 after openid. 
+
+This decoded as: 
+
+scope=https://www.googleapis.com/auth/cloud-platform.read-only openid&20https://www.googleapis.com/auth/userinfo.email 
+
+instead of 
+
+scope=https://www.googleapis.com/auth/cloud-platform.read-only openid https://www.googleapis.com/auth/userinfo.email 
+
+The fix was to encode as so: 
+
+"scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform.read-only%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email" 
+
+Adjacent to the 'auth' code param, google tells us what scopes is/will be associated with the accent tokens that we will get for that scope.
+
+The JWT later returned now contains email field :
+
+eyJhbGciOiJSUzI1NiIsImtpZCI6IjQwMmYzMDViNzA1ODEzMjlmZjI4OWI1YjNhNjcyODM4MDZlY2E4OTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc5Mzk0OTQ2MjMtZGtpcTNlNnFnMzV0ZjNqOWpmbmo1Y29paHR1NWdkZjAuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc5Mzk0OTQ2MjMtZGtpcTNlNnFnMzV0ZjNqOWpmbmo1Y29paHR1NWdkZjAuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDA5MDA4MzIzMzMzMDAzMTU2MDMiLCJlbWFpbCI6ImRpY2VkdWNrbW9ua0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6Imk0Sjc1M3VGT0ZFaFljRXNMRnZMdkEiLCJpYXQiOjE2NjE4NjcyMzAsImV4cCI6MTY2MTg3MDgzMH0.UUMX4P3Eltroj7f-cMyS-760wD4Oilwl6UvJPJrv1l9G5OXLIBpltCh78HeF5_7UsN-EZLuOwfxQY6LGOzHysgRkY_mjf2115EI9EtUEFvg6modLHJtHcVPxHsqsSrfkIasIZ3PcdIzKqZuLXpcHR4G9rw3wwW0tHB1ZWZJHUxT4JfJIaIimzwxyBrjN_ldz1393ull3Xcv2MUZoOc8pxbJnJG8eQudenhRI28dTrLRqdRzsBrHAra27N9nwFOZH81LTspgWDNROtB0AxLbCTrw_7lbJp2Oj0CmRQjgo04FUZILv51-EluQs42sIcH3U1zYNuMnh-RoV0tSrNoTb5w
+
+{
+  "iss": "https://accounts.google.com",
+  "azp": "407939494623-dkiq3e6qg35tf3j9jfnj5coihtu5gdf0.apps.googleusercontent.com",
+  "aud": "407939494623-dkiq3e6qg35tf3j9jfnj5coihtu5gdf0.apps.googleusercontent.com",
+  "sub": "100900832333300315603",
+  "email": "diceduckmonk@gmail.com",
+  "email_verified": true,
+  "at_hash": "i4J753uFOFEhYcEsLFvLvA",
+  "iat": 1661867230,
+  "exp": 1661870830
+}
+
+We can parse the JWT by using the github.com/ederinbay/GoogleIdTokenVerifier.
+We specify two params: the JWt and the client ID. Their docs call this the authToken, which is confusing.
+
+Without the email scope, the jwt:
+
+eyJhbGciOiJSUzI1NiIsImtpZCI6IjQwMmYzMDViNzA1ODEzMjlmZjI4OWI1YjNhNjcyODM4MDZlY2E4OTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc5Mzk0OTQ2MjMtZGtpcTNlNnFnMzV0ZjNqOWpmbmo1Y29paHR1NWdkZjAuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc5Mzk0OTQ2MjMtZGtpcTNlNnFnMzV0ZjNqOWpmbmo1Y29paHR1NWdkZjAuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDA5MDA4MzIzMzMzMDAzMTU2MDMiLCJhdF9oYXNoIjoiU3VlNEhsbTN5eWVpYkE1dVJ5MW9XQSIsImlhdCI6MTY2MTg2Nzg2OCwiZXhwIjoxNjYxODcxNDY4fQ.dfUbIVaSd2i1CIMW77MZpxJlHl7PkUWzbvZ4R-g9NczEHADNnN81z8_4etEAT2nAU9d2U7ozQ-2XzrmGNGbSH1wJy-DCrLCTB7gq-LCWHNK0CuVdx01Be0XHih-iGtNcexQxC0I6qa-ihLf2cQVqjTaQlXIA2SeWhYxUclPhpShaxrrAyp20qUQ_i5fQT2HodPnYTrh0olwhBYRF5LfHq8dpTgQOxRgHTBrvIIddNA36R-CYqHwXB1KDEVUBQhf0OrywLvHS9X8Fc9mnrq8ZXOz-UPFl3d0Pu0VTROv4_bjhQ5wKJvIjHhqEVlyDOY1grXbbPhYqOAB42tDWZqT-7w
+
+Does not contain the email field.
+
+{
+  "iss": "https://accounts.google.com",
+  "azp": "407939494623-dkiq3e6qg35tf3j9jfnj5coihtu5gdf0.apps.googleusercontent.com",
+  "aud": "407939494623-dkiq3e6qg35tf3j9jfnj5coihtu5gdf0.apps.googleusercontent.com",
+  "sub": "100900832333300315603",
+  "at_hash": "Sue4Hlm3yyeibA5uRy1oWA",
+  "iat": 1661867868,
+  "exp": 1661871468
+}
+
+==========
+It's also worth noting the Google consent screen is confusing. When requesting just 
+'openid' and 'https://www.googleapis.com/auth/cloud-platform.read-only', it shows a consent screen requesting 
+access to: 
+
+- Associate you with your personal info on Google ( automatically checked, can't uncheck checkbox )
+- View your data across Google Cloud services and see the email address of your Google Account. ( option to check )
+
+But this is misleading. The email address is actually not shown. See JWT without email above.
+
+# Alternative way to verify JWT
+
+Rather than use the library, you can call the userinfo API with the access_token
+
+https://www.googleapis.com/oauth2/v2/userinfo?access_token=ya29.a0AVA9y1vvr_qoiYIuxlxx2kPi814PBRNGMBgua4td_f5qmE9pKF0vk_krI-QuizqzsMufYOdyNGdnmfRwETazab5hzB49maPPMm_TrOFx1s5yYeZNUW98sDVgPbpZtqki6MvzR7bjfl22KQhLJHjnjQSorA9daCgYKATASAQASFQE65dr8KGBPWzecC5ey9D0ciCiZHA0163
+
+and get a response like this 
+
+{
+  "id": "100900832333300315603",
+  "picture": "https://lh3.googleusercontent.com/a/default-user=s96-c"
+}
+
+
+or like this ( with email scope )
+
+{
+  "id": "100900832333300315603",
+  "email": "diceduckmonk@gmail.com",
+  "verified_email": true,
+  "picture": "https://lh3.googleusercontent.com/a/default-user=s96-c"
+}
+
+
+# Summary 
+
+If we request openid scope, we get IdToken field as query param on callback which we can use 
+Google ID Token Verifier on. The IDToken field is JWT, the verifier gives us 
+a verified JSOn.
+
+If we originally requested email scope
+(https://www.googleapis.com/auth/userinfo.email), email field will be on this json.
+
+As an alternative means of getting at the email, the access token on the original request, 
+with or without the idToken field, can be used to call 
+
+https://www.googleapis.com/oauth2/v2/userinfo?access_token=
+
+which also gives a JSON of the user profile. If the email scope was included, the 
+email field is included. 
+
+If Verifier involves an HTTP call, it may be less superfluous to just call call the userinfo API.
+
+
+
+

@@ -1,0 +1,34 @@
+{{define "page"}}
+<h2>CloudSQL</h2>
+
+{{if .Unauthorized}}
+<p>
+  You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
+</p>
+{{else if .MissingScopes}}
+<p>
+  The following OAuth2 Scopes are needed but not yet granted:
+
+<ul>
+  <li>https://www.googleapis.com/auth/cloud-platform.read-only
+  <li>https://www.googleapis.com/auth/sqlservice.admin ( write )
+    <ul>
+      <li>CloudSQL demands this, even if only reading.
+      </li>
+    </ul>
+</ul>
+
+<a href="authorization">Securely grant access. </a>
+( note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
+requested.
+write scopes ( due to lazy API practices on GCP's part ) are on opt-in basis.
+</p>
+{{else}}
+<p>
+  Enumerates functions across Projects
+</p>
+<ul>{{.AssetLines}}</ul>
+{{end}}
+
+
+{{end}}

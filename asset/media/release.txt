@@ -1,0 +1,47 @@
+      ,~~. 
+     (  9 )-_,                  RELEASE NOTES
+(\___ )=='-'               DiceDuckMonk Web Console
+ \ .   ) )                  
+  \ `-' /           These release notes are for the current
+   `~j-'         development version of DiceDuckMonk Web Console.
+     "=:
+
+------------------------------------------------------------------------
+Date: 2022/9/6
+
+* feat: provide more  detailed incremental scope messaging 
+* feat: new query builder UI for search 
+
+------------------------------------------------------------------------
+Date: 2022/9/5
+
+* perf: enable HTTP caching and chunked gzip minification
+* feat(gcp): add GCF, CloudSQL integrations
+
+------------------------------------------------------------------------
+Date: 2022/9/4
+
+* Add release notes
+* perf: add caching layer 
+
+------------------------------------------------------------------------
+Date: 2022/9/2
+
+* perf: served minified CSS 
+* perf: serve static files in-memory
+* perf: prune HTML, CSS, JS
+* feat(gcp): cross VM 
+
+------------------------------------------------------------------------
+Date: 2022/9/1
+
+* Add release notes
+* feat(identity): add flow to revoke credentials
+* feat(gcp): add GCE VM list 
+* feat(gcp): add GAE graph traversal
+* sec: use bcrypt 
+
+------------------------------------------------------------------------
+Date: 2022/8/31
+
+* feat(core): add account tiers

@@ -1,0 +1,50 @@
+{{define "page"}}
+
+<div class="🐉 💪 🪜" id="search-hero">
+  <div class="💪 🦠">
+    <h3 id="search-header">Search Results for: <span id="search-original-query"></span></h3>
+    <nav class="💪 🦷 ⚖️ top-nav" style="padding-top: 3px">
+      <span id="search-redo-cta" class="🐕 ⚡" tabindex="0" onkeyup="">
+        search
+      </span>
+      <span tabindex="0" class="🐕 arrow down" id="search-advanced">modifier<i></i>
+      </span>
+    </nav>
+  </div>
+  <input id="query" value="{{.Query}}"></input>
+  <div class="💪 🥷 🦠" id="query-builder">
+    <div>
+      <label for=" provider">Provider:</label>
+      <select name="provider" id="filter-scope" onchange="changeProvider(event)">
+        <option value="all">All</option>
+        <option value="gcp">GCP</option>
+        <option value="aws">AWS</option>
+        <option value="azure">Azure</option>
+      </select>
+      <label for="algo">Algorithm:</label>
+      <select name="algo" id="filter-scope" onchange="changeAlgo(event)">
+        <option value="substring">substring</option>
+        <option value="fulltext">Full-text</option>
+      </select>
+      <label for="time">Time:</label>
+      <select name="time" id="filter-scope" onchange="changeTime(event)">
+        <option value="all">All time</option>
+        <option value="last24h">Last 24h</option>
+        <option value="lastmonth">Last Month</option>
+      </select>
+    </div>
+    <div>
+      <span class="🐕 🥷" id="search-builder-reset">reset</spn>
+    </div>
+  </div>
+</div>
+
+<ul>
+  {{ range .Results }}
+  <li>
+    <span>{{.Text}}</span> -
+    <span>{{.Link}}</span>
+  </li>
+  {{ end }}
+</ul>
+{{end}}

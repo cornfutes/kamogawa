@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: dev
+    volumes:
+      - .:/opt/app/api
+    ports:
+    - "3000:3000"
+    links:
+    - shimogawa_service
+    environment:
+      HOST: localhost
+      REDIRECT_URI: http://localhost:3000/google/oauth2
+      SHIMOGAWA_URL: postgres://local-dev@shimogawa_service:5432/shimogawa_db
+      JWT_SECRET_KEY: <retroactively_redacted>
+      DEV: true
+      CACHE_ENABLED: true
+  shimogawa_service:
+    image: postgres:13.8-alpine
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: shimogawa_db
+      POSTGRES_USER: local-dev
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - '5432:5432'
+volumes:
+  data:

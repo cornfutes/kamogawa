@@ -1,0 +1,67 @@
+=========================================================================
+                         .-.
+                         '-'
+                        //
+               _..---._/|
+             .' ."     '-.
+            /__/          \      *
+           ====_____     __|     :
+          /#   #""" |   /()\    :    ..*
+          |#   #    |   \__/    : .'' 
+          \#___#____|      /   :::.. .
+           \______________|_...ä_: .. '*
+  ()       // /\||||)))))))      '   . .
+ .( \_     \\_\//   _-'.'/        |   * ..
+( )  |^|^|^|ooo/  _#\.//"""_      |   . . .
+(_)_.'v|v|v|     / \#  \_ / '_  _'    . .  
+           | _ _/_/     /'./_-|"         . .
+           /#_#__"""-._ /#  \__)       .  .   
+           |__   ""-._ |##               . . .
+           |  ""|-"""-_/##              . .    
+           /""--\__.-|                       .
+           \-_.-<__ /                   .   .
+           /-_| /  \
+           \-_| \_-<.                        .  .
+           <_-/ <_.-\                    .
+           <_-|  |_.-|                        .
+      .----|   \__\  |                 .
+     |     ."""   '.  |                       .
+      .___|        |__|  (c) NamelessOne
+          '.__..."""
+
+A word from the founder  
+=========================================================================
+My teams held a disarray of cloud resources and, due to bad hygiene, found
+things difficult to locate later. 
+ 
+I've spent 6 years incubating the idea, tackling subproblems YoY, and everything
+has finally lined up. I’ve successfully sold my best friend, now co-founder, to
+quit their gig on Wall Street to join me in productionising the solution. We’re
+seasoned with the gaps in GCPs’ and AWS' Information Retrieval mechanisms but
+imagined beyond this. We elected boring tech to deliver stability, performance,
+security and, most importantly, on customer needs.
+ 
+We've built a decent search engine for cloud. Not the fancy AI; our secret sauce
+is domain experience wearing both SWE and SREs hats, as both consumer and producer
+of cloud services, shepherding O(10^5) multi-cloud systems with strict performance
+and compliance requirements. Search is a means to an end but it forms the basis o
+all workflows.
+ 
+Our web app is on a SPA diet. We believe (((SSR is simpler) is faster) is faster).
+Collectively, we've tweaked 500k+ LoC of JavaScript, love it, but opted for Go as
+it is better adapted to serving  CPU-bound work and to serving customers.
+ 
+We aspire to the UX of Craigslist/HackerNews.
+I was an art student, actually, but we are in the business of service design.
+It’s not in coding nor in design that we take pride, but in our capacity for empathy
+Milliseconds, kilobytes and, ultimately, costs matter. This is a tool by
+engineers for engineers, and also folks who use spreadsheets.
+ 
+The proof will be in the pudding. 
+I hope we and our product can be of service. 
+
+Louis and David 
+=========================================================================
+For red tape reasons with cloud providers, we are limiting early access to 100.
+We could technically lift this limit, but believe it's vital to ensure all of
+our customers are happy.

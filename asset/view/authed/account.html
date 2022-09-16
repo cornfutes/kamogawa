@@ -1,0 +1,43 @@
+{{define "page"}}
+<h2>Account</h2>
+<div>
+  <table>
+    <tr>
+      <td>Username</td>
+      <td>{{.Email}}</td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td><a href="/password">change</a></td>
+    </tr>
+    <tr>
+      <td>Encryption Key</td>
+      <td><a href="/encryption">change</a></td>
+    </tr>
+    <tr>
+      <td>Created</td>
+      <td>August 31, 2022</td>
+    </tr>
+    <tr>
+      <td>Top color</td>
+      <td>ff6000 </td>
+    </tr>
+    <tr>
+      <td>Account Type</td>
+      <td>demo</td>
+    </tr>
+    <tr>
+      <td>2FA</td>
+      <td>disabled ( <a href="/2fa">enable</a> )</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <ul class="🔫  🚫">
+          <li><a href="">Learn about benefits of upgrading account</a></li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>
+{{end}}

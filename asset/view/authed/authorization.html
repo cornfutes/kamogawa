@@ -1,0 +1,70 @@
+{{define "page"}}
+<h2>Authorization</h2>
+<h3 class="🍜">GCP</h3>
+{{if .GmailExists}}
+<p>
+  We've been granted the following OAuth2 scopes for <span style="font-family: monospace; ">{{.Gmail}} </span>
+</p>
+<ul>
+  {{ range .Scopes }}
+  <li style="font-family: monospace;">{{.}}</li>
+  {{ end }}
+</ul>
+<p>
+  <a href="/revokegcp">Revoke all scopes, tokens and wipe data.</a>
+</p>
+
+{{if .HasMissingScopes}}
+<p>
+  For full functionality, the additional scopes are needed
+</p>
+<ul>
+  {{range $key, $value := .MissingScopes}}
+  <li style="font-family: monospace;">
+    {{$value.Description}}
+    <ul>
+      <li><a href="{{$key}}">Grant just this scope</a></li>
+      <li>
+        Needed for:
+        <ul>
+          {{range .UsedBy}}
+          <li>{{.}}</li>
+          {{end}}
+        </ul>
+      </li>
+    </ul>
+  </li>
+  {{ end }}
+</ul>
+{{end}}
+
+{{else}}
+<p>
+  You've not authorized DiceDuckMonk to manage your GCP projects.
+  <br /><br />
+  <a href=" {{.GCPDelegatedAuthUrl}}">Securely authorize with OAuth2</a>
+</p>
+<p style="font-style: italic;">
+  Be sure to check the following boxes: <br /><br />
+  <img src="consent.png" style="border-radius: 20px;"
+    alt="Screenshot giving user tip to check GCP related scopes in OAuth2 Consent screen">
+</p>
+{{end}}
+
+<p>
+  Note: We applied the principle of least privilege. Initially, and by default,
+  we only request(ed) read-only scopes. We allow you to individually opt into write
+  scopes ( at your own risk ). GCP did not properly make certain APIs granular,
+  unfortunately.
+</p>
+<h3 class="🍜">AWS</h3>
+<p>
+  Coming soon
+</p>
+
+<h3 class="🍜">Azure</h3>
+<p>
+  Coming soon
+</p>
+
+{{end}}

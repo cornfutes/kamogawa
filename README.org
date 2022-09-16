@@ -1,0 +1,195 @@
+* DiceDuckMonk 
+
+** Product 
+
+This is a web application providing a cloud infrastructure management console.
+It provides a unified view of your cloud resources and inventory spanning 
+cloud providers including AWS, GCP and Azure.
+
+The out-of-the-box experience provided by the cloud providers / utility
+companies is inadequate. DiceDuckMonk's selling point is speed: both 
+in raw engineering performance, but also in intuitive design to fast-track you
+through cloud workflows and critical-user-journeys.
+
+The means of getting there include robust views to list your resources, as well 
+as a search engine. Ultimately, allowing you to quickly identify and isolate 
+the cloud resources under consideration, whether that is to understanding 
+billing or handle outages.
+
+** Tech and Architecture 
+
+This is a monolithic application server written in Go.
+It uses the Gin Web Framework which is 10x more performant than the `net/http` 
+standard library, while reducing boilerplate.
+
+The application levies SSR ( server side rendered ) HTML rather than shipping 
+JavaScript which renders HTML in the client's browser. There are trade-offs 
+as to which method has superior user-perceived latency. However, the simplicity 
+of the SSR rendering model, and especially not a hybrid SSR with client-side 
+hydration, frees us up to optimize critical latency paths. For one, the 
+DevEx is simple and stays simple, without having to catch up with vendoring 
+complexities and configuring woes plagueing the JavaScript / Node.JS world. 
+
+For the persistence layer, either SQLite or Postgres DB will be used. Postgres 
+DB has a good-enough full-text search, which should be good enough for a 
+medium-term stop-gap solution before investing in tuning a search database 
+such as Apache Lucene, Amazon Elastisearch, or pricy options such as Algolia. 
+SQLIte has the benefit that we can have one shard per user, and allow them to 
+download all their indexed data. This is TBD. We will use the Go Gorm library 
+as an ORM with the DBs.
+
+One feature of  Go is that we can have one self-contained binary. 
+Assets such as CSS or HTML are not included by default, and the binary will 
+read from the file system, however there is a way to bake these assets 
+directly into a fully encapsulated binary. 
+
+Why Go? Very fast compile time, good enough GC, low memory footprint. 
+Fast crypto, security and numeric libraries. Pragmatic and simple programming 
+model, as well as package management. It's minimal compared to a verbose language 
+like Java, but has much more reliable and consistent performant than Node.js. 
+It has an extensive community and well documented unlike edgy languages such as 
+Pheonix or Haskell. The language gets out of the way so we can focus on the problem 
+domain. Finally, Go forces you to write code in one way, thereby eliminating alot of 
+brainpower spent philosophizing.
+
+** Development
+
+*** Dependencies
+
+- Go
+- Postgres and the `psql` CLI. ( homebrew `postgresql@13` )
+- Docker 
+- Docker-compose
+ 
+*** Local Development 
+
+```
+docker compose build
+```
+
+```
+docker compose up
+```
+
+*** Format code
+
+```
+go fmt
+``
+
+The VScode Go extension also does linting
+
+*** Deploying 
+
+This currently won't actually work because there is no Postgres DB running alongside the server
+
+```
+docker build -t kamogawa1337 .
+```
+
+```
+docker run kamogawa1337
+```
+
+*** Cleaning up old dependencies 
+
+```
+docker compose run --rm app go mod tidy
+```
+
+*** IDE 
+
+VScode + the "Go" extension ( it will ask you to install a bunch of transitive 
+dependencies ) is great. 
+
+*** Project Structure 
+
+Each `kamogawa` subpackage is a file directory. i.e. `handler` directory 
+stores `kamogawa/handler` code.
+
+- gcp/
+  - integration with gcp
+- handler/
+  - define, not register HTML rendering handlers
+- view/
+  - HTML templates used  by `kamogawa/handler`
+  - /layout 
+    - shared UI structure across authed and unauthed views
+  - /auth 
+    - page content intended for authed routes
+  - /unauthed 
+    - page content intended for unauthed routes
+- main.go
+  - starts server, register handlers
+
+*** Running Natively 
+
+To run natively means to run the binary. First, build the binary.
+
+```
+$ go build 
+```
+
+That would output a file ( based on the pkg name of our main program ) 
+```
+$ find kamogawa
+```
+
+If you tried to run this:
+
+```
+$ ./kamogawa
+```
+
+You may see error message about environment variables such $SHIMOGAWA_URL
+not being set. In the Docker compose yml, you may see the environment variable 
+supply. You can try setting a similar value on your machine.
+
+```
+  export SHIMOGAWA_URL=postgres://local-dev@shimogawa_service:5432/shimogawa_db
+```
+
+When you run the program, you may see errors about connecting to the DB. 
+Make sure the postgres instance you run locally on your machine is on port 5432,
+has a db named shimogawa_db, and has the role user 'local-dev'
+
+Originally, the application binary looked up on the file system ( your native machine )
+for files using relative paths. If you moved the binary file, ran it someone else, 
+those look ups would fail. It would also fail if your machine simply don't have those files,
+i.e. you deploy the binary to a cloud VM but forgot to upload the files alongside.
+
+Since then, we've utilized Go's embedded filesystem which bakes file such as 
+HTML, CSS, directly into the Go application binary, such that the binary is 
+self contained. We don't even need Docker, just the postgres connection.
+
+### Deploy 
+
+gBuild and tag container. There is bug with CloudRun and M1 macs. Linux platform must be 
+specified if using m1 mac.
+
+```
+docker build -t gcr.io/linear-cinema-<retroactively_redacted>/diceduckmonk --platform linux/amd64 .
+```
+
+Push to Google Container Registry 
+
+```
+docker push gcr.io/linear-cinema-<retroactively_redacted>/diceduckmonk
+```
+
+It's worth noting the CloudRun Servicem which hosts 
+a list of containers specify 3 ENV variables. 
+One is for JWT_SECRET which is the same everywhere.
+
+The Postgres DB depends on environment. 
+Remotely, it is: postgres://<retroactively_redacted>:<retroactively_redacted>@<retroactively_redacted>/shimogawa_db
+
+Finally, the $HOST env variable affects setting cookie .
+Locally, the $HOST is localhost. Remotely, it depends on 
+if it is cloud run or hosted domain.
+<retroactively_redacted>.a.run.app
+
+
+*** Logging 
+
+Use log, not fmt.Printf

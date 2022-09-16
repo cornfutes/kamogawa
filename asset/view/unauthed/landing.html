@@ -1,7 +1,7 @@
 {{define "page"}}
 <div class="landing 💪 🪜">
-  <div class="splash-container">
-    <img src="/splash.gif" style="border-radius: 12px; width: 100%"
+  <div class="💪 🪜 splash-container">
+    <img src="/splash.gif" class="splash-image"
       alt="Illustration of Japanese torii gate in water under the moonlight. Courtesy of https://www.pixeltrue.com/scenic-illustrations">
     <h1 class="splash-text 🤍 ">Gateway to Your Cloud Infrastructure</h1>
   </div>
@@ -106,12 +106,11 @@
     </div>
   </div>
 </div> -->
-<section class="💪 🪜 content-narrow 🎯 🤍 "
-  style="width: 100%; background-color: rgb(48,102,104); justify-content: center;">
-  <h2 class="🍜">Supported Cloud Partners</h2>
+<section class="💪 🪜 content-narrow 🎯 🤍" id="landing-cloud-partners">
+  <h2 class="🍜">Supported Cloud Integrations</h2>
   <p>Our platform integrates with hundreds of products and services across the following cloud vendors</p>
   <a href="{{.EapUrl}}" class="link_with_arrow">Learn more about our service coverage</a>
-  <div class="💪 🎯" style="margin-top: 20px; width: 600px;">
+  <div class="💪 🎯" style="margin-top: 20px; max-width: 600px;">
     <div class="📞" style=" flex: 33%;">
       <img src=" cloud_logo_aws.png" height="64"><br />
       <span>AWS</span>
@@ -251,8 +250,8 @@
 <!--  </div>-->
 <!--</div>-->
 
-<section class="📞 🤍 ">
-  <div style="width: 652px;">
+<section class="📞 🤍  💪 🪜">
+  <div style="max-width: 650px;">
     <img src="phone.svg" width="64" height="64" style="filter: invert(1)">
     <h2 style="font-size: 32px;">Want to learn more?</h2>
     <p>
@@ -266,13 +265,15 @@
   </div>
 </section>
 
-<section class="📞 🤍 " style="width: 100%; background-color: rgb(20,20,20);">
-  <h2 class="🍜">System Status</h2>
+<!-- class="💪 🪜 content-narrow 🎯 🤍" id="landing-cloud-partners"> -->
+<section class="📞 🤍 💪 🪜 🎯 content-narrow" id="system-status">
+  <h2 class=" 🍜">System Status</h2>
   <p>If you’re experiencing an issue with developer tools or services,
     find out if there’s maintenance in progress or a
     known issue.
   </p>
   <a href="/status" class="link_with_arrow">View system status</a>
+  </div>
 </section>
 
 {{end}}

@@ -771,6 +771,22 @@ h5.truncate {
 
 }
 
+.splash-image {
+  border-radius: 12px;
+}
+
+#landing-cloud-partners {
+  background-color: rgb(48, 102, 104);
+  background: linear-gradient(90deg, var(--b) 0%, rgb(48, 102, 104) 50%, var(--b) 100%);
+  padding-bottom: 16px;
+}
+
+#system-status {
+  background-color: var(--d);
+  background: linear-gradient(90deg, var(--b) 0%, var(--d) 50%, var(--b) 100%);
+  padding-bottom: 16px;
+}
+
 @media all and (max-width: 1000px) {
   #main-child {
     flex-direction: column;
@@ -816,6 +832,17 @@ h5.truncate {
     width: 800px;
     position: relative;
   }
+
+  .content-narrow {
+    padding: 10px;
+  }
+
+  h1.splash-text {
+    font-size: 36px;
+    left: 60px;
+    bottom: 80px;
+    width: 350px;
+  }
 }
 
 @media all and (max-width: 800px) {
@@ -837,24 +864,162 @@ h5.truncate {
   }
 
   #header-child {
-    flex-basis: 500px;
+    flex-basis: 600px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
   }
 
   #main-child {
-    width: 500px;
+    width: 600px;
   }
 
   .landing {
     font-size: 21px;
-    width: 500px;
+    width: 600px;
     padding-top: 20px;
   }
 
   .splash-container {
-    width: 500px;
+    width: 600px;
     position: relative;
+  }
+
+  .content-narrow {
+    padding: 10px;
+  }
+
+  section {
+    padding: 10px;
+  }
+
+  .content-narrow {
+    padding: 10px;
+  }
+
+  h1.splash-text {
+    font-size: 36px;
+    left: 60px;
+    bottom: 80px;
+    width: 350px;
+  }
+}
+
+
+@media all and (max-width: 600px) {
+  aside>nav {
+    margin-left: 20px;
+  }
+
+  #content {
+    padding: 20px;
+  }
+
+  aside nav {
+    padding-top: 20px;
+  }
+
+  aside>details {
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  #header-child {
+    flex-basis: 450px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  #main-child {
+    width: 450px;
+  }
+
+  h1.splash-text {
+    font-size: 24px;
+    left: 36px;
+    bottom: 50px;
+    width: 450px;
+  }
+
+
+  .landing {
+    font-size: 21px;
+    width: 450px;
+    padding-top: 10px;
+  }
+
+  .splash-container {
+    width: 450px;
+    overflow: hidden;
+  }
+
+  .content-narrow {
+    padding: 10px;
+  }
+
+  #landing-cloud-partners {
+    width: 450px;
+    margin: 0;
+  }
+}
+
+
+
+@media all and (max-width: 450px) {
+  aside>nav {
+    margin-left: 20px;
+  }
+
+  #content {
+    padding: 20px;
+  }
+
+  aside nav {
+    padding-top: 20px;
+  }
+
+  aside>details {
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  #header-child {
+    flex-basis: 350px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  #main-child {
+    width: 350px;
+  }
+
+  h1.splash-text {
+    font-size: 24px;
+    left: 36px;
+    bottom: 50px;
+    width: 350px;
+  }
+
+
+  .landing {
+    font-size: 21px;
+    width: 350px;
+    padding-top: 10px;
+  }
+
+  .splash-container {
+    width: 350px;
+    overflow: hidden;
+  }
+
+  .content-narrow {
+    padding: 10px;
+  }
+
+  #landing-cloud-partners {
+    width: 350px;
+    margin: 0;
   }
 }

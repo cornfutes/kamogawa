@@ -1,46 +1,40 @@
 {{define "page"}}
-<div class="main-header">
-  <span class="menu-link-main" href="#">Search results for: '{{.Query}}'</span>
-</div>
-<div class="content-wrapper">
-
-  <div class="🐉 💪 🪜" id="search-hero">
-    <div class="💪 🦠">
-      <h3 id="s-h">Search Results for: <span id="search-original-query"></span></h3>
-      <nav class="💪 🦷 ⚖️ top-nav" style="padding-top: 3px">
-        <span id="s-re" class="🐕 ⚡" tabindex=0 onkeyup="">
-          search
-        </span>
-        <span tabindex=0 class="🐕 arrow down" id="s-mod">tools<i></i></span>
-      </nav>
-    </div>
-    <input id="query" value="{{.Query}}" placeholder="Type to search..."></input>
-    <div class=" 💪 🥷 🦠" id="query-builder">
-      <div>
-        <label for=provider>Provider:</label>
-        <select name=provider onchange="change(event, 0)">
-          <option value=all>All (implicit) </option>
-          <option value=gcp>GCP</option>
-          <option value=aws>AWS</option>
-          <option value=azure>Azure</option>
-        </select>
-        <label for=algo>Algo:</label>
-        <select name=algo onchange="change(event, 1)">
-          <option value=substring>substring (implicit) </option>
-          <option value=fulltext>Full-text</option>
-        </select>
-        <label for=time>Modified:</label>
-        <select name=time onchange="change(event, 2)">
-          <option value=all>All time</option>
-          <option value=last24>Last 24h</option>
-          <option value=lastmonth>Last Month (implicit) </option>
-        </select>
-      </div>
-      <div>
-        <span class="🐕 🥷" id="s-b-r">reset</spn>
-      </div>
-    </div>
+<div class="main-header 🦠">
+  <div>
+    <span class="menu-link-main">Search:</span>
+    <span class="badge 🔥">All</span>
+    <span class="badge 🍺">GCP</span>
+    <span class="badge 🍺">AWS</span>
+    <span class="badge 🍺">Azure</span>
+    <span class="badge 🍺">More</span>
   </div>
+  <a class="menu-link-main" href="#">
+    Tools
+  </a>
+</div>
+<div class="main-header">
+  <!-- <span class="menu-link-main">{{.CountTotalResults}} results ({{.Duration}})</span> -->
+  <span class="menu-link-main" id="search-result-count">1,337 results (5034milliseconds)</span>
+</div>
+<div class="main-header" style="padding: 30px">
+  <select>
+    <option value="0">Any time</option>
+    <option value="1">Past hour</option>
+    <option value="2">Past 24 hours</option>
+    <option value="3">Past week</option>
+    <option value="4">Past month</option>
+    <option value="5">Past year</option>
+    <option value="6">Custom range...</option>
+  </select>
+  <select>
+    <option value="0">Substring</option>
+    <option value="1">Verbatim</option>
+    <option value="2">Full-text</option>
+  </select>
+  <span class="menu-link-main">Clear</span>
+</div>
+
+<div class="content-wrapper">
   {{if .Unauthorized}}
   <p>
     You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
@@ -55,7 +49,6 @@
   {{if .Error }}
   <p>{{.Error}}</p>
   {{else if .HasResults}}
-  <p id="search-result-summary">{{.CountTotalResults}} results ({{.Duration}})</p>
   <div class="💪 🪜" style="padding: 10px;">
     {{ range .Results }}
     <div class="🎴" style="overflow:hidden">

@@ -37,21 +37,10 @@ func init() {
 		Email:    "1337gamer@gmail.com",
 		Password: "1234",
 	})
-	// TODO: remove. for prototyping purposes.
 	db.FirstOrCreate(&types.User{
 		Email:    "team@otonomi.ai",
 		Password: "dHJDFh43aa.X",
 	})
-
-	// TODO: Use to check if cache works
-	//db.Create(&types.Project{
-	//	Email:          "1337gamer@gmail.com",
-	//	ProjectNumber:  "472481681891",
-	//	ProjectId:      "ListVMs1",
-	//	LifeCycleState: "ACTIVE",
-	//	Name:           "ListVMs1",
-	//	CreateTime:     "2022-08-30T12:30:58.750Z",
-	//})
 }
 
 func main() {

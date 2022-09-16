@@ -25,6 +25,7 @@ var (
 	GCPClientId     string
 	GCPClientSecret string
 	ContactEmail    string
+	BrandName       string
 )
 
 func init() {
@@ -42,6 +43,11 @@ func init() {
 	ContactEmail = os.Getenv("CONTACT_EMAIL")
 	if len(ContactEmail) == 0 {
 		panic("Missing $CONTACT_EMAIL env variable")
+	}
+
+	BrandName = os.Getenv("BRAND_NAME")
+	if len(BrandName) == 0 {
+		panic("Missing $BRAND_NAME env variable")
 	}
 
 	if os.Getenv("RELEASE_ENV") == "dev" {

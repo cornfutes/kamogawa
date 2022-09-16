@@ -69,16 +69,16 @@ non-technical vulnerability testing Scope
 
 This policy applies to the following systems and services:
 
-  - app.ListVMs.com
-  - ListVMs.com
-  - api.ListVMs.com
+  - app.listvms.com
+  - listvms.com
+  - api.listvms.com
 
 Any service not expressly listed above, such as any connected services, are
 excluded from scope and are not authorized for testing. Additionally,
 vulnerabilities found in systems from our vendors fall outside of this
 policy’s scope and should be reported directly to the vendor according to
 their disclosure policy (if any). If you aren’t sure whether a system is in 
-cope or not, contact us at team@ListVMs.com.
+cope or not, contact us at team@listvms.com.
 
 Though we develop and maintain other internet-accessible systems or services,
 we ask that active research and testing only be conducted on the systems and
@@ -121,7 +121,7 @@ resolution. We will maintain an open dialogue to discuss issues.
 ========================================================================
 Questions
 
-Questions regarding this policy may be sent to team@ListVMs@.com.
+Questions regarding this policy may be sent to team@listvms.com.
 We also invite you to contact us with suggestions for improving this policy.
 ========================================================================
 Document change history

@@ -89,7 +89,7 @@ func Config(r *gin.Engine) {
 	if config.Env == config.Dev {
 		r.StaticFile("/style.css", "asset/media/style.css")
 	} else {
-		r.GET("style.css", css(styleCss))
+		r.GET("style.css", css(styleCssMin))
 	}
 	r.GET("cloud_logo_aws.png", png(pngAWS))
 	r.GET("cloud_logo_gcp.png", png(pngGCP))

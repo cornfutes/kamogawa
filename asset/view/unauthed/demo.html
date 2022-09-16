@@ -1,19 +1,16 @@
 {{define "page"}}
 <div class="landing 💪 🪜">
-  <div class="splash-container">
-    <img src="/ship.gif" style="border-radius: 12px; width: 100%"
-      alt="Illustration of sailboat at sea in evening. Courtesy of https://www.pixeltrue.com/scenic-illustrations">
-    <h1 class="splash-text 🤍">Welcome HNers!
-      <form action="/login" method="POST">
-        <fieldset class="🚫 🌎">
-          <input type="hidden" name="email" value="null@hackernews.com">
-          <input type="hidden" name="password" value="Pb$droV@a&t.a0e3">
-          <a onclick="this.closest('form').submit();return false;" class="link_with_arrow"
-            style="cursor: pointer">Proceed to demo</a>
-        </fieldset>
-      </form>
 
-    </h1>
-  </div>
+  <h1 class="🤍">Welcome HNers!
+    <form action="/login" method="POST">
+      <fieldset class="🚫 🌎">
+        <input type="hidden" name="email" value="null@hackernews.com">
+        <input type="hidden" name="password" value="Pb$droV@a&t.a0e3">
+        <a onclick="this.closest('form').submit();return false;" class="link_with_arrow" style="cursor: pointer">Proceed
+          to demo</a>
+      </fieldset>
+    </form>
+
+  </h1>
 </div>
 {{end}}

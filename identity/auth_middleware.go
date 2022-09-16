@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -49,7 +48,7 @@ func GateAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, exists := c.Get(IdentityContextKey)
 		if !exists {
-			c.Redirect(http.StatusFound, "/login?&error="+strconv.Itoa(int(Unauthorized)))
+			c.Redirect(http.StatusFound, "/search?q=test") // login?&error="+strconv.Itoa(int(Unauthorized)))
 			c.Abort()
 		}
 	}

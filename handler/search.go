@@ -13,6 +13,11 @@ import (
 type SearchResult struct {
 	Text string
 	Link string
+
+	Product  string
+	Provider string
+	Kind     string
+	Name     string
 }
 
 func getFakeData(q string) []SearchResult {
@@ -65,7 +70,15 @@ func SearchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
 
 	searchResults := make([]SearchResult, 0, len(gceInstanceDBs))
 	for _, v := range gceInstanceDBs {
-		searchResults = append(searchResults, SearchResult{Text: v.ToSearchString(), Link: v.ToLink()})
+		searchResults = append(searchResults,
+			SearchResult{
+				Text:     v.ToSearchString(),
+				Link:     v.ToLink(),
+				Name:     v.Name,
+				Provider: "GCP",
+				Product:  "GCE",
+				Kind:     "VM",
+			})
 	}
 
 	return searchResults, nil
@@ -90,7 +103,15 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 
 	searchResults := make([]SearchResult, 0, len(projectDBs))
 	for _, v := range projectDBs {
-		searchResults = append(searchResults, SearchResult{Text: v.ToSearchString(), Link: v.ToLink()})
+		searchResults = append(searchResults,
+			SearchResult{
+				Text:     v.ToSearchString(),
+				Link:     v.ToLink(),
+				Name:     v.Name,
+				Provider: "GCP",
+				Product:  "",
+				Kind:     "Project",
+			})
 	}
 
 	return searchResults, nil
@@ -103,7 +124,9 @@ var maxQueryError string = "Query must be 80 characters or less."
 
 func Search(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		q := c.Query("q")
+		originalQ := c.Query("q")
+		q := strings.Split(originalQ, ":::")[0]
+
 		if len(q) < minQueryLength {
 			core.HTMLWithGlobalState(c, "search.html", gin.H{
 				"Error":      minQueryError,
@@ -134,9 +157,10 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 		searchResults := getRealData(db, q)
 
 		core.HTMLWithGlobalState(c, "search.html", gin.H{
+			"HasFilter":  originalQ != q,
 			"Error":      nil,
 			"IsRegex":    isRegex,
-			"Query":      q,
+			"Query":      originalQ,
 			"HasResults": searchResults != nil,
 			"Results":    searchResults,
 		})

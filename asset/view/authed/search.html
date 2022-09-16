@@ -16,21 +16,21 @@
     <div>
       <label for=" provider">Provider:</label>
       <select name="provider" id="filter-scope" onchange="changeProvider(event)">
-        <option value="all">All</option>
+        <option value="all">All ( implicit ) </option>
         <option value="gcp">GCP</option>
         <option value="aws">AWS</option>
         <option value="azure">Azure</option>
       </select>
-      <label for="algo">Algorithm:</label>
+      <label for="algo">Algo:</label>
       <select name="algo" id="filter-scope" onchange="changeAlgo(event)">
-        <option value="substring">substring</option>
+        <option value="substring">substring ( implicit ) </option>
         <option value="fulltext">Full-text</option>
       </select>
-      <label for="time">Time:</label>
+      <label for="time">Modified:</label>
       <select name="time" id="filter-scope" onchange="changeTime(event)">
         <option value="all">All time</option>
         <option value="last24h">Last 24h</option>
-        <option value="lastmonth">Last Month</option>
+        <option value="lastmonth">Last Month ( implicit ) </option>
       </select>
     </div>
     <div>
@@ -40,20 +40,41 @@
 </div>
 
 {{if .IsRegex}}
-<p style="font-style: italic;">warning: regex is not supported yet.</p>
+<p style="font-style: italic;">warning: regex is not supported in the demo</p>
+{{end}}
+
+{{if .HasFilter}}
+<p style="font-style: italic;">warning: in the demo, we ignore the search filter ( everything after the ':::' ) </p>
 {{end}}
 
 {{if .Error }}
 <p>{{.Error}}</p>
 {{else if .HasResults}}
-<ul>
+
+<div class="💪 🪜" style="padding: 10px;">
   {{ range .Results }}
-  <li>
-    <span>{{.Text}}</span> -
-    <a href={{.Link}}>Link</a>
-  </li>
+  <div class="🎴 ">
+    <h5 class="truncate">{{.Link}}</h5>
+    {{if eq .Product "GCE"}}
+    <h3>Compute Engine VM "{{.Name}}"</h3>
+    {{else if eq .Kind "Project"}}
+    <h3> GCP Project "{{.Name}}"</h3>
+    {{else}}
+    <h3></h3>
+    {{end}}
+    <p>
+      {{.Text}}
+      kcgjklfg
+      fkfgjklgf
+      fgkjfdgkldgf
+      gflkfglfg
+      gfklfgjklfg
+      gfkgfjdk
+    </p>
+  </div>
   {{ end }}
-</ul>
+</div>
+
 {{else}}
 <p>No results found</p>
 {{end}}

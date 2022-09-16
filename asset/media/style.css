@@ -459,15 +459,22 @@ h3 {
 
 .🐉 input {
   color: var(--a);
+  opacity: 1;
   background-color: var(--f);
   margin: 0;
-  border-radius: 1px;
+  border-radius: 0px;
   border: 0;
   outline: none;
   font-family: monospace;
   font-size: 20px;
   font-weight: 300px;
   padding: 10px;
+}
+
+.🐉 input:focus {
+  border-radius: 20px;
+  opacity: .8;
+  transition: opacity 1s, border-radius .5s;
 }
 
 #search-hero {
@@ -724,4 +731,29 @@ button.disabled:hover {
   -webkit-transform: rotate(35deg);
   -ms-transform: rotate(35deg);
   transform: rotate(35deg);
+}
+
+.🎴 {
+  border: 1px solid var(--e);
+  margin-bottom: 7px;
+}
+
+.🎴 h3 {
+  padding-left: 20px;
+}
+
+.🎴 p {
+  font-size: 12px;
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+h5.truncate {
+  width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 5px 20px;
+  margin-top: 10px;
+  margin-bottom: 0;
 }

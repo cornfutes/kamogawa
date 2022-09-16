@@ -266,6 +266,6 @@
   }
 
   function search(q) {
-     window.location.href = '/search?q=' + q;
+     window.location.href = '/search?q=' + encodeURI(q);
   }
   </script>

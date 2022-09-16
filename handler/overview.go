@@ -4,7 +4,6 @@ import (
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
-	"kamogawa/types"
 	"kamogawa/types/gcp/gcetypes"
 	"strconv"
 	"strings"
@@ -14,36 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
-func mockGCPListProjects(user types.User) (*gcetypes.ListProjectResponse, *gcetypes.ErrorResponse) {
-	var errorResponse *gcetypes.ErrorResponse
-	var listProjectResponse *gcetypes.ListProjectResponse = &gcetypes.ListProjectResponse{}
-
-	var projects = make([]gcetypes.Project, 5)
-	projects[0] = gcetypes.Project{
-		Name:      "demo-blue-dragon",
-		ProjectId: "demo-blue-dragon",
-	}
-	projects[1] = gcetypes.Project{
-		Name:      "world",
-		ProjectId: "square-dragon-450910",
-	}
-	projects[2] = gcetypes.Project{
-		Name:      "saigon",
-		ProjectId: "saigon-360910",
-	}
-	projects[3] = gcetypes.Project{
-		Name:      "tokyo",
-		ProjectId: "tokyo-780110",
-	}
-	projects[4] = gcetypes.Project{
-		Name:      "europe",
-		ProjectId: "square-dragon-230910",
-	}
-	listProjectResponse.Projects = projects
-
-	return listProjectResponse, errorResponse
-}
 
 func Overview(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {

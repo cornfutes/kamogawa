@@ -19,9 +19,12 @@ dev: ## start local environment
 
 build: ## Build and tag for GCR.
 	docker build -t gcr.io/linear-cinema-360910/diceduckmonk --platform linux/amd64 .
-\
+
 deploy: build ## Build and Deploy to GCR.
 	docker push gcr.io/linear-cinema-360910/diceduckmonk
 
 tidy: ## cleanups code
 	go mody tidy
+
+testprod: ## visual regression test on prod
+	cd e2e && npx playwright test

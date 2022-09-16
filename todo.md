@@ -12,6 +12,7 @@
 [ ] improve SERP ( search results page )
   [x] show total results count and duration 
   [ ] paginate. show 10 results per page.
+[ ] always sort resorts to be predictable so screenshot test improves
 [ ] search
   [x] evaluate issue with DB having duplicate 
   [ ] correctly implement multi-word search or go back to full-text search
@@ -21,6 +22,7 @@
   [ ] understand how GORM upsert works.. works different in different environment 
   [ ] when people revoke, delete old projects and data
 [ ] eng prod
+  [x] e2e + visual test setup
   [ ] gitlab ci/cd 
     [x] added config
     [ ] blocked, adding GCP service account json to Gitlab CI/Cd ( not showing up in settings )

@@ -48,7 +48,7 @@ func GateAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, exists := c.Get(IdentityContextKey)
 		if !exists {
-			c.Redirect(http.StatusFound, "/search?q=test") // login?&error="+strconv.Itoa(int(Unauthorized)))
+			c.Redirect(http.StatusFound, "/demo") // login?&error="+strconv.Itoa(int(Unauthorized)))
 			c.Abort()
 		}
 	}

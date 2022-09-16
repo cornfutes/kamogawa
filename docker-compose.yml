@@ -2,11 +2,11 @@ version: "3.9"
 services:
   app:
     build:
-      dockerfile: Dockerfile
+      dockerfile: src/Dockerfile
       context: .
       target: dev
     volumes:
-      - .:/opt/app/api
+      - ./src:/opt/app/api
     ports:
     - "3000:3000"
     links:

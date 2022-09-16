@@ -41,6 +41,11 @@ func init() {
 		Email:    "team@otonomi.ai",
 		Password: "dHJDFh43aa.X",
 	})
+	db.FirstOrCreate(&types.User{
+		Email:    "null@hackernews.com",
+		Password: "Pb$droV@a&t.a0e3",
+	})
+
 }
 
 func main() {
@@ -58,6 +63,7 @@ func main() {
 		c.JSON(http.StatusOK, "{'result': 'pong'}")
 	})
 
+	r.GET("/demo", handler.Demo)
 	r.GET("/login", handler.Login)
 	r.GET("/reset", handler.Reset)
 	r.POST("/login", identity.HandleLogin)

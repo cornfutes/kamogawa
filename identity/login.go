@@ -44,6 +44,9 @@ const testUserPassword string = "HeroBallZ$5"
 const testUserEmail2 string = "team@otonomi.ai"
 const testUserPassword2 string = "dHJDFh43aa.X"
 
+const testUserEmail3 string = "null@hackernews.com"
+const testUserPassword3 string = "Pb$droV@a&t.a0e3"
+
 func HandleLogin(c *gin.Context) {
 	var loginRequest LoginRequest
 	err := c.Bind(&loginRequest)
@@ -53,7 +56,9 @@ func HandleLogin(c *gin.Context) {
 
 	// TODO: replace with DB lookup
 	// TODO: encrypt password with bcrypt
-	if !((loginRequest.Email == testUserEmail && loginRequest.Password == testUserPassword) || (loginRequest.Email == testUserEmail2 && loginRequest.Password == testUserPassword2)) {
+	if !((loginRequest.Email == testUserEmail && loginRequest.Password == testUserPassword) ||
+		(loginRequest.Email == testUserEmail2 && loginRequest.Password == testUserPassword2) ||
+		(loginRequest.Email == testUserEmail3 && loginRequest.Password == testUserPassword3)) {
 		c.Redirect(http.StatusFound, "/login?email="+loginRequest.Email+"&error="+strconv.Itoa(int(Incorrect)))
 		c.Abort()
 		return

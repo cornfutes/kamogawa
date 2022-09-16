@@ -50,10 +50,8 @@ var (
 
 	staticHtml = map[string]string{
 		"/":        "landing.html",
-		"/mission": "mission.html",
-		"/demo":    "tbd.html",
 		"/docs":    "tbd.html",
-		"/vdp":     "tbd.html",
+		"/mission": "mission.html",
 	}
 
 	etag string

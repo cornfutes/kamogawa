@@ -39,8 +39,8 @@ func GoogleOAuth2Callback(db *gorm.DB) func(c *gin.Context) {
 		// TODO: fix oauth in prod.
 		postBody, err := json.Marshal(map[string]string{
 			"code":          code,
-			"client_id":     "<retroactively_redacted>",
-			"client_secret": "<retroactively_redacted>",
+			"client_id":     config.GCPClientId,
+			"client_secret": config.GCPClientSecret,
 			"redirect_uri":  config.RedirectUri,
 			"grant_type":    "authorization_code",
 		})
@@ -65,8 +65,7 @@ func GoogleOAuth2Callback(db *gorm.DB) func(c *gin.Context) {
 		Tokens["refresh_token"] = token.RefreshToken
 		fmt.Printf("RefreshToken: %v \n", token.RefreshToken)
 
-		var ti GoogleIdTokenVerifier.TokenInfo = *GoogleIdTokenVerifier.Verify(token.IdToken,
-			"<retroactively_redacted>")
+		var ti GoogleIdTokenVerifier.TokenInfo = *GoogleIdTokenVerifier.Verify(token.IdToken, config.GCPClientId)
 		gmail := ti.Email
 
 		var email, exists = c.Get(IdentityContextKey)

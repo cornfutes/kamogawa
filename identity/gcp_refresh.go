@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"database/sql"
 	"fmt"
+	"kamogawa/config"
 	"kamogawa/types"
 	"log"
 	"time"
@@ -31,8 +32,8 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) ResponseRefreshToken {
 	db.First(&user, "email = ?", email)
 
 	postBody, err := json.Marshal(map[string]string{
-		"client_id":     "<retroactively_redacted>",
-		"client_secret": "<retroactively_redacted>",
+		"client_id":     config.GCPClientId,
+		"client_secret": config.GCPClientSecret,
 		"refresh_token": user.RefreshToken.String,
 		"grant_type":    "refresh_token",
 	})

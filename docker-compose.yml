@@ -18,6 +18,8 @@ services:
       JWT_SECRET_KEY: <retroactively_redacted>
       RELEASE_ENV: dev
       CACHE_ENABLED: true
+      GCP_CLIENT_ID: <retroactively_redacted>
+      GCP_CLIENT_SECRET: <retroactively_redacted>
       EAP_URL: http://google.com
   shimogawa_service:
     image: postgres:13.8-alpine

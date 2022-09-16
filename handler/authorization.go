@@ -14,13 +14,12 @@ import (
 	"gorm.io/gorm"
 )
 
-var clientId = "38029384895-t1chm9en5703tjmkqfqpa1ki6020p8n6.apps.googleusercontent.com"
 var redirectUri = config.RedirectUri
 var googleAuthUrl = getUrlWithScopes(GCPScopes)
 
 func getUrlWithScopes(scopes string) string {
 	return "https://accounts.google.com/o/oauth2/v2/auth?" +
-		"client_id=" + clientId + "&" +
+		"client_id=" + config.GCPClientId + "&" +
 		"redirect_uri=" + url.QueryEscape(redirectUri) + "&" +
 		"response_type=code&" +
 		"scope=" + url.QueryEscape(scopes) + "&" +

@@ -16,12 +16,14 @@ const (
 )
 
 var (
-	Host         string
-	RedirectUri  string
-	EapUrl       string
-	Env          EnvEnum
-	CacheEnabled bool
-	Preindex     bool
+	Host            string
+	RedirectUri     string
+	EapUrl          string
+	Env             EnvEnum
+	CacheEnabled    bool
+	Preindex        bool
+	GCPClientId     string
+	GCPClientSecret string
 )
 
 func init() {
@@ -64,6 +66,13 @@ func init() {
 	}
 	fmt.Printf("EAP_URL=%v\n", EapUrl)
 
-	fmt.Printf("EAP_URL =%v\n", CacheEnabled)
+	GCPClientId = os.Getenv("GCP_CLIENT_ID")
+	if len(GCPClientId) == 0 {
+		panic("Missing $GCP_CLIENT_ID env variable")
+	}
 
+	GCPClientSecret = os.Getenv("GCP_CLIENT_SECRET")
+	if len(GCPClientSecret) == 0 {
+		panic("Missing $GCP_CLIENT_SECRET env variable")
+	}
 }

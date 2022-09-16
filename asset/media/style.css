@@ -763,6 +763,11 @@ h5.truncate {
   align-items: center;
 }
 
+#top-nav {
+  flex-direction: row-reverse;
+}
+
+
 @media only screen and (max-width: 1000px) {
   #main-child {
     flex-direction: column;

@@ -28,16 +28,16 @@
         <span id="search-cancel"></span>
       </div>
       <ul class="🍜 💪 🦷 ⚖️ top-nav" id="top-nav" >
-        <a href="/status">System Status</a>
-        <a href="/release.txt">Release Notes</a>
-        <a href="/demo">Demo</a>
+        <span class="top-link" id="search-start" tabindex=0></span>
         {{if .IsLoggedIn}}
-        <a href="/account">Account</a>
         <a href="/account">Logout</a>
+        <a href="/account">Account</a>
         {{else}}
         <a href="/login">Login</a>
         {{end}}
-        <span class="top-link" id="search-start" tabindex=0></span>
+        <a href="/demo">Demo</a>
+        <a href="/release.txt">Release Notes</a>
+        <a href="/status">System Status</a>
       </ul>
     </div>
   </header>

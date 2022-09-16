@@ -86,7 +86,7 @@ func searchGAEServices(db *gorm.DB, q string) ([]SearchResult, error) {
 			SearchResult{
 				Text:     v.ToSearchString(),
 				Link:     v.ToLink(),
-				Name:     v.Id,
+				Name:     v.Name,
 				Provider: "GCP",
 				Product:  "GAE",
 				Kind:     "Service",

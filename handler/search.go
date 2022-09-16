@@ -162,7 +162,7 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 	result := db.Raw(""+
 		" SELECT * "+
 		" FROM project_dbs"+
-		" WHERE (name || ' ' || project_id || ' ' || project_number"+
+		" WHERE (name || ' ' || project_id"+
 		" ILIKE ?)"+
 		" AND email = 'null@hackernews.com'"+
 		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
@@ -209,7 +209,12 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 		start := time.Now()
 		allSearchResults := getRealData(db, q)
 		duration := time.Since(start)
-		results := allSearchResults[:SERPPageSize]
+		var results []SearchResult
+		if len(allSearchResults) > SERPPageSize {
+			results = allSearchResults[:SERPPageSize]
+		} else {
+			results = allSearchResults
+		}
 		numTotalResults := len(allSearchResults)
 		core.HTMLWithGlobalState(c, "search.html", gin.H{
 			"HasFilter":         originalQ != q,

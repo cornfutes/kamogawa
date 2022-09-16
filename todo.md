@@ -5,6 +5,7 @@
 [ ] Automated Screenshot Testing ( why? faster refactoring )
 [ ] cache 
   [x] fix GCE VMs page not caching case where project doesn't have GCE API enabled 
+  [ ] fix cache behavior for GAE 
 [ ] improve SERP ( search results page )
   [x] show total results count and duration 
   [ ] paginate. show 10 results per page.

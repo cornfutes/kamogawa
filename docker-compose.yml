@@ -26,6 +26,8 @@ services:
       # THEME: glass
     env_file:
       - config.env
+    environment:
+      THEME: ${THEME:-}
   shimogawa_service:
     image: postgres:13.8-alpine
     volumes:

@@ -3,10 +3,13 @@ package types
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"time"
 )
 
 type ProjectDB struct {
-	gorm.Model
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 	Project
 	Email     string `gorm:"primaryKey:idx"`
 	ProjectId string `gorm:"primaryKey:idx"`

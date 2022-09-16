@@ -2,8 +2,9 @@ package gaecache
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"kamogawa/types/gcp/gaetypes"
+
+	"gorm.io/gorm"
 )
 
 func ReadServicesCache(db *gorm.DB, projectId string) (*gaetypes.GAEListServicesResponse, error) {
@@ -22,7 +23,13 @@ func ReadServicesCache(db *gorm.DB, projectId string) (*gaetypes.GAEListServices
 
 	services := make([]gaetypes.GAEService, 0, len(serviceDBs))
 	for _, serviceDB := range serviceDBs {
-		services = append(services, gaetypes.GAEService{Name: serviceDB.Name, Id: serviceDB.Id, Split: gaetypes.GAEServiceTrafficAllocations{}})
+		services = append(services,
+			gaetypes.GAEService{
+				// GCP nomenclature is misleading.
+				Name:  serviceDB.Id,
+				Id:    serviceDB.Name,
+				Split: gaetypes.GAEServiceTrafficAllocations{},
+			})
 	}
 
 	return &gaetypes.GAEListServicesResponse{Services: services}, nil
@@ -39,7 +46,13 @@ func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListSer
 	serviceDBs := make([]gaetypes.GAEServiceDB, 0, len(resp.Services))
 
 	for _, v := range resp.Services {
-		serviceDBs = append(serviceDBs, gaetypes.GAEServiceDB{Name: v.Name, Id: v.Id, ProjectId: projectId})
+		serviceDBs = append(serviceDBs, gaetypes.GAEServiceDB{
+			// GAE API is misleading. The ID is the name of the service, not its unique resource path.
+			Name: v.Id,
+			// The name of the service is the unique resource name
+			Id:        v.Name,
+			ProjectId: projectId,
+		})
 	}
 
 	for _, serviceDB := range serviceDBs {

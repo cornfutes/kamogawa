@@ -771,7 +771,7 @@ h5.truncate {
 
 }
 
-@media only screen and (max-width: 1000px) {
+@media all and (max-width: 1000px) {
   #main-child {
     flex-direction: column;
   }
@@ -818,7 +818,7 @@ h5.truncate {
   }
 }
 
-@media only screen and (max-width: 800px) {
+@media all and (max-width: 800px) {
   aside>nav {
     margin-left: 20px;
   }

@@ -38,7 +38,7 @@ func init() {
 	fmt.Printf("Host=%v\n", Host)
 
 	Theme = os.Getenv("THEME")
-	if Theme != "glass" {
+	if Theme != "kubrick" {
 		Theme = "requiem"
 	}
 

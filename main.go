@@ -3,11 +3,14 @@ package main
 import (
 	"fmt"
 	"kamogawa/asset"
+	"kamogawa/cache"
 	"kamogawa/core"
 	"kamogawa/handler"
 	"kamogawa/identity"
 	"kamogawa/types"
 	"log"
+	"strings"
+	"unsafe"
 
 	"net/http"
 
@@ -113,7 +116,50 @@ func main() {
 			c.Abort()
 		})
 
+		authed.GET("/project.csv", func(c *gin.Context) {
+			if c.Query("t") != "project" {
+				c.Data(http.StatusBadRequest, "text/csv; charset=utf-8", []byte{})
+				c.Abort()
+				return
+			}
+
+			var email, exists = c.Get(identity.IdentityContextkey)
+			if !exists {
+				panic("Unexpected")
+			}
+			var user types.User
+			err := db.First(&user, "email = ?", email).Error
+			if err != nil {
+				panic("Unvalid DB state")
+			}
+			if user.AccessToken == nil {
+				core.HTMLWithGlobalState(c, "overview.html", gin.H{
+					"Unauthorized": true,
+				})
+				return
+			}
+
+			var csvLines []string
+			listProjectResponse, _ := cache.ReadProjectsCache(db, user)
+			if listProjectResponse != nil {
+				csvLines = append(csvLines, "project_id, project_name")
+				for _, v := range listProjectResponse.Projects {
+					csvLines = append(csvLines, v.ProjectId+","+v.ProjectNumber)
+				}
+			}
+			c.Data(http.StatusOK, "text/csv; charset=utf-8", strToBytes(strings.Join(csvLines[:], "\n")))
+			c.Abort()
+		})
 	}
 
 	r.Run(":3000")
+}
+
+func strToBytes(s string) []byte {
+	return *(*[]byte)(unsafe.Pointer(
+		&struct {
+			string
+			Cap int
+		}{s, len(s)},
+	))
 }

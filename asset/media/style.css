@@ -643,6 +643,17 @@ button:hover {
   transition: border-color 1s, color .5s ease;
 }
 
+button.disabled {
+  color: var(--g);
+  cursor: not-allowed;
+}
+
+button.disabled:hover {
+  border-color: var(--g);
+  color: var(--g);
+}
+
+
 .container {
   display: block;
   position: relative;
@@ -653,6 +664,12 @@ button:hover {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.container.disabled {
+  cursor: not-allowed;
+  text-decoration: line-through;
+  color: var(--g);
 }
 
 /* Hide the browser's default checkbox */
@@ -675,15 +692,14 @@ button:hover {
   border: 1px var(--f) solid;
 }
 
-/* On mouse-over, add a grey background color */
+.container.disabled .checkmark {
+  border: 1px solid var(--g)
+}
+
 .container:hover input~.checkmark {
   background-color: var(-b);
 }
 
-/* When the checkbox is checked, add a blue background */
-.container input:checked~.checkmark {
-  background-color: var(--b);
-}
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {

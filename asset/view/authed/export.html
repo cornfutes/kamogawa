@@ -1,12 +1,14 @@
 {{define "page"}}
 <h2>Export</h2>
 
-<h3 class="🍜">Search Index</h3>
+<h3 class="🍜">Search Index ( coming soon, for free ) </h3>
 <p>
-  <button onclick="alert('Disabled on account type DEMO')">Download as SQLite</button>
+  <button class="disabled">Download as SQLite</button>
 </p>
 
+
 <h3 class="🍜">Business Intelligence</h3>
+<br />
 
 <p>
   Select the resources you want to export:
@@ -15,49 +17,51 @@
 <div class="💪 🦠" style="padding-bottom: 20px">
   <div class="💪 🪜">
     <label class="container">
-      <input type="checkbox" checked="checked">
+      <input type="checkbox" id="download-checkbox-projects">
       <span class="checkmark"></span>
       Projects
     </label>
-    <label class="container">
-      <input type="checkbox">
-      <span class="checkmark"></span>GCE Zones
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      GCE Zones
     </label>
-    <label class="container">
-      <input type="checkbox" checked="checked">
-      <span class="checkmark"></span>GCE Instances
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      GCE Instances
     </label>
   </div>
   <div class="💪 🪜">
-    <label class="container">
-      <input type="checkbox">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
       <span class="checkmark"></span>
       GAE Services
     </label>
-    <label class="container">
-      <input type="checkbox" checked="checked">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
       <span class="checkmark"></span>
       GAE Versions
     </label>
-    <label class="container">
-      <input type="checkbox">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
       <span class="checkmark"></span>
       GAE Instances
     </label>
   </div>
   <div class="💪 🪜">
-    <label class="container">
-      <input type="checkbox">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
       <span class="checkmark"></span>
       CloudRun services
     </label>
-    <label class="container">
-      <input type="checkbox" checked="checked">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
       <span class="checkmark"></span>
       CloudSQL instances
     </label>
-    <label class="container">
-      <input type="checkbox">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
       <span class="checkmark"></span>
       Cloud Functions
     </label>
@@ -65,7 +69,30 @@
 </div>
 
 <p>
-  <button onclick="alert('Disabled on account type DEMO')">Download as CSV</button>
-  <button onclick="alert('Disabled on account type DEMO')">Download as DuckDB</button>
+  <button id="download-csv" class="disabled">Download as CSV</button>
+  <button class="disabled">Download as DuckDB</button>
 </p>
+
+<a href="/plans" class="link_with_arrow">Increase export options with Premium</a>
+
+<script>
+
+  const checkbox = document.getElementById('download-checkbox-projects')
+
+  checkbox.addEventListener('change', (event) => {
+    if (event.currentTarget.checked) {
+      document.getElementById('download-csv').classList.remove('disabled');
+    } else {
+      document.getElementById('download-csv').classList.add('disabled');
+    }
+  })
+
+  document.getElementById('download-csv').addEventListener('click', e => {
+    if (checkbox.checked) {
+      window.location.href = 'project.csv?t=project';
+    }
+
+  });
+</script>
+
 {{end}}

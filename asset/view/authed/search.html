@@ -59,6 +59,8 @@
     <h3>Compute Engine VM "{{.Name}}"</h3>
     {{else if eq .Kind "Project"}}
     <h3> GCP Project "{{.Name}}"</h3>
+    {{else if eq .Kind "Version"}}
+    <h3> GAE Version "{{.Name}}"</h3>
     {{else}}
     <h3></h3>
     {{end}}

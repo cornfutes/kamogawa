@@ -1,49 +1,10 @@
 package types
 
 import (
-	"database/sql"
+	"fmt"
 
 	"gorm.io/gorm"
 )
-
-type User struct {
-	gorm.Model
-	Email        string `gorm:"primaryKey"`
-	Password     string
-	Gmail        *sql.NullString
-	Scope        *sql.NullString
-	AccessToken  *sql.NullString
-	RefreshToken *sql.NullString
-}
-
-type ProjectDB struct {
-	gorm.Model
-	Project
-	Email     string `gorm:"primaryKey:idx"`
-	ProjectId string `gorm:"primaryKey:idx"`
-	//Parent         ProjectParent
-}
-
-func (in *ProjectDB) ToProject() Project {
-	return Project{
-		ProjectNumber:  in.ProjectNumber,
-		ProjectId:      in.ProjectId,
-		LifeCycleState: in.LifeCycleState,
-		Name:           in.Name,
-		CreateTime:     in.CreateTime,
-	}
-}
-
-func (in *Project) ToProjectDB(email string) ProjectDB {
-	var out ProjectDB
-	out.Email = email
-	out.ProjectNumber = in.ProjectNumber
-	out.ProjectId = in.ProjectId
-	out.LifeCycleState = in.LifeCycleState
-	out.Name = in.Name
-	out.CreateTime = in.CreateTime
-	return out
-}
 
 type GCEInstanceDB struct {
 	gorm.Model
@@ -60,6 +21,14 @@ func (in *GCEInstanceDB) ToGCEInstance() GCEInstance {
 		Name:   in.Name,
 		Status: in.Status,
 	}
+}
+
+func (in *GCEInstanceDB) ToSearchString() string {
+	return fmt.Sprintf("Type: Instance, Name: %v, Id: %v, Project Id: %v, Zone: %v", in.Name, in.Id, in.ProjectId, in.Zone)
+}
+
+func (in *GCEInstanceDB) ToLink() string {
+	return fmt.Sprintf("https://console.cloud.google.com/compute/instancesDetail/zones/%v/instances/%v?project=%v", in.Zone, in.Name, in.ProjectId)
 }
 
 func GCEInstanceDBToGCEAggregatedInstances(in []GCEInstanceDB) GCEAggregatedInstances {

@@ -30,18 +30,15 @@ func getFakeData(q string) []SearchResult {
 // TODO(david): implement
 func getRealData(db *gorm.DB, q string) []SearchResult {
 	var searchResults []SearchResult
-	fmt.Printf("david1 %v\n", searchResults)
 	r, err := searchInstances(db, q)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
-	fmt.Printf("david2 %v\n", searchResults)
 
 	r, err = searchProjects(db, q)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
-	fmt.Printf("david3 %v\n", searchResults)
 
 	return searchResults
 }

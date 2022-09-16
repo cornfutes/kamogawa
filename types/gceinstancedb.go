@@ -28,7 +28,7 @@ func (in *GCEInstanceDB) ToSearchString() string {
 }
 
 func (in *GCEInstanceDB) ToLink() string {
-	return fmt.Sprintf("https://console.cloud.google.com/compute/instancesDetail/zones/%v/instances/%v?project=%v", in.Zone, in.Name, in.ProjectId)
+	return fmt.Sprintf("https://console.cloud.google.com/compute/instancesDetail/%v/instances/%v?project=%v", in.Zone, in.Name, in.ProjectId)
 }
 
 func GCEInstanceDBToGCEAggregatedInstances(in []GCEInstanceDB) GCEAggregatedInstances {

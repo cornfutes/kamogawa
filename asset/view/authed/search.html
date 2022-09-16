@@ -15,19 +15,19 @@
   <div class="💪 🥷 🦠" id="query-builder">
     <div>
       <label for="provider">Provider:</label>
-      <select name="provider" id="filter-scope" onchange="changeProvider(event)">
+      <select name="provider" onchange="change(event, 0)">
         <option value="all">All (implicit) </option>
         <option value="gcp">GCP</option>
         <option value="aws">AWS</option>
         <option value="azure">Azure</option>
       </select>
       <label for="algo">Algo:</label>
-      <select name="algo" id="filter-scope" onchange="changeAlgo(event)">
+      <select name="algo" onchange="change(event, 1)">
         <option value="substring">substring (implicit) </option>
         <option value="fulltext">Full-text</option>
       </select>
       <label for="time">Modified:</label>
-      <select name="time" id="filter-scope" onchange="changeTime(event)">
+      <select name="time" onchange="change(event, 2)">
         <option value="all">All time</option>
         <option value="last24h">Last 24h</option>
         <option value="lastmonth">Last Month (implicit) </option>

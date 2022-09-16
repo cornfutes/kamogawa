@@ -160,15 +160,16 @@
   }
 
       function updateQuery(tk = []) {
-      if(provider != "all") tk.push("provider:" + provider);
-      if(algo != "substring") tk.push("algo:" + algo);
-      if(time != "all") tk.push("time:" + time);
-      if(tk.length > 0) q = [$("query").value.split(":::")[0].trim(), ":::", ...tk].join(" ");
+      if(f[0] != "all") tk.push("provider:" + f[0]);
+      if(f[1] != "substring") tk.push("algo:" + f[1]);
+      if(f[2] != "all") tk.push("time:" + f[2]);
+      r = $("query");
+      if(tk.length > 0) q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ");
       if(q == originalQuery) { 
-        $("query").value = originalQuery;
+        r.value = originalQuery;
         resetSearchState();
       } else {
-        $("query").value = q;
+        r.value = q;
         ad('search-header', '⚡');
         $('search-original-query').innerText = originalQuery;
         rm('search-redo-cta', '⚡');
@@ -178,22 +179,12 @@
 
       let originalQuery = q || '',
         baseQuery = (q.length > 0 && q.split(':::')[0] ) || '',
-        provider = 'all',
-        algo = 'substring',
-        time = 'all';
+        f = ['all', 'substring', 'all'];
 
-    function changeProvider(e) {
-      provider = e.target.value;
-      updateQuery();
-    }
-    function changeAlgo(e) {
-      algo = e.target.value;
-      updateQuery();
-    }
-    function changeTime(e) {
-      time = e.target.value;
-      updateQuery();
-    }
+      function change(e, i) {
+        f[i] = e.target.value;
+        updateQuery();
+      }
       $('query').addEventListener(u, e => {
         e.preventDefault();
         if(e.code == 'Enter') {

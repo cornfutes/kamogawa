@@ -3,11 +3,12 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/tjarratt/babble"
 	"log"
 	"math/rand"
 	"os"
 	"strconv"
+
+	"github.com/tjarratt/babble"
 )
 
 func main() {

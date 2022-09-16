@@ -17,5 +17,8 @@
     "ui.semanticTokens": true,
     // Enable stricter formatter. https://github.com/mvdan/gofumpt
     "formatting.gofumpt": true
+  },
+  "files.associations": {
+    "*.tmpl": "html",
   }
 }

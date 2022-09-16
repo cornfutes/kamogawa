@@ -684,6 +684,7 @@ body.light-mode .video-bg:before {
   background: none;
   color: var(--button-inactive);
   border: 1px solid var(--button-inactive);
+  cursor: not-allowed;
 }
 
 .status-button:not(.open):hover {
@@ -1253,4 +1254,23 @@ hr {
 
 .🍺 {
   background-color: black;
+}
+
+/** Splash */
+.splash-image {
+  border-radius: 12px;
+}
+
+.splash-container {
+  width: var(--width);
+  position: relative;
+}
+
+.splash-text {
+  position: absolute;
+  bottom: 100px;
+  left: 150px;
+  width: 400px;
+  font-weight: 500;
+  text-shadow: 10px 10px 15px black;
 }

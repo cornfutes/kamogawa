@@ -22,3 +22,6 @@
 [ ]
   try calling api with revoked refresh token and see what happens 
 [ ] default
+[ ] refactor
+  [ ] all places where we parse response success and error response can be refactored.
+    check responseStatus code and branch respectively

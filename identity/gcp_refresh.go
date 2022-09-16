@@ -24,7 +24,12 @@ type ResponseRefreshToken struct {
 	TokenType   string `json:"token_type"`
 }
 
-func GCPRefresh(c *gin.Context, db *gorm.DB) ResponseRefreshToken {
+type ErrorRefreshToken struct {
+	Error            string `json:"error"`
+	ErrorDescription string `json:"error_description"`
+}
+
+func GCPRefresh(c *gin.Context, db *gorm.DB) (*ResponseRefreshToken, *ErrorRefreshToken) {
 	var email, _ = c.Get(IdentityContextKey)
 
 	fmt.Printf("Revoking for email: %v\n", email)
@@ -34,32 +39,44 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) ResponseRefreshToken {
 	postBody, err := json.Marshal(map[string]string{
 		"client_id":     config.GCPClientId,
 		"client_secret": config.GCPClientSecret,
-		"refresh_token": user.RefreshToken.String,
+		"refresh_token": "1//06Ch0xWOX_kIWCgYIARAAGAYSNgF-L9IrRcMGwxK5-bEVrxNgUrnjS42vSWpgzL4JHZ4mE5WVxkNFyH_sZnhYh1ELaegt4B8z7Q",
 		"grant_type":    "refresh_token",
 	})
 	if err != nil {
-		log.Fatalf("An Error occured while refreshing %v", err)
+		log.Fatalf("An error occured while refreshing %v", err)
 	}
 	reqBody := bytes.NewBuffer(postBody)
+	fmt.Printf("PostBody '%v' \n", reqBody)
 	resp, err := http.Post("https://oauth2.googleapis.com/token", "application/json", reqBody)
 	if err != nil {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	var responseRefreshToken ResponseRefreshToken
-	err = json.NewDecoder(resp.Body).Decode(&responseRefreshToken)
-	if err != nil {
-		panic(err)
-	}
-	log.Println(responseRefreshToken)
 
-	return responseRefreshToken
+	if resp.StatusCode == 200 {
+		var responseSuccess ResponseRefreshToken
+		if err := json.NewDecoder(resp.Body).Decode(&responseSuccess); err != nil {
+			panic(err)
+		}
+		return &responseSuccess, nil
+	} else {
+		var responseError ErrorRefreshToken
+		if err := json.NewDecoder(resp.Body).Decode(&responseError); err != nil {
+			panic(err)
+		}
+		return nil, &responseError
+	}
 }
 
 func CheckDBAndRefreshToken(c *gin.Context, user types.User, db *gorm.DB) {
-	if time.Now().Sub(user.UpdatedAt).Seconds() > 3300 {
-		respRefreshToken := GCPRefresh(c, db)
-		user.AccessToken = &sql.NullString{String: respRefreshToken.AccessToken, Valid: true}
+	if time.Since(user.UpdatedAt).Seconds() > 3300 || len(user.AccessToken.String) == 0 {
+		responseRefreshToken, errorRefreshToken := GCPRefresh(c, db)
+		if errorRefreshToken != nil {
+			if errorRefreshToken.Error == "invalid_grant" && errorRefreshToken.ErrorDescription == "Bad Request" {
+				panic("Invalid refresh token")
+			}
+		}
+		user.AccessToken = &sql.NullString{String: responseRefreshToken.AccessToken, Valid: true}
 		db.Save(&user)
 	}
 }

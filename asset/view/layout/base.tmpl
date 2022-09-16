@@ -8,7 +8,7 @@
 <link rel=icon href="data:;base64,iVBORw0KGgo=">
 
 <body class="💪 🪜 🍜 📜 🚫">
-  <header id="header" class="💪 🎯">
+  <header class="💪 🎯">
     <div class="💪" id="header-child">
       <div class="💪">
         <h1 id=logo class="🍜">
@@ -23,7 +23,7 @@
           spellcheck=false
           autocomplete=off
           aria-label="Search term"
-          id="search-input">
+          id="s-i">
         <span id="search-cancel"></span>
       </div>
       <ul class="🍜 💪 🦷 ⚖️ top-nav" id="top-nav" >
@@ -72,7 +72,7 @@ let $d = document,
     $t = $('top-nav'),
     $s = $('search-box'),
     $a = $('search-start'),
-    $i = $('search-input'),
+    $i = $('s-i'),
      s = q => window.location.href = `/search?q=${encodeURI(q)}`,
     fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
   defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
@@ -91,11 +91,11 @@ $d[z](u, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
 
 $i[z](u, e => {
   if(!j) return;
-  if (e.code == 'Escape') e[p](), defo();
+  if(e.code == 'Escape') e[p](), defo();
   else if (e.code == k) {
     {{if .IsLoggedIn}}
       e[p]();
-      s($('search-input').value);
+      s($('s-i').value);
     {{else}}
       window.location.href = '/login?error=4';
     {{end}}
@@ -141,7 +141,6 @@ $sm[z](u, e => {
 });
 
 $r[z](c, _ => { r.value = o, reset() });
-    
 
 function change(e, i) { 
   f[i] = e.target.value; 

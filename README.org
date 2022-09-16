@@ -1,5 +1,7 @@
 * Project Codename: Shimogawa
 
+[[https://github.com/DiceDuckMonkOrg/kamogawa/actions/workflows/google-cloudrun-docker.yml][https://github.com/DiceDuckMonkOrg/kamogawa/actions/workflows/google-cloudrun-docker.yml/badge.svg]]
+
 ** Product 
 
 Web app to read and write to CSPs ( cloud providers )
@@ -15,7 +17,37 @@ What makes it different?
 Other product features:
 - billing and birds-eye visibilty of project 
 
-** Tech and Architecture 
+** Repo Overview 
+
+#+BEGIN_SRC plaintext
+├── .github         CI/CD on Github Actions
+├── .VScode         Presets for VScode
+├── e2e             Test automation w/ headless browser. Node.js, Playwright.
+├── src             App Server which sends SSR HTML. Go, Gin Web Framework. 
+├── team            Notes on Project Management and Development
+└── tool_babbler    Golang 
+#+END_SRC
+
+** Getting Started 
+
+Relevant commands encapsulated in Make.
+
+#+BEGIN_SRC plaintext
+└─ ▶ make help
+help                           This help command.
+cloc                           Total SLOC w/ Tokei. Run `brew install tokei` first
+cloc_go                        Naive SLOC of Go code.
+dev                            Run local Postgres server + live-reloading App Server
+dev_clean                      Start local environment from clean slate 
+build                          Build and tag for GCR.
+deploy                         Build then deploy to GCR.
+go_clean                       Cleans up go code.
+test_prod                      visual regression against prod
+#+END_SRC
+
+** Background Story
+
+*** Tech and Architecture 
 
 Monorepo with monolithic server in Go. The server serves web browser requests.
 
@@ -153,13 +185,6 @@ There are some trivial
 
 **** Endpoints 
 
-
-Wrap up
-
-
-
-
-## 
 One feature of  Go is that we can have one self-contained binary. 
 Assets such as CSS or HTML are not included by default, and the binary will 
 read from the file system, however there is a way to bake these assets 
@@ -185,19 +210,19 @@ brainpower spent philosophizing.
  
 *** Local Development 
 
-```
+#+BEGIN_SRC bash
 docker compose build
-```
+#+END_SRC
 
-```
+#+BEGIN_SRC bash
 docker compose up
-```
+#+END_SRC
 
 *** Format code
 
-```
+#+BEGIN_SRC bash
 go fmt
-``
+#+END_SRC
 
 The VSCode Go extension also does linting
 
@@ -205,63 +230,43 @@ The VSCode Go extension also does linting
 
 This currently won't actually work because there is no Postgres DB running alongside the server
 
-```
+#+BEGIN_SRC bash
 docker build -t kamogawa1337 .
-```
+#+END_SRC
 
-```
+#+BEGIN_SRC bash
 docker run kamogawa1337
-```
+#+END_SRC
 
 *** Cleaning up old dependencies 
 
-```
+#+BEGIN_SRC bash
 docker compose run --rm app go mod tidy
-```
+#+END_SRC
 
 *** IDE 
 
 VScode + the "Go" extension ( it will ask you to install a bunch of transitive 
 dependencies ) is great. 
 
-*** Project Structure 
-
-Each `kamogawa` subpackage is a file directory. i.e. `handler` directory 
-stores `kamogawa/handler` code.
-
-- gcp/
-  - integration with gcp
-- handler/
-  - define, not register HTML rendering handlers
-- view/
-  - HTML templates used  by `kamogawa/handler`
-  - /layout 
-    - shared UI structure across authed and unauthed views
-  - /auth 
-    - page content intended for authed routes
-  - /unauthed 
-    - page content intended for unauthed routes
-- main.go
-  - starts server, register handlers
-
 *** Running Natively 
 
 To run natively means to run the binary. First, build the binary.
 
-```
+#+BEGIN_SRC bash
 $ go build 
-```
+#+END_SRC
 
 That would output a file ( based on the pkg name of our main program ) 
-```
+#+BEGIN_SRC bash
 $ find kamogawa
-```
+#+END_SRC
 
 If you tried to run this:
 
-```
+#+BEGIN_SRC bash
 $ ./kamogawa
-```
+#+END_SRC
 
 You may see error message about environment variables such $SHIMOGAWA_URL
 not being set. In the Docker compose yml, you may see the environment variable 
@@ -289,15 +294,16 @@ self contained. We don't even need Docker, just the postgres connection.
 gBuild and tag container. There is bug with CloudRun and M1 macs. Linux platform must be 
 specified if using m1 mac.
 
-```
+=======
+#+BEGIN_SRC bash
 docker build -t gcr.io/linear-cinema-<retroactively_redacted>/goku --platform linux/amd64 .
-```
+#+END_SRC
 
 Push to Google Container Registry 
 
-```
+#+BEGIN_SRC bash
 docker push gcr.io/linear-cinema-<retroactively_redacted>/goku
-```
+#+END_SRC
 
 It's worth noting the CloudRun Servicem which hosts 
 a list of containers specify 3 ENV variables. 
@@ -311,21 +317,20 @@ Locally, the $HOST is localhost. Remotely, it depends on
 if it is cloud run or hosted domain.
 <retroactively_redacted>.a.run.app
 
-
 *** Logging 
 
 Use log, not fmt.Printf
 
 ***  Debugging 
 
-psql -h localhost -p 5432 -U local-dev -d shimogawa_db
-psql -h <retroactively_redacted> -p 5432 -U postgres -d shimogawa_db
+#+BEGIN_SRC bash
+$ psql -h localhost -p 5432 -U local-dev -d shimogawa_db #local
+$ psql -h <retroactively_redacted> -p 5432 -U postgres -d shimogawa_db # prod
+#+END_SRC
 
-*** 
-Run docker compose with no cache 
-
-```
-docker compose build --no-cache && docker-compose up
-```
+***  Run docker compose with no cache 
 
 https://code.visualstudio.com/docs/languages/go#:~:text=Using%20the%20Go%20extension%20for,from%20the%20VS%20Code%20Marketplace.
+#+BEGIN_SRC bash
+$ docker compose build --no-cache && docker-compose up
+#+END_SRC

@@ -14,7 +14,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var clientId = "407939494623-dkiq3e6qg35tf3j9jfnj5coihtu5gdf0.apps.googleusercontent.com"
+var clientId = "38029384895-t1chm9en5703tjmkqfqpa1ki6020p8n6.apps.googleusercontent.com"
 var redirectUri = config.RedirectUri
 var googleAuthUrl = getUrlWithScopes(GCPScopes)
 

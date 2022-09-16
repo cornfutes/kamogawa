@@ -2,6 +2,7 @@ package asset
 
 import (
 	_ "embed"
+	"kamogawa/config"
 	"kamogawa/core"
 	"net/http"
 
@@ -71,8 +72,11 @@ func Config(r *gin.Engine) {
 	r.HTMLRender = ConfigureHTMLRenderer()
 
 	// Register static assets.
-	// r.GET("style.css", css(styleCss))
-	r.StaticFile("/style.css", "asset/media/style.css")
+	if config.Env == config.Dev {
+		r.GET("style.css", css(styleCss))
+	} else {
+		r.StaticFile("/style.css", "asset/media/style.css")
+	}
 	r.GET("cloud_logo_aws.png", png(pngAWS))
 	r.GET("cloud_logo_gcp.png", png(pngGCP))
 	r.GET("cloud_logo_azure.png", png(pngAzure))

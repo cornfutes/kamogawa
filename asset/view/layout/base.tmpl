@@ -57,9 +57,7 @@
   </footer>
 <script>
 let $d = document,
-     $ = l => d.getElementById(l),
-    rm = (l, c) => $(l).classList.remove(c),
-    ad = (l, c) => $(l).classList.add(c),
+     $ = l => $d.getElementById(l),
    rm2 = (l, c) => l.classList.remove(c),
    ad2 = (l, c) => l.classList.add(c),
      j = false,
@@ -69,7 +67,7 @@ let $d = document,
      z = 'addEventListener',
      p = 'preventDefault',
     $i = $('search-input'),
-    $s = $('search-box');
+    $s = $('search-box'),
     $t = $('top-nav'),
     $m = $('main'),
     $l = $('logo'),
@@ -90,7 +88,7 @@ if($a) {
   });
 }
 
-d[z](u, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
+$d[z](u, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
 
 $i[z](u, e => {
   if(!j) return;
@@ -117,33 +115,33 @@ console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;backg
 let           sqb = false,
                 f = ['all', 'substring', 'lastmonth'],
                 r = $("query"),
-               $m = $('s-mod'),
+              $sm = $('s-mod'),
             elSoq = $('search-original-query'),
+              $qb = $('query-builder'),
               $r  = $('s-b-r'), 
               $re = $('s-re'),
-           elQbId = 'query-builder',
-            elHId = 'search-header', 
+               $h = $('s-h'),
                dd = 'down',
-              o$m = _ => {
-                      if(sqb) ad2($m, dd), ad(elQbId, "🥷");
-                      else    rm2($m, dd), rm(elQbId, "🥷");
+             o$sm = _ => {
+                      if(sqb) ad2($sm, dd), ad2($qb, "🥷");
+                      else    rm2($sm, dd), rm2($qb, "🥷");
                       sqb = !sqb;
                     };
 
 {{if .Query}}q = '{{.Query}}' {{end}};
 o = q || '';
 
-$m[z](c, o$m); 
-$m[z](u, e => {
+$sm[z](c, o$sm); 
+$sm[z](u, e => {
   if(e.code != k) return;
   event[p]();
-  o$m();
+  o$sm();
 });
 
 $r[z](c, _ => { r.value = o, reset() });
     
 function reset() {
-  rm(elHId, '⚡');
+  rm2($h, '⚡');
   ad2($re, '⚡');
   ad2($r, '🥷');
   elSoq.innerText = '';
@@ -162,7 +160,7 @@ function change(e, i) {
       reset();
     } else {
       r.value = q;
-      ad(elHId, '⚡');
+      ad2($h, '⚡');
       elSoq.innerText = o;
       rm2($re, '⚡');
       rm2($r, '🥷');
@@ -178,7 +176,7 @@ r[z](u, e => {
   else if(e.target.value == o) q = e.target.value, reset();
   else {
     q = e.target.value;
-    ad(elHId, '⚡');
+    ad2($h, '⚡');
     elSoq.innerText = o;
     rm2($re, '⚡');
     rm2($r, '🥷');
@@ -193,7 +191,7 @@ $re[z](c, e => {
 $re[z](u, e => e.code == k && q != o && e[p]() && s(q));
 {{end}}
 
-const lnl = d.querySelectorAll('.left-nav-link');
+const lnl = $d.querySelectorAll('.left-nav-link');
 lnl && lnl.forEach(el => {
   if (el.querySelector('a').href.split('?')[0] == window.location.href.split('?')[0]) {
     el.classList.add('active');

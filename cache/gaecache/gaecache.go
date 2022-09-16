@@ -151,9 +151,13 @@ func WriteVersionsAuth(db *gorm.DB, user types.User, gaeVersionDBs []gaetypes.GA
 	}
 }
 
-func ReadInstancesCache(db *gorm.DB, projectId string, serviceName string, versionName string) (*gaetypes.GAEListInstancesResponse, error) {
+func ReadInstancesCache(db *gorm.DB, user types.User, projectId string, serviceName string, versionName string) (*gaetypes.GAEListInstancesResponse, error) {
 	var instanceDBs []gaetypes.GAEInstanceDB
-	result := db.Where("version_id = ?", gaetypes.ToVersionId(projectId, serviceName, versionName)).Find(&instanceDBs)
+	result := db.Joins(
+		" INNER JOIN gae_instance_auths"+
+			" ON gae_instance_auths.id = gae_instance_dbs.id"+
+			" AND gae_instance_auths.gmail = ?"+
+			" AND gae_instance_dbs.version_id = ?", user.Gmail.String, gaetypes.ToVersionId(projectId, serviceName, versionName)).Find(&instanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -178,18 +182,17 @@ func ReadInstancesCache(db *gorm.DB, projectId string, serviceName string, versi
 	return &gaetypes.GAEListInstancesResponse{Instances: instances}, nil
 }
 
-func WriteInstancesCache(db *gorm.DB, projectId string, serviceName string, versionName string, resp *gaetypes.GAEListInstancesResponse) {
+func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, serviceName string, versionName string, resp *gaetypes.GAEListInstancesResponse) {
 	if resp == nil {
-		panic("Unexpected list of projects")
+		panic("Unexpected list of instances")
 	}
 	if len(resp.Instances) == 0 {
 		return
 	}
 
-	instanceDBs := make([]gaetypes.GAEInstanceDB, 0, len(resp.Instances))
-
+	gaeInstanceDBs := make([]gaetypes.GAEInstanceDB, 0, len(resp.Instances))
 	for _, v := range resp.Instances {
-		instanceDBs = append(instanceDBs, gaetypes.GAEInstanceDB{
+		gaeInstanceDBs = append(gaeInstanceDBs, gaetypes.GAEInstanceDB{
 			// GAE API is misleading
 			Name:        v.Id,
 			Id:          v.Name,
@@ -201,7 +204,24 @@ func WriteInstancesCache(db *gorm.DB, projectId string, serviceName string, vers
 		})
 	}
 
-	for _, instanceDB := range instanceDBs {
-		db.FirstOrCreate(&instanceDB)
+	for _, gaeInstanceDB := range gaeInstanceDBs {
+		db.FirstOrCreate(&gaeInstanceDB)
+	}
+
+	WriteInstancesAuth(db, user, gaeInstanceDBs)
+
+}
+
+func WriteInstancesAuth(db *gorm.DB, user types.User, gaeInstanceDBs []gaetypes.GAEInstanceDB) {
+	if len(gaeInstanceDBs) == 0 {
+		return
+	}
+
+	gaeInstanceAuths := make([]gaetypes.GAEInstanceAuth, 0, len(gaeInstanceDBs))
+	for _, v := range gaeInstanceDBs {
+		gaeInstanceAuths = append(gaeInstanceAuths, gaetypes.GAEInstanceAuth{Gmail: user.Gmail.String, Id: v.Id})
+	}
+	for _, v := range gaeInstanceAuths {
+		db.FirstOrCreate(&v)
 	}
 }

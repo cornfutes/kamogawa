@@ -162,7 +162,7 @@ func GAEListVersionsMain(user types.User, projectId string, serviceName string) 
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions.instances/list
 func GAEListInstances(db *gorm.DB, user types.User, projectId string, serviceName string, versionName string, useCache bool) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gaecache.ReadInstancesCache(db, projectId, serviceName, versionName)
+		responseSuccess, err := gaecache.ReadInstancesCache(db, user, projectId, serviceName, versionName)
 		if err == nil {
 			return responseSuccess, &gaetypes.ErrorAdminAPI{}
 		}
@@ -174,7 +174,7 @@ func GAEListInstances(db *gorm.DB, user types.User, projectId string, serviceNam
 	}
 
 	if config.CacheEnabled {
-		gaecache.WriteInstancesCache(db, projectId, serviceName, versionName, responseSuccess)
+		gaecache.WriteInstancesCache(db, user, projectId, serviceName, versionName, responseSuccess)
 	}
 
 	return responseSuccess, responseError

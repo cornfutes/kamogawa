@@ -45,7 +45,7 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *g
 
 func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, error) {
 	var projectDBs []gcetypes.ProjectDB
-	result := db.Where("email = ?", user.Email).Find(&projectDBs)
+	result := db.Where("gmail = ?", user.Gmail.String).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -76,7 +76,7 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 	projectDBs := make([]gcetypes.ProjectDB, 0, len(resp.Projects))
 
 	for _, v := range resp.Projects {
-		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Email, &v, true))
+		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Gmail.String, &v, true))
 	}
 	for _, projectDB := range projectDBs {
 		db.FirstOrCreate(&projectDB)
@@ -85,7 +85,7 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 
 func ReadProjectsCache2(db *gorm.DB, user types.User) []gcetypes.ProjectDB {
 	var projectDBs []gcetypes.ProjectDB
-	result := db.Where("email = ?", user.Email).Find(&projectDBs)
+	result := db.Where("gmail = ?", user.Gmail.String).Find(&projectDBs)
 	if result.Error != nil {
 		panic("Query failed")
 	}

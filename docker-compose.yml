@@ -31,7 +31,7 @@ services:
   shimogawa_service:
     image: postgres:13.8-alpine
     volumes:
-      - data:/var/lib/postgresql/data
+      - goku:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: shimogawa_db
       POSTGRES_USER: local-dev
@@ -39,4 +39,4 @@ services:
     ports:
       - '5432:5432'
 volumes:
-  data:
+  goku:

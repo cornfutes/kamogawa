@@ -44,5 +44,5 @@ jobs:
       # IAM role "Cloud Build Service Account" needed for this step.
       - name: Build and Push Container
         run: |-
-          docker build -t "gcr.io/linear-cinema-360910/niigata:${{ github.sha }}" ./
+          docker build -t "gcr.io/linear-cinema-360910/niigata:${{ github.sha }}" ./src
           docker push "gcr.io/linear-cinema-360910/niigata:${{ github.sha }}"

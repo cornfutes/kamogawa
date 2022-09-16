@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang=en-US>
 <title>{{.BrandName}}</title>
-<meta name=viewport content=width=device-width,initial-scale=1>
+<meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=description content="Search engine for GCP, plus more.">
 <link rel=stylesheet href=style.css>
 <link rel=icon href=data:,>
@@ -23,30 +23,30 @@
           autocomplete=off
           aria-label="Search term"
           id="s-i">
-        <span id="search-cancel"></span>
+        <span id=search-cancel></span>
       </div>
       <ul class="🍜 💪 🦷 ⚖️ top-nav" id="top-nav">
         {{if .IsLoggedIn}}
-        <span class="top-link" id="search-start" tabindex=0></span>
-        <form method="post" action="/logout" id="top-link">
-          <input type="hidden" name="name" value="value" />
+        <span class=top-link id=search-start tabindex=0></span>
+        <form method=post action=/logout id="top-link">
+          <input type=hidden name=name value=value />
           <a onclick="this.parentNode.submit();">Logout</a>
         </form>
-        <a href="/account">Account</a>
+        <a href=/account>Account</a>
         {{else}}
-        <a href="/demo">Demo</a>
+        <a href=/demo>Demo</a>
         {{end}}
       </ul>
     </div>
   </header>
   <div class="💪 🌳 ⚖️">{{template "main" .}}</div>
   <footer class="💪 🪜">
-    <p class="📞"><a href="{{.EapUrl}}">Join our Early Access Program!</a>
+    <p class=📞><a href="{{.EapUrl}}">Join our Early Access Program!</a>
     <ul class="🔫 🍜 🚫 footer-links">
-      <li><a href="about.txt">About</a>
-      <li><a href="api.txt">API</a>
-      <li><a href="security.txt">Security</a>
-      <li><a href="legal.txt">Legal</a>
+      <li><a href=about.txt>About</a>
+      <li><a href=api.txt>API</a>
+      <li><a href=security.txt>Security</a>
+      <li><a href=legal.txt>Legal</a>
       <li><a href="mailto:{{.ContactEmail}}">Contact</a>
     </ul>
   </footer>
@@ -62,12 +62,13 @@ let $d = document,
      k = 'Enter',
      j = false,
      q = '',
+    $i = $('s-i'),
     $m = $('main'),
     $l = $('logo'),
     $t = $('top-nav'),
     $s = $('search-box'),
     $a = $('search-start'),
-    $i = $('s-i'),
+     v = e => e.target.value,
      s = q => window.location.href = `/search?q=${encodeURI(q)}`,
     fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
   defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
@@ -138,7 +139,7 @@ $sm[z](u, e => {
 $r[z](c, _ => { r.value = o, reset() });
 
 function change(e, i) { 
-  f[i] = e.target.value; 
+  f[i] = v(e)
 
   let tk = [];
   if(f[0] != "all"      ) tk.push("provider:" + f[0]);
@@ -163,10 +164,10 @@ function change(e, i) {
 }
 r[z](u, e => {
   e[p]();
-  if(e.code == k) s(e.target.value);
-  else if(e.target.value == o) q = e.target.value, reset();
+  if(e.code == k) s(v(e));
+  else if(v(e) == o) q = v(e), reset();
   else {
-    q = e.target.value;
+    q = v(e);
     ad($h, '⚡');
     elSoq.innerText = o;
     rm($re, '⚡');

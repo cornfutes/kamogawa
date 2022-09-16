@@ -93,7 +93,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			projectStrings = responseSuccess.Projects
 			for i, project := range projectStrings {
 				if project.ProjectId == project.Name {
-					projectStrings[i].ProjectId = "--same as Project name--"
+					projectStrings[i].ProjectId = "--same as Project Name--"
 				}
 			}
 		}

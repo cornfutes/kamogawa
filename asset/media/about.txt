@@ -60,7 +60,6 @@ engineers for engineers, and also folks who use spreadsheets.
 The proof will be in the pudding. 
 I hope we and our product can be of service. 
 
-Louis and David 
 =========================================================================
 For red tape reasons with cloud providers, we are limiting early access to 100.
 We could technically lift this limit, but believe it's vital to ensure all of

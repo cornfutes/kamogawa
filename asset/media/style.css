@@ -767,6 +767,10 @@ h5.truncate {
   flex-direction: row-reverse;
 }
 
+#top-link {
+  display: inline-flex;
+
+}
 
 @media only screen and (max-width: 1000px) {
   #main-child {

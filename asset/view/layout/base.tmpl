@@ -140,10 +140,9 @@
     var q = '';
     {{if .Query}} 
       q = {{.Query}} || '';
-    console.log(q);
-    var originalQuery = q;
-    var baseQuery = (q.length > 0 && q.split(':::')[0] ) || '';
     {{end}}
+    var originalQuery = q || '';
+    var baseQuery = (q.length > 0 && q.split(':::')[0] ) || '';
     let provider = 'all';
     let algo = 'substring';
     let time = 'all';

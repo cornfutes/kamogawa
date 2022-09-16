@@ -2,6 +2,7 @@ package identity
 
 import (
 	"fmt"
+	"kamogawa/config"
 	"log"
 	"net/http"
 
@@ -9,11 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func ExtractClaimsEmail(c *gin.Context) *string {
-	tokenString, err := c.Cookie(sessionCookieKey)
-	if err != nil {
-		return nil
-	}
+func ExtractClaimsEmail(tokenString string, c *gin.Context) *string {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -37,9 +34,15 @@ func ExtractClaimsEmail(c *gin.Context) *string {
 
 func SetAuthContext() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		result := ExtractClaimsEmail(c)
+		tokenString, err := c.Cookie(SessionCookieKey)
+		if err != nil {
+			return
+		}
+		result := ExtractClaimsEmail(tokenString, c)
 		if result != nil {
 			c.Set(IdentityContextKey, *result)
+			// Extend the session.
+			c.SetCookie(SessionCookieKey, tokenString, 3600, "/", config.Host, false, true)
 		}
 	}
 }

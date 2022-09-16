@@ -76,7 +76,7 @@ func HandleLogin(c *gin.Context) {
 
 	// TODO: change in prod. Cookie can be set over non-https domain ( i.e. http://localhost )
 	// httpOnly flag set to true, preventing cookie being accessed by JavaScript
-	c.SetCookie(sessionCookieKey, tokenString, 3600, "/", config.Host, false, true)
+	c.SetCookie(SessionCookieKey, tokenString, 3600, "/", config.Host, false, true)
 
 	c.Redirect(http.StatusFound, "/search?q=test")
 }

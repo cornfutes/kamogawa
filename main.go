@@ -72,7 +72,11 @@ func main() {
 	r.POST("/login", identity.HandleLogin)
 	r.POST("/reset", identity.HandleReset)
 	r.GET("/loggedout", func(c *gin.Context) {
-		if identity.ExtractClaimsEmail(c) == nil {
+		tokenString, err := c.Cookie(identity.SessionCookieKey)
+		if err != nil {
+			c.Redirect(http.StatusFound, "/account")
+		}
+		if identity.ExtractClaimsEmail(tokenString, c) == nil {
 			core.HTMLWithGlobalState(c, "loggedout.html", gin.H{})
 		} else {
 			c.Redirect(http.StatusFound, "/account")

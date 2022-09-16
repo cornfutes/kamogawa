@@ -76,10 +76,6 @@ func main() {
 		}
 	})
 
-	r.GET("/status", func(c *gin.Context) {
-		c.Redirect(http.StatusFound, "/login")
-	})
-
 	authed := r.Group("/", identity.GateAuth())
 	{
 		authed.GET("release.txt", asset.TXT(asset.Release))
@@ -113,6 +109,10 @@ func main() {
 		})
 		authed.GET("/2fa", func(c *gin.Context) {
 			core.HTMLWithGlobalState(c, "2fa.html", gin.H{})
+			c.Abort()
+		})
+		authed.GET("/status", func(c *gin.Context) {
+			core.HTMLWithGlobalState(c, "status.html", gin.H{})
 			c.Abort()
 		})
 

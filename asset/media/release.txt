@@ -42,6 +42,9 @@ Date: 2022/9/1
 * sec: use bcrypt 
 
 ------------------------------------------------------------------------
-Date: 2022/8/31
 
-* feat(core): add account tiers
+.
+.
+.
+
+Entry before 2022/9/6 omitted 

@@ -1,3 +1,9 @@
+/** 
+For convenience, dequeue one of these emojis when adding new class.
+🌾🍺🥷🌸🍙🐒🌽💛🌴🦴
+🔥🎭💕🎏🗻🍌🍓🍎🍒
+*/
+
 :root {
   --a: #030303;
   --b: #1d1d1d;
@@ -77,14 +83,28 @@ kbd {
   justify-content: space-between;
 }
 
+.🍏 {
+  gap: 40px;
+}
+
 .🎯 {
   align-items: center;
   justify-content: center;
 }
 
+/**
+normal flex, it is vertical align.
+when stack, this is similar to text-align center.
+*/
+.🎂 {
+  align-items: center;
+}
+
+
 .📞 {
   text-align: center;
 }
+
 
 /************* Whitespace *************/
 .🚫 {
@@ -778,7 +798,6 @@ h5.truncate {
 #landing-cloud-partners {
   background-color: rgb(48, 102, 104);
   background: linear-gradient(90deg, var(--b) 0%, rgb(48, 102, 104) 50%, var(--b) 100%);
-  padding-bottom: 16px;
 }
 
 #system-status {

@@ -65,6 +65,7 @@ let d = document,
     j = false,
     c = 'click',
     u = 'keyup',
+    k = 'Enter',
     z = 'addEventListener',
     p = 'preventDefault',
    si = $('search-input'),
@@ -73,7 +74,8 @@ let d = document,
    m  = $('main'),
    l  = $('logo'),
    ss = $('search-start'),
-    q = '';
+    q = '',
+    s = q => window.location.href = `/search?q=${encodeURI(q)}`;
     
 function   fo() { j=true ; rm2(sb, '👻'); ad2(tn, '👻'); ad2(m, '🌃'); ad2(l, '🌃'); if(q && q.length > 0) si.value= q; si.focus(); }
 function defo() { j=false; ad2(sb, '👻'); rm2(tn, '👻'); rm2(m, '🌃'); rm2(l, '🌃');                       si.value=''; }
@@ -81,7 +83,7 @@ function defo() { j=false; ad2(sb, '👻'); rm2(tn, '👻'); rm2(m, '🌃'); rm2
 if(ss) {
   ss[z](c, fo);
   ss[z](u, e => {
-    if (e.code == 'Enter') {
+    if (e.code == k) {
       e[p]();
       fo();
     }
@@ -93,7 +95,7 @@ d[z](u, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
 si[z](u, e => {
   if(!j) return;
   if (e.code == 'Escape') e[p](), defo();
-  else if (e.code == 'Enter') {
+  else if (e.code == k) {
     {{if not .IsLoggedIn}}
       window.location.href = '/login?error=4';
     {{else}}
@@ -123,7 +125,6 @@ let           sqb = false,
            elQbId = 'query-builder',
             elHId = 'search-header', 
                dd = 'down',
-                s = q => window.location.href = `/search?q=${encodeURI(q)}`,
               o$m = _ => {
                       if(sqb) ad2($m, dd), ad(elQbId, "🥷");
                       else    rm2($m, dd), rm(elQbId, "🥷");
@@ -135,7 +136,7 @@ o = q || '';
 
 $m[z](c, o$m); 
 $m[z](u, e => {
-  if(e.code != 'Enter') return;
+  if(e.code != k) return;
   event[p]();
   o$m();
 });
@@ -174,7 +175,7 @@ function change(e, i) {
 }
 r[z](u, e => {
   e[p]();
-  if(e.code == 'Enter') s(e.target.value);
+  if(e.code == k) s(e.target.value);
   else if(e.target.value == o) q = e.target.value, reset();
   else {
     q = e.target.value;
@@ -190,7 +191,7 @@ srcta[z](c, e => {
     s(q);  
   }
 });
-srcta[z](u, e => e.code == 'Enter' && q != o && e[p]() && s(q));
+srcta[z](u, e => e.code == k && q != o && e[p]() && s(q));
 {{end}}
 
 const lnl = d.querySelectorAll('.left-nav-link');

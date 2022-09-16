@@ -185,7 +185,7 @@ func SearchGCEInstances(db *gorm.DB, user types.User, q string) ([]SearchResult,
 		" INNER JOIN gce_instance_auths "+
 		" ON gce_instance_auths.id = gce_instance_dbs.id"+
 		" AND gce_instance_auths.gmail = ?"+
-		" AND (gce_instance_dbs.name || ' ' || gce_instance_dbs.id || ' ' || gce_instance_dbs.project_id || ' ' || gce_instance_dbs.zone) ILIKE ?"+
+		" AND (gce_instance_dbs.id || ' ' || gce_instance_dbs.name || ' ' || gce_instance_dbs.status || ' ' || gce_instance_dbs.project_id || ' ' || gce_instance_dbs.zone) ILIKE ?"+
 		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
@@ -258,7 +258,7 @@ func searchGAEVersions(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 		" INNER JOIN gae_version_auths "+
 		" ON gae_version_auths.id = gae_version_dbs.id"+
 		" AND gae_version_auths.gmail = ?"+
-		" AND gae_version_dbs.id ILIKE ?"+
+		" AND (gae_version_dbs.name || ' ' || gae_version_dbs.id || ' ' || gae_version_dbs.project_id || ' ' || gae_version_dbs.service_name || ' ' || gae_version_dbs.service_id || ' ' || gae_version_dbs.serving_status) ILIKE ?"+
 		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gaeVersionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")

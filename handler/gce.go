@@ -45,7 +45,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		var htmlLines []string
 		// Enumerate Projects for credentials
 		for _, p := range projectStrings {
-			responseSuccess, responseError := gcp.GCEListInstances(db, user, p.ProjectId)
+			responseSuccess, responseError := gcp.GCEListInstances(db, user, p.ProjectId, useCache)
 			htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul>")
 			if responseError.Error.Code > 0 {
 				// Shortcircuit if missing GCE scope.

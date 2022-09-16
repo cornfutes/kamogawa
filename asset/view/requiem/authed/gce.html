@@ -1,0 +1,46 @@
+{{define "page"}}
+<h2>GCE</h2>
+{{if .Unauthorized}}
+<p>
+  You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
+</p>
+{{else if .MissingScopes}}
+<p>
+  The following OAuth2 Scopes are needed but not yet granted:
+
+<ul>
+  <li>https://www.googleapis.com/auth/cloud-platform.read-only
+  <li>https://www.googleapis.com/auth/compute.readonly
+</ul>
+
+<a href="authorization">Securely grant access</a>
+(note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
+requested.
+write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
+</p>
+
+{{else}}
+<p>
+  Enumerates VMs across Projects, and then across Zones within each project.
+</p>
+<p>
+  Cache avoided {{.NumCachedCalls}} API calls
+</p>
+<p>Query took ({{.Duration}})</p>
+
+
+<ul>{{.AssetLines}}</ul>
+
+<h2 class="🍜">Update GCE Cache</h2>
+
+<p>
+  You can manually refresh the cache for individual services for free.
+</p>
+
+<button class="disabled">Refresh</button> <span style="color:red">(disabled in demo)</span>
+<p>
+  <a href="overview">See Overview on details on traversing entire graph</a>
+</p>
+
+{{end}}
+{{end}}

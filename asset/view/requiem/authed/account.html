@@ -1,0 +1,51 @@
+{{define "page"}}
+<h2>Account</h2>
+<div>
+  <table>
+    <tr>
+      <td>Username</td>
+      <td>{{.Email}}</td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td><a href="/password">change</a></td>
+    </tr>
+    <tr>
+      <td>Encryption Key</td>
+      <td><a href="/encryption">change</a></td>
+    </tr>
+    <tr>
+      <td>Created</td>
+      <td>September 9, 2022</td>
+    </tr>
+    <tr>
+      <td>Top color</td>
+      <td>1D1D1D </td>
+    </tr>
+    <tr>
+      <td>Account Type</td>
+      <td>demo</td>
+    </tr>
+    <tr>
+      <td>2FA</td>
+      <td>disabled (<a href="/2fa">enable</a>)</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <ul class="🔫  🚫">
+          <li><a href="{{.EapUrl}}">Learn about the benefits of upgrading your account</a></li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h2>Early Access</h2>
+<p>
+  Experience the capabilities of our platform. The web UI is just one
+  compoent of it. We want to know how else we can be of service to your team.
+</p>
+<a href="{{.EapUrl}}">Join Early Access Program!</a>
+
+{{end}}

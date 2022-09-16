@@ -11,11 +11,11 @@ import (
 	"github.com/gin-contrib/multitemplate"
 )
 
-var baseLayoutPath = "view/layout/" + config.Theme + "/*.tmpl"
-var unauthedLayoutsPath = "view/layout/" + config.Theme + "/unauthed/*.html"
-var authedLayoutsPath = "view/layout/" + config.Theme + "/authed/*.html"
-var unauthedViewsGlob = "view/unauthed/*.html"
-var authedViewsGlob = "view/authed/*.html"
+var baseLayoutPath = "view/" + config.Theme + "/layout/*.tmpl"
+var unauthedLayoutsPath = "view/" + config.Theme + "/layout/unauthed/*.html"
+var authedLayoutsPath = "view/" + config.Theme + "/layout/authed/*.html"
+var unauthedViewsGlob = "view/" + config.Theme + "/unauthed/*.html"
+var authedViewsGlob = "view/" + config.Theme + "/authed/*.html"
 
 //go:embed view/*
 var views embed.FS

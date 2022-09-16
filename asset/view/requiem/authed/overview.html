@@ -1,0 +1,103 @@
+{{define "page"}}
+<h2 class=🍜>GCP Overview</h2>
+<div>
+  {{if.HasErrors}}
+  <p>
+    There was an unexpected error requesting the data containing the message:
+  </p>
+  <code style="background-color: black">{{.Error.Error.Message}}</code>
+  <p>
+    <a href="/bug" class="link_with_arrow">Please help us improve and report a bug</a>
+  </p>
+  {{else if .Unauthorized}}
+  <p>
+    You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
+  </p>
+  {{else if .MissingScopes}}
+  <p>
+    The following OAuth2 Scopes are needed but not yet granted:
+
+  <ul>
+    <li>https://www.googleapis.com/auth/cloud-platform.read-only
+  </ul>
+
+  <a href="authorization">Securely grant access</a>
+  </p>
+  {{else if .MissingScopes}}
+  <p>
+    At a minimum (different resources need more scopes), the following OAuth2 Scopes are needed but not yet granted:
+
+  <ul>
+    <li>https://www.googleapis.com/auth/cloud-platform.read-only
+  </ul>
+
+  <a href="authorization">Securely grant access</a>
+  (note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
+  requested. write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
+  </p>
+  {{else}}
+  <p>
+    We indexed up to the first 50 Projects and their assets.
+    <a href="{{.EapUrl}}" class="link_with_arrow">Increase this limit with Premium</a>
+  </p>
+
+  {{if .HasProjects}}
+  <table>
+    <thead>
+      <td>
+        Project Name
+      </td>
+      <td>
+        ID
+      </td>
+    </thead>
+    {{ range .Projects }}
+    <tr>
+      <td>
+        {{.Name}}
+      </td>
+      <td>
+        {{.ProjectId}}
+      </td>
+    </tr>
+    {{ end }}
+  </table>
+
+  {{else}}
+  You don't have any projects.
+  {{end}}
+  {{end}}
+</div><br />
+
+<h2 class="🍜">Update Project Cache</h2>
+<p>
+  The full-graph traversal / cache invalidation runs on schedule.
+</p>
+<ul class=🍕>
+  <li>Last indexing occured: {{.LastRunTime}} ago. (triggered by scheduler) </li>
+  <li>Next indexing scheduled in: {{.NextRunTime}}.
+    <a href="{{.EapUrl}}" class="link_with_arrow">Perform ad-hoc run immediately</a>
+  </li>
+  <li>Indexing schedule every 24 hours.
+    <a href="{{.EapUrl}}" class="link_with_arrow">Increase this limit with Premium</a>
+  </li>
+</ul>
+<p>
+  You can manually refresh the cache for individual services for free.
+</p>
+
+<button class="disabled">Refresh</button> <span style="color:red">(disabled in demo)</span>
+<br />
+<br />
+
+<h2 class="🍜">Create a Project</h2> <br />
+
+<a href="https://console.cloud.google.com/projectcreate" class="link_with_arrow">Via GCP Web
+  Console</a>
+
+<br />
+<br />
+
+
+</div>
+{{end}}

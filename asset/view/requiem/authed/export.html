@@ -1,0 +1,97 @@
+{{define "page"}}
+<h2>Export</h2>
+
+<h3 class="🍜">Search Index (coming soon, for free) </h3>
+<p>
+  <button class="disabled">Download as SQLite</button>
+</p>
+
+
+<h3 class="🍜">Business Intelligence</h3>
+<br />
+
+<p>
+  Select the resources you want to export:
+</p>
+
+<div class="💪 🦠" style="padding-bottom: 20px">
+  <div class="💪 🪜">
+    <label class="container">
+      <input type="checkbox" id="download-checkbox-projects">
+      <span class="checkmark"></span>
+      GCP Projects
+    </label>
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      GCE Zones
+    </label>
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      GCE Instances
+    </label>
+  </div>
+  <div class="💪 🪜">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      GAE Services
+    </label>
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      GAE Versions
+    </label>
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      GAE Instances
+    </label>
+  </div>
+  <div class="💪 🪜">
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      CloudRun services
+    </label>
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      CloudSQL instances
+    </label>
+    <label class="container disabled">
+      <input type="checkbox" disabled>
+      <span class="checkmark"></span>
+      Cloud Functions
+    </label>
+  </div>
+</div>
+
+<p>
+  <button id="download-csv" class="disabled">Download as CSV</button>
+  <button class="disabled">Download as DuckDB</button>
+</p>
+
+<a href="{{.EapUrl}}" class="link_with_arrow">Request access to our Early Access Program</a>
+
+<script>
+  const checkbox = document.getElementById('download-checkbox-projects')
+
+  checkbox.addEventListener('change', (event) => {
+    if (event.currentTarget.checked) {
+      document.getElementById('download-csv').classList.remove('disabled');
+    } else {
+      document.getElementById('download-csv').classList.add('disabled');
+    }
+  })
+
+  document.getElementById('download-csv').addEventListener('click', e => {
+    if (checkbox.checked) {
+      window.location.href = 'project.csv?t=project';
+    }
+
+  });
+</script>
+
+{{end}}

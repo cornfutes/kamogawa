@@ -1,0 +1,331 @@
+{{define "page"}}
+<div class="landing 💪 🪜">
+  <div class="💪 🪜 splash-container">
+    <img src="/splash_landing.gif" class="splash-image"
+      alt="Illustration of Japanese torii gate in water under the moonlight. Courtesy of https://www.pixeltrue.com/scenic-illustrations">
+    <h1 class="splash-text">Gateway to Your Cloud Infrastructure</h1>
+  </div>
+  <div class="content content-narrow">
+    <p>
+      At first, cloud is overwhelming.
+      At scale, unwieldy.
+      Entropy is rampant.
+    </p>
+    <p>
+      Every cloud workflows involve referencing assets or finding relevant
+      entrypoints. Currently, this is a bottleneck of and for cloud adoption.
+      It is an economic drain without inherent value.
+    </p>
+    <p>
+      Existing tools make humans serve them, which is backwards.
+    </p>
+    <p>
+      We make cloud accessible.
+      We've built a search engine to this end.
+    </p>
+    <p>
+      <a href="/demo">Try it out!</a>
+    </p>
+    <hr />
+    <!-- <h3>The Landscape</h3>
+    <p>
+      APIs require signficant upfront engineering time. Data models and tooling
+      are fragmented, both across and within cloud providers.
+      Documentation add noise, not value, exceptionally so with GCP.
+    </p>
+    <p>
+      Most cloud tasks are infrequent or one-off such that API integration
+      doesn't make sense.
+    </p>
+    <p>
+      Incumbent Web UIs are bloated but fail essential workflows.
+      Users simply need to list, search and inspect their assets.
+      Occasionally, submit a webform to create or edit.
+      This should be a painless process, but it's not.
+    </p>
+    <h4>The GCP Web Console</h4>
+    <p>A perpetual stream of
+      novel UI elements and UX patterns are forced upon users.
+      The application is megabytes large with many states not well-handled.
+    </p>
+    <p>
+      The directory and navigation structure is byzantine.
+      There are 90+ items on the left menu, in arbitrary order of usefulness and relevancy.
+    </p>
+    <p>Basic functionality is absent. For example, there's no
+      interface to query CloudSQL. A built-in shell exists to provide
+      CLI access but it can't connect to CloudSQL instances on IPv4.</p>
+    <p>
+      Search quality is poor. For example, substring searching does not work on
+      App Engine resources. If one knew the resource ID why would they need
+      search to begin with?
+    </p>
+    <h3>What we do differently</h3>
+    <p>
+      Our search actually works. This eliminates the toil of manually traversing
+      UI consoles.
+    </p>
+    <p>
+      The web UI on which we this is served is lightweight at kilobytes in size.
+      We're mobile-first, meanwhile it looks good but also loads fast
+      on weaker devices and slow connections.
+    </p>
+    <a href="/mission" class="link_with_arrow">Learn about our commitment to security,
+      privacy and usability</a>
+  </div>
+</div> -->
+
+    <!-- <h2 class="🤍" style="padding-bottom: 50px;">Platform Overview</h2>
+
+<div class="💪 🌳 🤍 " style="width: 100%; gap: 16px;">
+  <div class="💪 🌳" style="
+        flex-direction: row-reverse;
+        background-color: #141414;
+        padding-top: 64px;
+        padding-bottom: 64px;
+        background: linear-gradient(320deg, #D3655D 0%, #E2A856 100%);
+    ">
+    <div style="width: 440px; padding-right: 51px; ">
+      <img src="/console.svg" style="width: 100px; height: 100px;">
+      <h2 class="🍜">UI-as-a-Service</h2>
+      <p>We provide the best-in-class web console
+        for all your cloud management needs.
+        We are not constrained by organizational challenges that prevent
+        cloud platforms from delivering software that make sense.
+      </p>
+      <p>In fact, cloud vendors are disincentivized from
+        facilitating multi-cloud adoption. The full potential
+        of cloud-native has yet to be realized by organizations, ironically inhibited
+        by these utility services. We believe we can make money without being evil.
+        This translates to making your cloud operation easier and more cost-effective.
+      </p>
+      <p>
+        Our edge is in what we lack:
+      <ul>
+        <li>Bloated 20MB+ bundles of JavaScript/CSS</li>
+        <li>Cluttered UIs mirroring the cloud vendors'
+          org structure rather than what is applicable to your workflow</li>
+        <li>Uninspired material design </li>
+        <li>Irrelevant content for a theoretical frankenstein client</li>
+      </ul>
+      Our product roadmap is driven by utility.
+      Support for web browsers that are NOT desktop Chrome is
+      also important.
+      </p>
+      <a href="/login" class="link_with_arrow 🤍 ">Login to web console</a>
+    </div>
+  </div>
+  <div class="💪 🌳" style="
+      background-color: #141414;
+     padding-top: 64px;
+      padding-bottom: 64px;
+      background: linear-gradient(320deg, #15266D 0%, #0A60D8 100%);">
+    <div style="padding-left: 51px; width: 440px;">
+      <img src="/graphql.png" style="width: 100px; height: 100px;">
+      <h2 class="🍜">One API</h2>
+      <p>When you need more expressive queries or
+        automation at scale, we have a
+        GraphQL API. A single API to integrate and familiarize with,
+        rather than a dozen quirky ones.
+      </p>
+      <p>Incentive structures at cloud vendors lead to APIs provided that are
+        half-baked at launch, then in an ambiguous state of maintenance.
+        SDKs and libraries are inconsistently implemented. They are
+        subject to idiosyncrasies at the whim of individual developers,
+        especially in ecosystems that are $NOT_JAVA. Autogen is not a panacea,
+        either.
+      </p>
+      <p>
+        Documentation is the worst. For example, there are 2.5x sets of
+        documentation alluding to authentication with GCP APIs.
+        In the end, you have to dig through source code to
+        uncover a specific parameter, how to
+        pass it, and finally correlate this to your specific library / API version.
+        This is a failed abstraction that puts the burden
+        of fragile integration code on your team.
+      </p>
+      <p>
+        We manage the complexities of vendoring and versioning issues,
+        so you have reliability and predictability.
+        We are uniquely positioned for economy-of-scale in regard to
+        smoothing out API quirks once-and-for-all.
+        Your software engineering woes are literally our business.
+        Payment processors existed before Stripe, and we're kind of
+        like Stripe, but for Cloud vendors rather than banks.
+      </p>
+      <a href="/docs" class="link_with_arrow" style="color: white">API Documentation</a>
+    </div>
+  </div>
+</div> -->
+    <section class="💪 🪜 content-narrow 🎯" id="landing-cloud-partners">
+      <h2>Supported Integrations</h2>
+      <div class="💪 🍏">
+        <div class="💪 🪜 🎂">
+          <img src="cloud_logo_aws.png" alt="logo of AWS">
+          AWS
+        </div>
+        <div class="💪 🪜 🎂">
+          <img src="cloud_logo_azure.png" alt="logo of Azure">
+          Azure
+        </div>
+        <div class="💪 🪜 🎂">
+          <img src="cloud_logo_gcp.png" alt="logo of GCP">
+          GCP
+        </div>
+      </div>
+      <p>
+        <a href="{{.EapUrl}}" class="link_with_arrow">Learn more about our service coverage</a>
+      </p>
+    </section>
+    <!-- <section class="📞 🤍 " style="border-bottom: 1px solid rgb(66, 66, 69)">
+  <div class="💪 🌳 🦠" style="flex-flow: row nowrap; align-items: flex-end; align-items: center;">
+    <h1 class=" 💪" style="font-size: 42px; font-weight: 300;">Strategies for cloud-native enterprises</h1>
+    <div class="💪">
+      <a href="{{.EapUrl}}" class="link_with_arrow">View all</a>
+    </div>
+  </div>
+  <p>
+    We accelerate your organizations' capacity to adopt cloud.
+  </p>
+  <div class=" 💪" style="margin-top: 20px; width: 980px; align-items: top; justify-content: top; gap: 40px;">
+    <div class="💪 🪜 "
+      style=" flex: 33%; text-align: left; border: 1px solid grey; border-radius: 10px; background-color: rgb(29,29,32); ">
+      <div class="💪 🪜 🌳 🦠" style="margin: 17px 25px;">
+        <div class="💪 🪜">
+          <h3 style="margin-bottom: 0">Business Intelligence</h3>
+          <p>
+            Easy-to-consume analytics tools and dashboards.
+            Billing is one area of focus. In particular, GCP's billing
+            are not human legible. Teams end up break uo their Projects as to have detailed breakdowns.
+          </p>
+        </div>
+        <div class="💪"><a href="{{.EapUrl}}" class="link_with_arrow">Details</a></div>
+      </div>
+    </div>
+    <div class="💪 🪜 "
+      style=" flex: 33%; text-align: left; border: 1px solid grey; border-radius: 10px; background-color: rgb(29,29,32); ">
+      <div class="💪 🪜 🌳 🦠" style="margin: 17px 25px;">
+        <div class="💪 🪜">
+          <h3 style="margin-bottom: 0">Serverless</h3>
+          <p>
+            We lift out provisional patterns, so you can think about code
+            rather than details of a specific cloud vendor.
+            Unlike the serverless offerings by cloud vendors,
+            we do not obfuscate the implementation details.
+            We merely hide details up front, but our serverless platform
+            is open in the sense that the implementation
+            details is always available and accessible to you.
+            For example, Cloud Functions provisions Compute instances
+            under neath the hood. We will containerize your serverless
+            code in a transparent and portable way, and host it as
+            a non leaky abstraction Compute Instance, or whatever cloud
+            hosting platform is the most cost-effective.
+          </p>
+        </div>
+        <div class="💪"><a href="{{.EapUrl}}" class="link_with_arrow">Details</a></div>
+      </div>
+    </div>
+    <div class="💪 🪜"
+      style=" flex: 33%; text-align: left; border: 1px solid grey; border-radius: 10px; background-color: rgb(29,29,32); ">
+      <div class="💪 🪜 🌳 🦠" style="margin: 17px 25px;">
+        <div class="💪 🪜">
+          <h3 style="margin-bottom: 0">Multi-cloud</h3>
+          <p>By consolidating
+            and unifying across cloud vendors,
+            smoothing over their idiosyncracies, we reduce vendor risk.
+            One direct benefit of our platform is
+            reducing your operational costs by migrating workloads to the
+            cost-effective cloud vendor on-demand.
+          </p>
+        </div>
+        <div class="💪"><a href="{{.EapUrl}}" class="link_with_arrow">Details</a></div>
+      </div>
+    </div>
+</section> -->
+
+    <!--<h2 style="color: white; padding-top: 50px; padding-bottom: 50px;">Team</h2>-->
+    <!--<div class="💪 🌳 🤍 " style="width: 100%; gap: 16px;">-->
+    <!--  <div class="💪 🌳"-->
+    <!--    style="flex-direction: row-reverse;background-color: #141414;padding-top: 64px;padding-bottom: 64px;">-->
+    <!--    <div style="width: 440px; padding-right: 51px; ">-->
+    <!--      <h2 class="🍜">Louis</h2>-->
+    <!--      <h3>Build products that serves customers</h3>-->
+    <!--      <p>-->
+    <!--        Previously at Google, specifically GCP on serverless. Later, as a-->
+    <!--        customer managed tens of thousands of VMs in a multi-cloud context.-->
+
+    <!--        He is acutely aware of the friction points.-->
+    <!--      </p>-->
+    <!--      <p>-->
+    <!--        Strange programmer in that they studied fine arts.-->
+    <!--        Does not, however, muddle art with service design, which-->
+    <!--        is the the problem we are solving.-->
+    <!--      </p>-->
+
+    <!--      <p>-->
+    <!--        Other areas of knowledge-->
+    <!--      <ul>-->
+    <!--        <li>UI libraries</li>-->
+    <!--        <li>Search engines</li>-->
+    <!--        <li>Distributed data processing</li>-->
+    <!--        <li>Dependency Injection Graphs</li>-->
+    <!--      </ul>-->
+    <!--      </p>-->
+    <!--      &lt;!&ndash; <a href="" class="link_with_arrow">Read my blog posts</a> &ndash;&gt;-->
+    <!--    </div>-->
+    <!--  </div>-->
+    <!--  <div class="💪 🌳" style="-->
+    <!--      background-color: #111111;-->
+    <!--     padding-top: 64px;-->
+    <!--      padding-bottom: 64px;">-->
+    <!--    <div style="padding-left: 51px; width: 440px;">-->
+    <!--      <h2 class="🍜">David</h2>-->
+    <!--      <h3>Build infra that serves the products</h3>-->
+    <!--      <p>-->
+    <!--        Previously, quantitative developer on Wall Street.-->
+    <!--        Astrophysics background. Built high-performance, high-availability-->
+    <!--        and high-precision systems.-->
+    <!--      </p>-->
+    <!--      <p>-->
+    <!--        Also worn SRE hat ensuring systems are healthy.-->
+    <!--      </p>-->
+    <!--      <p>-->
+    <!--        Other production experience:-->
+    <!--      <ul>-->
+    <!--        <li>Compliance</li>-->
+    <!--        <li>Business Intelligence</li>-->
+    <!--        <li>ML</li>-->
+    <!--        <li>APIs</li>-->
+    <!--      </ul>-->
+    <!--      </p>-->
+    <!--    </div>-->
+    <!--  </div>-->
+    <!--</div>-->
+
+    <section class="📞 🤍  💪 🪜">
+      <div style="max-width: 650px;">
+        <img src="phone.svg" width="64" height="64" style="filter: invert(1)">
+        <h2 style="font-size: 32px;">Want to learn more?</h2>
+        <p>
+          Talk to <span style="text-decoration: line-through;">
+            our sales team</span> us (technical founders) to learn how we
+          save developers' time while providing operational visibility for business executives.
+          If you came here from YCombinator, we have a demo using live rather cached data.
+        </p>
+        <a href="mailto: {{.ContactEmail}}" class="link_with_arrow">Email us</a><br />
+        <a href="{{.EapUrl}}" class="link_with_arrow">Early Access Program</a>
+      </div>
+    </section>
+
+    <!-- class="💪 🪜 content-narrow 🎯 🤍" id="landing-cloud-partners"> -->
+    <section class="📞 🤍 💪 🪜 🎯 content-narrow" id="system-status">
+      <h2 class=" 🍜">System Status</h2>
+      <p>If you’re experiencing an issue with developer tools or services,
+        find out if there’s maintenance in progress or a
+        known issue.
+      </p>
+      <a href="/status" class="link_with_arrow">View system status</a>
+  </div>
+  </section>
+
+  {{end}}

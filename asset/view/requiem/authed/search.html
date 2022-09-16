@@ -1,0 +1,71 @@
+{{define "page"}}
+<div class="🐉 💪 🪜" id="search-hero">
+  <div class="💪 🦠">
+    <h3 id="s-h">Search Results for: <span id="search-original-query"></span></h3>
+    <nav class="💪 🦷 ⚖️ top-nav" style="padding-top: 3px">
+      <span id="s-re" class="🐕 ⚡" tabindex=0 onkeyup="">
+        search
+      </span>
+      <span tabindex=0 class="🐕 arrow down" id="s-mod">tools<i></i></span>
+    </nav>
+  </div>
+  <input id="query" value="{{.Query}}" placeholder="Type to search..."></input>
+  <div class=" 💪 🥷 🦠" id="query-builder">
+    <div>
+      <label for=provider>Provider:</label>
+      <select name=provider onchange="change(event, 0)">
+        <option value=all>All (implicit) </option>
+        <option value=gcp>GCP</option>
+        <option value=aws>AWS</option>
+        <option value=azure>Azure</option>
+      </select>
+      <label for=algo>Algo:</label>
+      <select name=algo onchange="change(event, 1)">
+        <option value=substring>substring (implicit) </option>
+        <option value=fulltext>Full-text</option>
+      </select>
+      <label for=time>Modified:</label>
+      <select name=time onchange="change(event, 2)">
+        <option value=all>All time</option>
+        <option value=last24>Last 24h</option>
+        <option value=lastmonth>Last Month (implicit) </option>
+      </select>
+    </div>
+    <div>
+      <span class="🐕 🥷" id="s-b-r">reset</spn>
+    </div>
+  </div>
+</div>
+{{if .IsRegex}}
+<p class=🍕>warning: regex is not supported in the demo</p>
+{{end}}
+{{if .HasFilter}}
+<p class=🍕>warning: in the demo, we ignore the search filter (everything after the ':::') </p>
+{{end}}
+{{if .Error }}
+<p>{{.Error}}</p>
+{{else if .HasResults}}
+<p>{{.CountTotalResults}} results ({{.Duration}})</p>
+<div class="💪 🪜" style="padding: 10px;">
+  {{ range .Results }}
+  <div class="🎴" style="overflow:hidden">
+    <h5 class="truncate"><a href="{{.Link}}">{{.Link}}</a></h5>
+    {{if eq .Product "GCE"}}
+    <h3>Compute Engine VM "{{.Name}}"</h3>
+    {{else if eq .Kind "Project"}}
+    <h3> GCP Project "{{.Name}}"</h3>
+    {{else if eq .Kind "Service"}}
+    <h3> GAE Service "{{.Name}}"</h3>
+    {{else if eq .Kind "Version"}}
+    <h3> GAE Version "{{.Name}}"</h3>
+    {{else}}
+    <h3></h3>
+    {{end}}
+    <p>{{.Text}}</p>
+  </div>
+  {{ end }}
+</div>
+{{else}}
+<p>No results found</p>
+{{end}}
+{{end}}

@@ -109,7 +109,7 @@
           window.location.href = '/login?error=4';
         {{else}}
           e.preventDefault();
-          search($('search-input').value);
+          s($('search-input').value);
         {{end}}
       } else if (e.code == 'Tab') e.preventDefault();
     });
@@ -200,7 +200,7 @@
     elQuery.addEventListener(u, e => {
       e.preventDefault();
       if(e.code == 'Enter') {
-        search(e.target.value);
+        s(e.target.value);
       } else if(e.target.value == originalQuery) {
         q = e.target.value;
         resetSearchState();
@@ -217,10 +217,10 @@
   const srcta = $('search-redo-cta');
   if(srcta) {
     srcta.addEventListener(c, e => {
-      if(q != originalQuery) e.preventDefault(), search(q);
+      if(q != originalQuery) e.preventDefault(), s(q);
     });  
     srcta.addEventListener(u, e => {
-      if(event.code == 'Enter' && q != originalQuery) e.preventDefault(), search(q);
+      if(event.code == 'Enter' && q != originalQuery) e.preventDefault(), s(q);
     });
   }
 
@@ -234,5 +234,5 @@
     });
   }
 
-  function search(q) { window.location.href = '/search?q=' + encodeURI(q); }
+  function s(q) { window.location.href = '/search?q=' + encodeURI(q); }
   </script>

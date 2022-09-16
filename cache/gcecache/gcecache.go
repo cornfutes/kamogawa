@@ -2,11 +2,10 @@ package gcecache
 
 import (
 	"fmt"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"kamogawa/types"
 	"kamogawa/types/gcp/gcetypes"
-
-	"gorm.io/gorm"
 )
 
 func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, error) {
@@ -118,9 +117,13 @@ func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []gcetypes.Projec
 	}
 }
 
-func ReadInstancesCache(db *gorm.DB, projectId string) (*gcetypes.GCEAggregatedInstances, error) {
+func ReadInstancesCache(db *gorm.DB, user types.User, projectId string) (*gcetypes.GCEAggregatedInstances, error) {
 	var gceInstanceDBs []gcetypes.GCEInstanceDB
-	result := db.Where("project_id = ?", projectId).Find(&gceInstanceDBs)
+	result := db.Joins(
+		" INNER JOIN gce_instance_auths"+
+			" ON gce_instance_auths.id = gce_instance_dbs.id"+
+			" AND gce_instance_auths.gmail = ?"+
+			" AND gce_instance_dbs.project_id = ?", user.Gmail.String, projectId).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -145,9 +148,23 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *g
 	}
 
 	gceInstanceDBs := gcetypes.GCEAggregatedInstancesToGCEInstanceDB(user, projectId, resp)
-
 	for _, gceInstanceDB := range gceInstanceDBs {
 		db.FirstOrCreate(&gceInstanceDB)
 	}
 
+	WriteInstancesAuth(db, user, gceInstanceDBs)
+}
+
+func WriteInstancesAuth(db *gorm.DB, user types.User, gceInstanceDBs []gcetypes.GCEInstanceDB) {
+	if len(gceInstanceDBs) == 0 {
+		return
+	}
+
+	instanceAuths := make([]gcetypes.GCEInstanceAuth, 0, len(gceInstanceDBs))
+	for _, v := range gceInstanceDBs {
+		instanceAuths = append(instanceAuths, gcetypes.GCEInstanceAuth{Gmail: user.Gmail.String, Id: v.Id})
+	}
+	for _, v := range instanceAuths {
+		db.FirstOrCreate(&v)
+	}
 }

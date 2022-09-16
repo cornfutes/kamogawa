@@ -22,7 +22,7 @@ var ScopeGCE = "https://www.googleapis.com/auth/compute.readonly"
 
 func GCEListInstances(db *gorm.DB, user types.User, projectId string, useCache bool) (*gcetypes.GCEAggregatedInstances, *gcetypes.ErrorGCEListInstance) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gcecache.ReadInstancesCache(db, projectId)
+		responseSuccess, err := gcecache.ReadInstancesCache(db, user, projectId)
 		if err == nil {
 			return responseSuccess, &gcetypes.ErrorGCEListInstance{}
 		}

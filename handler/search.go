@@ -122,7 +122,7 @@ func getSearchResults(db *gorm.DB, user types.User, q string) []SearchResult {
 		searchResults = append(searchResults, r...)
 	}
 
-	r, err = SearchGCEInstances(db, word)
+	r, err = SearchGCEInstances(db, user, word)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
@@ -142,16 +142,14 @@ func getSearchResults(db *gorm.DB, user types.User, q string) []SearchResult {
 
 func searchProjects(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
 	var projectDBs []gcetypes.ProjectDB
-	result := db.Raw(""+
+	result := db.Raw(
 		" SELECT project_dbs.* "+
-		" FROM ("+
-		"   project_dbs"+
-		"   INNER JOIN project_auths "+
-		"   ON project_auths.project_id = project_dbs.project_id"+
-		"   AND project_auths.gmail = ?"+
-		" ) WHERE (project_dbs.name || ' ' || project_dbs.project_id"+
-		" ILIKE ?)"+
-		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&projectDBs)
+			" FROM project_dbs"+
+			" INNER JOIN project_auths "+
+			" ON project_auths.project_id = project_dbs.project_id"+
+			" AND project_auths.gmail = ?"+
+			" AND (project_dbs.name || ' ' || project_dbs.project_id) ILIKE ?"+
+			" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -178,14 +176,16 @@ func searchProjects(db *gorm.DB, user types.User, q string) ([]SearchResult, err
 	return searchResults, nil
 }
 
-func SearchGCEInstances(db *gorm.DB, q string) ([]SearchResult, error) {
+func SearchGCEInstances(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
 	var gceInstanceDBs []gcetypes.GCEInstanceDB
 	result := db.Raw(""+
-		" SELECT * "+
+		" SELECT gce_instance_dbs.* "+
 		" FROM gce_instance_dbs"+
-		" WHERE name || ' ' || id || ' ' || project_id || ' ' || zone"+
-		" ILIKE ?"+
-		" LIMIT ?", fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gceInstanceDBs)
+		" INNER JOIN gce_instance_auths "+
+		" ON gce_instance_auths.id = gce_instance_dbs.id"+
+		" AND gce_instance_auths.gmail = ?"+
+		" AND (gce_instance_dbs.name || ' ' || gce_instance_dbs.id || ' ' || gce_instance_dbs.project_id || ' ' || gce_instance_dbs.zone) ILIKE ?"+
+		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

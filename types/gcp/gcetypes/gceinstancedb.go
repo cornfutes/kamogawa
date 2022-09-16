@@ -6,6 +6,11 @@ import (
 	"kamogawa/types"
 )
 
+type GCEInstanceAuth struct {
+	Gmail string `gorm:"primaryKey:idx"`
+	Id    string `gorm:"primaryKey:idx"`
+}
+
 type GCEInstanceDB struct {
 	gorm.Model
 	GCEInstance

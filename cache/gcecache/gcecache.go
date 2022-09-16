@@ -45,7 +45,11 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *g
 
 func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, error) {
 	var projectDBs []gcetypes.ProjectDB
-	result := db.Where("gmail = ?", user.Gmail.String).Find(&projectDBs)
+
+	result := db.Joins(
+		" INNER JOIN project_auths "+
+			" ON project_auths.project_id = project_dbs.project_id"+
+			" AND project_auths.gmail = ? ", user.Gmail.String).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -74,18 +78,23 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 	}
 
 	projectDBs := make([]gcetypes.ProjectDB, 0, len(resp.Projects))
-
 	for _, v := range resp.Projects {
-		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Gmail.String, &v, true))
+		projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(&v, true))
 	}
 	for _, projectDB := range projectDBs {
 		db.FirstOrCreate(&projectDB)
 	}
+
+	WriteProjectsAuth(db, user, resp)
 }
 
 func ReadProjectsCache2(db *gorm.DB, user types.User) []gcetypes.ProjectDB {
 	var projectDBs []gcetypes.ProjectDB
-	result := db.Where("gmail = ?", user.Gmail.String).Find(&projectDBs)
+
+	result := db.Joins(
+		" INNER JOIN project_auths "+
+			" ON project_auths.project_id = project_dbs.project_id"+
+			" AND project_auths.gmail = ? ", user.Gmail.String).Find(&projectDBs)
 	if result.Error != nil {
 		panic("Query failed")
 	}
@@ -107,5 +116,38 @@ func WriteProjectsCache2(db *gorm.DB, user types.User, projects []gcetypes.Proje
 		db.Clauses(clause.OnConflict{
 			UpdateAll: true,
 		}).Create(&projectDB)
+	}
+
+	WriteProjectsAuth2(db, user, projects)
+}
+
+func WriteProjectsAuth(db *gorm.DB, user types.User, resp *gcetypes.ListProjectResponse) {
+	if resp == nil {
+		panic("Unexpected list of projects")
+	}
+	if len(resp.Projects) == 0 {
+		return
+	}
+
+	projectAuths := make([]gcetypes.ProjectAuth, 0, len(resp.Projects))
+	for _, v := range resp.Projects {
+		projectAuths = append(projectAuths, gcetypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
+	}
+	for _, v := range projectAuths {
+		db.FirstOrCreate(&v)
+	}
+}
+
+func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []gcetypes.ProjectDB) {
+	if len(projects) == 0 {
+		return
+	}
+
+	projectAuths := make([]gcetypes.ProjectAuth, 0, len(projects))
+	for _, v := range projects {
+		projectAuths = append(projectAuths, gcetypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
+	}
+	for _, v := range projectAuths {
+		db.FirstOrCreate(&v)
 	}
 }

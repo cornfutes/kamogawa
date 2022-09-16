@@ -53,7 +53,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			}
 			projectDBs = make([]gcetypes.ProjectDB, 0, len(responseSuccess.Projects))
 			for _, p := range responseSuccess.Projects {
-				projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(user.Gmail.String, &p, true))
+				projectDBs = append(projectDBs, gcetypes.ProjectToProjectDB(&p, true))
 			}
 			fmt.Printf("len %v\n", projectDBs)
 		}

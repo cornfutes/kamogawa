@@ -19,6 +19,7 @@ func InitDB(url string) *gorm.DB {
 
 	db.AutoMigrate(
 		&types.User{},
+		&gcetypes.ProjectAuth{},
 		&gcetypes.ProjectDB{},
 		&gcetypes.GCEInstanceDB{},
 		&gaetypes.GAEServiceDB{},

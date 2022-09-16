@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"kamogawa/core"
 	"kamogawa/identity"
+	"kamogawa/types"
 	"kamogawa/types/gcp/gaetypes"
 	"kamogawa/types/gcp/gcetypes"
 	"strings"
@@ -23,6 +24,7 @@ type SearchResult struct {
 }
 
 const SERPPageSize = 10
+const resultLimit = 50
 const minQueryLength int = 1
 const minQueryError string = "Query must be 4 characters or more."
 const maxQueryLength int = 80
@@ -31,7 +33,8 @@ const maxQueryError string = "Query must be 80 characters or less."
 func Search(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		user := identity.CheckSessionForUser(c, db)
-		if user.AccessToken == nil {
+		// TODO: Handle non-GCP users
+		if user.AccessToken == nil || !user.Gmail.Valid {
 			core.HTMLWithGlobalState(c, "search.html", gin.H{
 				"Unauthorized": true,
 			})
@@ -47,7 +50,7 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 		}
 
 		start := time.Now()
-		allSearchResults := getSearchResults(db, q)
+		allSearchResults := getSearchResults(db, user, q)
 		duration := time.Since(start)
 		var results []SearchResult
 		if len(allSearchResults) > SERPPageSize {
@@ -108,13 +111,13 @@ func queryIsRegex(q string) bool {
 	return isRegex
 }
 
-func getSearchResults(db *gorm.DB, q string) []SearchResult {
+func getSearchResults(db *gorm.DB, user types.User, q string) []SearchResult {
 	var searchResults []SearchResult
 
 	// TODO: renable multiworld. duplicate results
 	word := strings.Fields(q)[0]
 	// for _, word := range strings.Fields(q) {
-	r, err := searchProjects(db, word)
+	r, err := searchProjects(db, user, word)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
@@ -137,15 +140,18 @@ func getSearchResults(db *gorm.DB, q string) []SearchResult {
 	return searchResults
 }
 
-func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
+func searchProjects(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
 	var projectDBs []gcetypes.ProjectDB
 	result := db.Raw(""+
-		" SELECT * "+
-		" FROM project_dbs"+
-		" WHERE (name || ' ' || project_id"+
+		" SELECT project_dbs.* "+
+		" FROM ("+
+		"   project_dbs"+
+		"   INNER JOIN project_auths "+
+		"   ON project_auths.project_id = project_dbs.project_id"+
+		"   AND project_auths.gmail = ?"+
+		" ) WHERE (project_dbs.name || ' ' || project_dbs.project_id"+
 		" ILIKE ?)"+
-		" AND email = 'null@hackernews.com'"+
-		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
+		" LIMIT ?", user.Gmail.String, fmt.Sprintf("%%%v%%", q), resultLimit).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -179,7 +185,7 @@ func SearchGCEInstances(db *gorm.DB, q string) ([]SearchResult, error) {
 		" FROM gce_instance_dbs"+
 		" WHERE name || ' ' || id || ' ' || project_id || ' ' || zone"+
 		" ILIKE ?"+
-		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&gceInstanceDBs)
+		" LIMIT ?", fmt.Sprintf("%%%v%%", q), resultLimit).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -213,7 +219,7 @@ func searchGAEServices(db *gorm.DB, q string) ([]SearchResult, error) {
 		" FROM gae_service_dbs"+
 		" WHERE name || ' ' || id || ' ' || project_id"+
 		" ILIKE ?"+
-		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&results)
+		" LIMIT ?", fmt.Sprintf("%%%v%%", q), resultLimit).Find(&results)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -248,7 +254,7 @@ func searchGAEVersions(db *gorm.DB, q string) ([]SearchResult, error) {
 		" FROM gae_version_dbs"+
 		" WHERE id "+
 		" ILIKE ?"+
-		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&x)
+		" LIMIT ?", fmt.Sprintf("%%%v%%", q), resultLimit).Find(&x)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

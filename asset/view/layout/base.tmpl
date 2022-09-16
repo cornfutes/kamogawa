@@ -56,33 +56,33 @@
     </ul>
   </footer>
 <script>
-let d = document,
-    $ = l => d.getElementById(l),
-   rm = (l, c) => $(l).classList.remove(c),
-   ad = (l, c) => $(l).classList.add(c),
-  rm2 = (l, c) => l.classList.remove(c),
-  ad2 = (l, c) => l.classList.add(c),
-    j = false,
-    c = 'click',
-    u = 'keyup',
-    k = 'Enter',
-    z = 'addEventListener',
-    p = 'preventDefault',
-   si = $('search-input'),
-   sb = $('search-box');
-   tn = $('top-nav'),
-   m  = $('main'),
-   l  = $('logo'),
-   ss = $('search-start'),
-    q = '',
-    s = q => window.location.href = `/search?q=${encodeURI(q)}`;
+let $d = document,
+     $ = l => d.getElementById(l),
+    rm = (l, c) => $(l).classList.remove(c),
+    ad = (l, c) => $(l).classList.add(c),
+   rm2 = (l, c) => l.classList.remove(c),
+   ad2 = (l, c) => l.classList.add(c),
+     j = false,
+     c = 'click',
+     u = 'keyup',
+     k = 'Enter',
+     z = 'addEventListener',
+     p = 'preventDefault',
+    $i = $('search-input'),
+    $s = $('search-box');
+    $t = $('top-nav'),
+    $m = $('main'),
+    $l = $('logo'),
+    $a = $('search-start'),
+     q = '',
+     s = q => window.location.href = `/search?q=${encodeURI(q)}`;
     
-function   fo() { j=true ; rm2(sb, '👻'); ad2(tn, '👻'); ad2(m, '🌃'); ad2(l, '🌃'); if(q && q.length > 0) si.value= q; si.focus(); }
-function defo() { j=false; ad2(sb, '👻'); rm2(tn, '👻'); rm2(m, '🌃'); rm2(l, '🌃');                       si.value=''; }
+function   fo() { j=true ; rm2($s, '👻'); ad2($t, '👻'); ad2($m, '🌃'); ad2($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
+function defo() { j=false; ad2($s, '👻'); rm2($t, '👻'); rm2($m, '🌃'); rm2($l, '🌃');                       $i.value=''; }
 
-if(ss) {
-  ss[z](c, fo);
-  ss[z](u, e => {
+if($a) {
+  $a[z](c, fo);
+  $a[z](u, e => {
     if (e.code == k) {
       e[p]();
       fo();
@@ -92,7 +92,7 @@ if(ss) {
 
 d[z](u, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
 
-si[z](u, e => {
+$i[z](u, e => {
   if(!j) return;
   if (e.code == 'Escape') e[p](), defo();
   else if (e.code == k) {
@@ -121,7 +121,7 @@ let           sqb = false,
             elSoq = $('search-original-query'),
               $r  = $('s-b-r'), 
         elSrctaId = 'search-redo-cta',
-            srcta = $(elSrctaId),
+              $re = $(elSrctaId),
            elQbId = 'query-builder',
             elHId = 'search-header', 
                dd = 'down',
@@ -185,13 +185,13 @@ r[z](u, e => {
     rm2($r, '🥷');
   }
 });
-srcta[z](c, e => {
+$re[z](c, e => {
   if(q != o) {
     e[p]();
     s(q);  
   }
 });
-srcta[z](u, e => e.code == k && q != o && e[p]() && s(q));
+$re[z](u, e => e.code == k && q != o && e[p]() && s(q));
 {{end}}
 
 const lnl = d.querySelectorAll('.left-nav-link');

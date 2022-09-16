@@ -633,6 +633,7 @@ table {
   font-family: sans-serif;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   border-top: 1px solid #484b45;
+  min-width: 675px;
 }
 
 thead tr {
@@ -944,6 +945,10 @@ h5.truncate {
     bottom: 80px;
     width: 350px;
   }
+
+  table {
+    min-width: 560px;
+  }
 }
 
 
@@ -1002,6 +1007,10 @@ h5.truncate {
   #landing-cloud-partners {
     width: 450px;
     margin: 0;
+  }
+
+  table {
+    min-width: 410px;
   }
 }
 
@@ -1062,5 +1071,9 @@ h5.truncate {
   #landing-cloud-partners {
     width: 350px;
     margin: 0;
+  }
+
+  table {
+    min-width: 310px;
   }
 }

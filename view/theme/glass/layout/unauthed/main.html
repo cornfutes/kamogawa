@@ -1,8 +1,17 @@
 {{define "main"}}
 <div class="wrapper">
-  <div class="content-wrapper">
-    {{template "page" .html}}
+  <div class="main-container">
+    <div class="main-header">
+      <a class="menu-link-main" href="#">Search results</a>
+      <!-- <div class="header-menu">
+        <a class="main-header-link is-active" href="#">Desktop</a>
+        <a class="main-header-link" href="#">Mobile</a>
+        <a class="main-header-link" href="#">Web</a>
+      </div> -->
+    </div>
+    <div class="content-wrapper">
+      {{template "page" .}}
+    </div>
   </div>
-</div> <!-- end main -->
-
+</div>
 {{end}}

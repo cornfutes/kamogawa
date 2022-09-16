@@ -148,15 +148,15 @@ function reset() {
   ad2($r, '🥷');
   elSoq.innerText = '';
 }
-function updateQuery(tk = []) {
-  if(f[0] != "all") tk.push("provider:" + f[0]);
-  if(f[1] != "substring") tk.push("algo:" + f[1]);
-  if(f[2] != "lastmonth") tk.push("time:" + f[2]);
-  if(tk.length == 0) {
-    r.value = r.value.split(":::")[0].trim()
-    if(r.value == o) reset();
-  } else {
-    q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
+function change(e, i) { 
+  f[i] = e.target.value; 
+
+  let tk = [];
+  if(f[0] != "all"      ) tk.push("provider:" + f[0]);
+  if(f[1] != "substring") tk.push(    "algo:" + f[1]);
+  if(f[2] != "lastmonth") tk.push(    "time:" + f[2]);
+  if(tk.length) {
+   q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
     if (q == o) {
       r.value = o;
       reset();
@@ -167,9 +167,12 @@ function updateQuery(tk = []) {
       rm(elSrctaId, '⚡');
       rm2($r, '🥷');
     }
+   
+  } else {
+    r.value = r.value.split(":::")[0].trim();
+    if(r.value == o) reset();
   }
 }
-function change(e, i) { f[i] = e.target.value, updateQuery() }
 r[z](u, e => {
   e[p]();
   if(e.code == 'Enter') s(e.target.value);

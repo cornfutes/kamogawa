@@ -2,14 +2,14 @@ package handler
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"kamogawa/core"
+	"kamogawa/identity"
 	"kamogawa/types/gcp/gaetypes"
 	"kamogawa/types/gcp/gcetypes"
 	"strings"
 	"time"
-
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type SearchResult struct {
@@ -23,19 +23,103 @@ type SearchResult struct {
 }
 
 const SERPPageSize = 10
+const minQueryLength int = 1
+const minQueryError string = "Query must be 4 characters or more."
+const maxQueryLength int = 80
+const maxQueryError string = "Query must be 80 characters or less."
 
-func getRealData(db *gorm.DB, q string) []SearchResult {
+func Search(db *gorm.DB) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		user := identity.CheckSessionForUser(c, db)
+		if user.AccessToken == nil {
+			core.HTMLWithGlobalState(c, "search.html", gin.H{
+				"Unauthorized": true,
+			})
+			return
+		}
+		identity.CheckDBAndRefreshToken(c, user, db)
+
+		originalQ := c.Query("q")
+		q := strings.Split(originalQ, ":::")[0]
+
+		if !validateQuery(c, q) {
+			return
+		}
+
+		start := time.Now()
+		allSearchResults := getSearchResults(db, q)
+		duration := time.Since(start)
+		var results []SearchResult
+		if len(allSearchResults) > SERPPageSize {
+			results = allSearchResults[:SERPPageSize]
+		} else {
+			results = allSearchResults
+		}
+		numTotalResults := len(allSearchResults)
+		core.HTMLWithGlobalState(c, "search.html", gin.H{
+			"HasFilter":         originalQ != q,
+			"Error":             nil,
+			"IsRegex":           queryIsRegex(q),
+			"Query":             originalQ,
+			"HasResults":        results != nil,
+			"Results":           results,
+			"CountTotalResults": numTotalResults,
+			"Duration":          duration,
+			"IsSearch":          "yes",
+		})
+	}
+}
+
+func validateQuery(c *gin.Context, q string) bool {
+	if len(q) < minQueryLength {
+		core.HTMLWithGlobalState(c, "search.html", gin.H{
+			"Error":      minQueryError,
+			"Query":      q,
+			"HasResults": false,
+			"Results":    nil,
+			"IsSearch":   "yes",
+		})
+		return false
+	}
+	if len(q) > maxQueryLength {
+		core.HTMLWithGlobalState(c, "search.html", gin.H{
+			"Error":      maxQueryError,
+			"Query":      q,
+			"HasResults": false,
+			"Results":    nil,
+			"IsSearch":   "yes",
+		})
+		return false
+	}
+
+	return true
+}
+
+// For displaying warning that we ignore regex right now.
+func queryIsRegex(q string) bool {
+	isRegex := false
+	for i := 0; i < len(q); i++ {
+		char := string(q[i])
+		if char == "*" || char == "\\" || char == "." || char == "+" || char == "^" || char == "[" || char == "]" {
+			isRegex = true
+			break
+		}
+	}
+	return isRegex
+}
+
+func getSearchResults(db *gorm.DB, q string) []SearchResult {
 	var searchResults []SearchResult
 
 	// TODO: renable multiworld. duplicate results
 	word := strings.Fields(q)[0]
 	// for _, word := range strings.Fields(q) {
-	r, err := SearchInstances(db, word)
+	r, err := searchProjects(db, word)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
 
-	r, err = searchProjects(db, word)
+	r, err = SearchGCEInstances(db, word)
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
@@ -123,7 +207,7 @@ func searchGAEVersions(db *gorm.DB, q string) ([]SearchResult, error) {
 
 }
 
-func SearchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
+func SearchGCEInstances(db *gorm.DB, q string) ([]SearchResult, error) {
 	var gceInstanceDBs []gcetypes.GCEInstanceDB
 	result := db.Raw(""+
 		" SELECT * "+
@@ -190,80 +274,4 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 	}
 
 	return searchResults, nil
-}
-
-var minQueryLength int = 1
-var minQueryError string = "Query must be 4 characters or more."
-var maxQueryLength int = 80
-var maxQueryError string = "Query must be 80 characters or less."
-
-func Search(db *gorm.DB) func(c *gin.Context) {
-	return func(c *gin.Context) {
-		originalQ := c.Query("q")
-		q := strings.Split(originalQ, ":::")[0]
-
-		if !validateQuery(c, q) {
-			return
-		}
-
-		start := time.Now()
-		allSearchResults := getRealData(db, q)
-		duration := time.Since(start)
-		var results []SearchResult
-		if len(allSearchResults) > SERPPageSize {
-			results = allSearchResults[:SERPPageSize]
-		} else {
-			results = allSearchResults
-		}
-		numTotalResults := len(allSearchResults)
-		core.HTMLWithGlobalState(c, "search.html", gin.H{
-			"HasFilter":         originalQ != q,
-			"Error":             nil,
-			"IsRegex":           queryIsRegex(q),
-			"Query":             originalQ,
-			"HasResults":        results != nil,
-			"Results":           results,
-			"CountTotalResults": numTotalResults,
-			"Duration":          duration,
-			"IsSearch":          "yes",
-		})
-	}
-}
-
-func validateQuery(c *gin.Context, q string) bool {
-	if len(q) < minQueryLength {
-		core.HTMLWithGlobalState(c, "search.html", gin.H{
-			"Error":      minQueryError,
-			"Query":      q,
-			"HasResults": false,
-			"Results":    nil,
-			"IsSearch":   "yes",
-		})
-		return false
-	}
-	if len(q) > maxQueryLength {
-		core.HTMLWithGlobalState(c, "search.html", gin.H{
-			"Error":      maxQueryError,
-			"Query":      q,
-			"HasResults": false,
-			"Results":    nil,
-			"IsSearch":   "yes",
-		})
-		return false
-	}
-
-	return true
-}
-
-// For displaying warning that we ignore regex right now.
-func queryIsRegex(q string) bool {
-	isRegex := false
-	for i := 0; i < len(q); i++ {
-		char := string(q[i])
-		if char == "*" || char == "\\" || char == "." || char == "+" || char == "^" || char == "[" || char == "]" {
-			isRegex = true
-			break
-		}
-	}
-	return isRegex
 }

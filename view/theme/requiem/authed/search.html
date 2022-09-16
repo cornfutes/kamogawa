@@ -36,6 +36,11 @@
     </div>
   </div>
 </div>
+{{if .Unauthorized}}
+<p>
+  You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
+</p>
+{{else}}
 {{if .IsRegex}}
 <p class=🍕>warning: regex is not supported in the demo</p>
 {{end}}
@@ -67,5 +72,6 @@
 </div>
 {{else}}
 <p>No results found</p>
+{{end}}
 {{end}}
 {{end}}

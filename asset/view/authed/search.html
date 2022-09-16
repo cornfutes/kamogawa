@@ -53,7 +53,7 @@
 
 <div class="💪 🪜" style="padding: 10px;">
   {{ range .Results }}
-  <div class="🎴 ">
+  <div class="🎴" style="overflow:hidden">
     <h5 class="truncate">{{.Link}}</h5>
     {{if eq .Product "GCE"}}
     <h3>Compute Engine VM "{{.Name}}"</h3>

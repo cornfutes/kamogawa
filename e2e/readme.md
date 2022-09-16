@@ -14,8 +14,8 @@ When ran, tests performs the following:
 ## Installation 
 
 ```
-$PATH_TO_REPO/playwright $ npm i 
-$PATH_TO_REPO/playwright $ npm i playwright --g
+$PATH_TO_REPO/e2e $ npm i 
+$PATH_TO_REPO/e2e $ npm i playwright --g
 ```
 ## Run 
 

@@ -39,7 +39,7 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) (*ResponseRefreshToken, *ErrorRefre
 	postBody, err := json.Marshal(map[string]string{
 		"client_id":     config.GCPClientId,
 		"client_secret": config.GCPClientSecret,
-		"refresh_token": "1//06Ch0xWOX_kIWCgYIARAAGAYSNgF-L9IrRcMGwxK5-bEVrxNgUrnjS42vSWpgzL4JHZ4mE5WVxkNFyH_sZnhYh1ELaegt4B8z7Q",
+		"refresh_token": "1//06A23GxR9YieFCgYIARAAGAYSNgF-L9IrzYCqn1P9MOMBL4zeJyvXbubJxhrBENOVv-G_QxWPq-VZi8WlErs0GmrfW9a9pHX7oQ",
 		"grant_type":    "refresh_token",
 	})
 	if err != nil {
@@ -72,9 +72,19 @@ func CheckDBAndRefreshToken(c *gin.Context, user types.User, db *gorm.DB) {
 	if time.Since(user.UpdatedAt).Seconds() > 3300 || len(user.AccessToken.String) == 0 {
 		responseRefreshToken, errorRefreshToken := GCPRefresh(c, db)
 		if errorRefreshToken != nil {
+			// The refresh token did not look like a refresh token.
 			if errorRefreshToken.Error == "invalid_grant" && errorRefreshToken.ErrorDescription == "Bad Request" {
-				panic("Invalid refresh token")
+				panic(errorRefreshToken)
 			}
+			// Was a legit refresh token
+			if errorRefreshToken.Error == "invalid_grant" && errorRefreshToken.ErrorDescription == "Token has been expired or revoked." {
+				panic(errorRefreshToken)
+			}
+			// Empty string for refresh token.
+			if errorRefreshToken.Error == "invalid_request" && errorRefreshToken.ErrorDescription == "Missing required parameter: refresh_token" {
+				panic(errorRefreshToken)
+			}
+			panic("Error: '" + errorRefreshToken.Error + "', description: '" + errorRefreshToken.ErrorDescription + "'")
 		}
 		user.AccessToken = &sql.NullString{String: responseRefreshToken.AccessToken, Valid: true}
 		db.Save(&user)

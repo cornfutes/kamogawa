@@ -54,7 +54,7 @@ func GCPListProjects(db *gorm.DB, user types.User, useCache bool) (*types.ListPr
 }
 
 func GCPListProjectsMain(db *gorm.DB, user types.User) (*types.ListProjectResponse, *types.ErrorResponse) {
-	apiProjectsUrl := "https://cloudresourcemanager.googleapis.com/v1/projects"
+	apiProjectsUrl := "https://cloudresourcemanager.googleapis.com/v1/projects?filter=lifecycleState:ACTIVE"
 	log.Printf("User %v\n", user.AccessToken)
 	if !user.AccessToken.Valid {
 		panic("Access Token expected but not found %v\n")

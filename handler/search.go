@@ -96,12 +96,26 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 	return searchResults, nil
 }
 
+var minQueryLength int = 4
+var minQueryError string = "Query must be 4 characters or more."
+var maxQueryLength int = 80
+var maxQueryError string = "Query must be 80 characters or less."
+
 func Search(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		q := c.Query("q")
-		if len(q) < 4 {
+		if len(q) < minQueryLength {
 			core.HTMLWithGlobalState(c, "search.html", gin.H{
-				"Error":      "Query must be 4 or more characters long.",
+				"Error":      minQueryError,
+				"Query":      q,
+				"HasResults": false,
+				"Results":    nil,
+			})
+			return
+		}
+		if len(q) > maxQueryLength {
+			core.HTMLWithGlobalState(c, "search.html", gin.H{
+				"Error":      maxQueryError,
 				"Query":      q,
 				"HasResults": false,
 				"Results":    nil,

@@ -12,7 +12,7 @@ type GAEVersionDB struct {
 	Name          string `json:"name"`
 	Id            string `json:"id",gorm:"primaryKey"`
 	ServingStatus string `json:"servingStatus"`
-	ServiceId     string `json:"id,gorm:"primaryKey"`
+	ParentId      string `json:"id,gorm:"primaryKey"`
 }
 
 type GAEInstanceDB struct {

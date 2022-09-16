@@ -3,6 +3,7 @@ package gaecache
 import (
 	"fmt"
 	"kamogawa/types/gcp/gaetypes"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -101,7 +102,7 @@ func WriteVersionsCache(db *gorm.DB, serviceId string, resp *gaetypes.GAEListVer
 			Name:          v.Id,
 			Id:            v.Name,
 			ServingStatus: v.ServingStatus,
-			ServiceId:     serviceId,
+			ParentId:      strings.Split(v.Name, "/versions/")[0],
 		})
 	}
 

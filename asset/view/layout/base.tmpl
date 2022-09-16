@@ -57,26 +57,25 @@
   </footer>
 <script>
 let $d = document,
-     $ = l => $d.getElementById(l),
     rm = (l, c) => l.classList.remove(c),
     ad = (l, c) => l.classList.add(c),
-     j = false,
+     $ = l => $d.getElementById(l),
+     z = 'addEventListener',
+     p = 'preventDefault',
      c = 'click',
      u = 'keyup',
      k = 'Enter',
-     z = 'addEventListener',
-     p = 'preventDefault',
-    $i = $('search-input'),
-    $s = $('search-box'),
-    $t = $('top-nav'),
+     j = false,
+     q = '',
     $m = $('main'),
     $l = $('logo'),
+    $t = $('top-nav'),
+    $s = $('search-box'),
     $a = $('search-start'),
-     q = '',
-     s = q => window.location.href = `/search?q=${encodeURI(q)}`;
-    
-function   fo() { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
-function defo() { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value=''; }
+    $i = $('search-input'),
+     s = q => window.location.href = `/search?q=${encodeURI(q)}`,
+    fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
+  defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
 
 if($a) {
   $a[z](c, fo);
@@ -94,11 +93,11 @@ $i[z](u, e => {
   if(!j) return;
   if (e.code == 'Escape') e[p](), defo();
   else if (e.code == k) {
-    {{if not .IsLoggedIn}}
-      window.location.href = '/login?error=4';
-    {{else}}
+    {{if .IsLoggedIn}}
       e[p]();
       s($('search-input').value);
+    {{else}}
+      window.location.href = '/login?error=4';
     {{end}}
   } else if (e.code == 'Tab') e[p]();
 });
@@ -112,22 +111,25 @@ const lNav = $("nav-gcp"); if (lNav) {
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
 
 {{if eq .IsSearch "yes" }}
-let           sqb = false,
-                f = ['all', 'substring', 'lastmonth'],
-                r = $("query"),
-              $sm = $('s-mod'),
+ let            f = ['all', 'substring', 'lastmonth'],
             elSoq = $('search-original-query'),
               $qb = $('query-builder'),
               $r  = $('s-b-r'), 
+                r = $("query"),
+              $sm = $('s-mod'),
               $re = $('s-re'),
                $h = $('s-h'),
                dd = 'down',
+              sqb = false,
              o$sm = _ => {
                       if(sqb) ad($sm, dd), ad($qb, "🥷");
                       else    rm($sm, dd), rm($qb, "🥷");
                       sqb = !sqb;
+                    },
+            reset = _ => { 
+                      elSoq.innerText = ''; ad($r, '🥷'); 
+                      rm($h, '⚡'); ad($re, '⚡'); 
                     };
-
 {{if .Query}}q = '{{.Query}}' {{end}};
 o = q || '';
 
@@ -140,12 +142,7 @@ $sm[z](u, e => {
 
 $r[z](c, _ => { r.value = o, reset() });
     
-function reset() {
-  rm($h, '⚡');
-  ad($re, '⚡');
-  ad($r, '🥷');
-  elSoq.innerText = '';
-}
+
 function change(e, i) { 
   f[i] = e.target.value; 
 

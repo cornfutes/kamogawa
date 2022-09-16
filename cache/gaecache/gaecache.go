@@ -111,9 +111,9 @@ func WriteVersionsCache(db *gorm.DB, projectId string, serviceName string, resp 
 	}
 }
 
-func ReadInstancesCache(db *gorm.DB, versionId string) (*gaetypes.GAEListInstancesResponse, error) {
+func ReadInstancesCache(db *gorm.DB, versionName string) (*gaetypes.GAEListInstancesResponse, error) {
 	var instanceDBs []gaetypes.GAEInstanceDB
-	result := db.Where("version_id = ?", versionId).Find(&instanceDBs)
+	result := db.Where("version_id = ?", versionName).Find(&instanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -136,7 +136,7 @@ func ReadInstancesCache(db *gorm.DB, versionId string) (*gaetypes.GAEListInstanc
 	return &gaetypes.GAEListInstancesResponse{Instances: instances}, nil
 }
 
-func WriteInstancesCache(db *gorm.DB, versionId string, resp *gaetypes.GAEListInstancesResponse) {
+func WriteInstancesCache(db *gorm.DB, versionName string, resp *gaetypes.GAEListInstancesResponse) {
 	if resp == nil {
 		panic("Unexpected list of projects")
 	}
@@ -147,7 +147,7 @@ func WriteInstancesCache(db *gorm.DB, versionId string, resp *gaetypes.GAEListIn
 	instanceDBs := make([]gaetypes.GAEInstanceDB, 0, len(resp.Instances))
 
 	for _, v := range resp.Instances {
-		instanceDBs = append(instanceDBs, gaetypes.GAEInstanceDB{Name: v.Id, Id: v.Name, VMName: v.VMName, VersionId: versionId})
+		instanceDBs = append(instanceDBs, gaetypes.GAEInstanceDB{Name: v.Id, Id: v.Name, VMName: v.VMName, VersionId: versionName})
 	}
 
 	for _, instanceDB := range instanceDBs {

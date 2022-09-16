@@ -160,28 +160,28 @@ func GAEListVersionsMain(user types.User, projectId string, serviceName string) 
 }
 
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions.instances/list
-func GAEListInstances(db *gorm.DB, user types.User, projectId string, serviceName string, versionId string, useCache bool) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
+func GAEListInstances(db *gorm.DB, user types.User, projectId string, serviceName string, versionName string, useCache bool) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gaecache.ReadInstancesCache(db, versionId)
+		responseSuccess, err := gaecache.ReadInstancesCache(db, versionName)
 		if err == nil {
 			return responseSuccess, &gaetypes.ErrorAdminAPI{}
 		}
 	}
 
-	responseSuccess, responseError := GAEListInstancesMain(user, projectId, serviceName, versionId)
+	responseSuccess, responseError := GAEListInstancesMain(user, projectId, serviceName, versionName)
 	if responseSuccess == nil {
 		return nil, responseError
 	}
 
 	if config.CacheEnabled {
-		gaecache.WriteInstancesCache(db, versionId, responseSuccess)
+		gaecache.WriteInstancesCache(db, versionName, responseSuccess)
 	}
 
 	return responseSuccess, responseError
 }
 
-func GAEListInstancesMain(user types.User, projectId string, serviceName string, versionId string) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
-	apiAdminApiUrl := "https://appengine.googleapis.com/v1/apps/" + projectId + "/services/" + serviceName + "/versions/" + versionId + "/instances"
+func GAEListInstancesMain(user types.User, projectId string, serviceName string, versionName string) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
+	apiAdminApiUrl := "https://appengine.googleapis.com/v1/apps/" + projectId + "/services/" + serviceName + "/versions/" + versionName + "/instances"
 	var bearer = "Bearer " + user.AccessToken.String
 	fmt.Printf("Token %v\n", bearer)
 

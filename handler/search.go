@@ -57,7 +57,8 @@ func SearchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
 		" SELECT * "+
 		" FROM gce_instance_dbs"+
 		" WHERE name || ' ' || id || ' ' || project_id || ' ' || zone"+
-		" ILIKE ?", fmt.Sprintf("%%%v%%", q)).Find(&gceInstanceDBs)
+		" ILIKE ?"+
+		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&gceInstanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -90,7 +91,8 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 		" SELECT * "+
 		" FROM project_dbs"+
 		" WHERE name || ' ' || project_id || ' ' || project_number"+
-		" ILIKE ?", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
+		" ILIKE ?"+
+		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

@@ -148,24 +148,29 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 			})
 			return
 		}
-		isRegex := false
-		for i := 0; i < len(q); i++ {
-			char := string(q[i])
-			if char == "*" || char == "\\" || char == "." || char == "+" || char == "^" || char == "[" || char == "]" {
-				isRegex = true
-				break
-			}
-		}
 
 		searchResults := getRealData(db, q)
 
 		core.HTMLWithGlobalState(c, "search.html", gin.H{
 			"HasFilter":  originalQ != q,
 			"Error":      nil,
-			"IsRegex":    isRegex,
+			"IsRegex":    queryIsRegex(q),
 			"Query":      originalQ,
 			"HasResults": searchResults != nil,
 			"Results":    searchResults,
 		})
 	}
+}
+
+// For displaying warning that we ignore regex right now.
+func queryIsRegex(q string) bool {
+	isRegex := false
+	for i := 0; i < len(q); i++ {
+		char := string(q[i])
+		if char == "*" || char == "\\" || char == "." || char == "+" || char == "^" || char == "[" || char == "]" {
+			isRegex = true
+			break
+		}
+	}
+	return isRegex
 }

@@ -74,7 +74,7 @@ func main() {
 		authed.GET("release.txt", asset.TXT(asset.Release))
 
 		// ******** Begin left nav
-		authed.GET("/search", handler.Search)
+		authed.GET("/search", handler.Search(db))
 
 		authed.GET("/overview", handler.Overview(db))
 		authed.GET("/gce", handler.GCE(db))

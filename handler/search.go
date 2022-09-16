@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"fmt"
 	"kamogawa/core"
+	"kamogawa/types"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type SearchResult struct {
@@ -25,22 +28,87 @@ func getFakeData(q string) []SearchResult {
 }
 
 // TODO(david): implement
-func getRealData(q string) []SearchResult {
+func getRealData(db *gorm.DB, q string) []SearchResult {
+	var searchResults []SearchResult
+	fmt.Printf("david1 %v\n", searchResults)
+	r, err := searchInstances(db, q)
+	if err == nil {
+		searchResults = append(searchResults, r...)
+	}
+	fmt.Printf("david2 %v\n", searchResults)
 
-	return nil
+	r, err = searchProjects(db, q)
+	if err == nil {
+		searchResults = append(searchResults, r...)
+	}
+	fmt.Printf("david3 %v\n", searchResults)
+
+	return searchResults
 }
 
-func Search(c *gin.Context) {
-	q := c.Query("q")
-
-	searchResults := getRealData(q)
-	if searchResults == nil {
-		searchResults = getFakeData(q)
+func searchInstances(db *gorm.DB, q string) ([]SearchResult, error) {
+	var gceInstanceDBs []types.GCEInstanceDB
+	result := db.Raw(""+
+		" SELECT * "+
+		" FROM gce_instance_dbs"+
+		" WHERE name || ' ' || id || ' ' || project_id || ' ' || zone"+
+		" ILIKE ?", fmt.Sprintf("%%%v%%", q)).Find(&gceInstanceDBs)
+	if result.Error != nil {
+		fmt.Printf("Query failed\n")
+		return nil, fmt.Errorf("Query failed")
 	}
 
-	// Renders HTML
-	core.HTMLWithGlobalState(c, "search.html", gin.H{
-		"Query":   q,
-		"Results": searchResults,
-	})
+	if len(gceInstanceDBs) == 0 {
+		fmt.Printf("No results found\n")
+		return nil, fmt.Errorf("No results found")
+	}
+
+	searchResults := make([]SearchResult, 0, len(gceInstanceDBs))
+	for _, v := range gceInstanceDBs {
+		searchResults = append(searchResults, SearchResult{Text: v.ToSearchString(), Link: v.ToLink()})
+	}
+
+	return searchResults, nil
+}
+
+func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
+	var projectDBs []types.ProjectDB
+	result := db.Raw(""+
+		" SELECT * "+
+		" FROM project_dbs"+
+		" WHERE name || ' ' || project_id || ' ' || project_number"+
+		" ILIKE ?", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
+	if result.Error != nil {
+		fmt.Printf("Query failed\n")
+		return nil, fmt.Errorf("Query failed")
+	}
+
+	if len(projectDBs) == 0 {
+		fmt.Printf("No results found\n")
+		return nil, fmt.Errorf("No results found")
+	}
+
+	searchResults := make([]SearchResult, 0, len(projectDBs))
+	for _, v := range projectDBs {
+		searchResults = append(searchResults, SearchResult{Text: v.ToSearchString(), Link: v.ToLink()})
+	}
+
+	return searchResults, nil
+}
+
+func Search(db *gorm.DB) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		q := c.Query("q")
+
+		searchResults := getRealData(db, q)
+		if searchResults == nil {
+			searchResults = getFakeData(q)
+		}
+
+		// Renders HTML
+		core.HTMLWithGlobalState(c, "search.html", gin.H{
+			"Query":   q,
+			"Results": searchResults,
+		})
+	}
 }

@@ -156,7 +156,7 @@ function change(e, i) {
   if(f[1] != "substring") tk.push(    "algo:" + f[1]);
   if(f[2] != "lastmonth") tk.push(    "time:" + f[2]);
   if(tk.length) {
-   q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
+    q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
     if (q == o) {
       r.value = o;
       reset();
@@ -167,7 +167,6 @@ function change(e, i) {
       rm(elSrctaId, '⚡');
       rm2($r, '🥷');
     }
-   
   } else {
     r.value = r.value.split(":::")[0].trim();
     if(r.value == o) reset();

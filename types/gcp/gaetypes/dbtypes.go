@@ -40,6 +40,6 @@ func (in *GAEVersionDB) ToSearchString() string {
 func (in *GAEVersionDB) ToLink() string {
 	var parentPath = strings.Split(in.ParentId, "/services/")
 	var projectId = strings.Split(parentPath[0], "apps/")[1]
-	var serviceId = parentPath[1]
-	return fmt.Sprintf("https://console.cloud.google.com/appengine/versions?serviceId=%v&project=%v", serviceId, projectId)
+	var serviceName = parentPath[1]
+	return fmt.Sprintf("https://console.cloud.google.com/appengine/versions?serviceId=%v&project=%v", serviceName, projectId)
 }

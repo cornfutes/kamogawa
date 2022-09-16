@@ -61,9 +61,9 @@ func WriteServicesCache(db *gorm.DB, projectId string, resp *gaetypes.GAEListSer
 	}
 }
 
-func ReadVersionsCache(db *gorm.DB, projectId string, serviceId string) (*gaetypes.GAEListVersionsResponse, error) {
+func ReadVersionsCache(db *gorm.DB, projectId string, serviceName string) (*gaetypes.GAEListVersionsResponse, error) {
 	var versionDBs []gaetypes.GAEVersionDB
-	result := db.Where("parent_id = ?", fmt.Sprintf("apps/%v/services/%v", projectId, serviceId)).Find(&versionDBs)
+	result := db.Where("parent_id = ?", fmt.Sprintf("apps/%v/services/%v", projectId, serviceName)).Find(&versionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -87,7 +87,7 @@ func ReadVersionsCache(db *gorm.DB, projectId string, serviceId string) (*gaetyp
 	return &gaetypes.GAEListVersionsResponse{Versions: versions}, nil
 }
 
-func WriteVersionsCache(db *gorm.DB, projectId string, serviceId string, resp *gaetypes.GAEListVersionsResponse) {
+func WriteVersionsCache(db *gorm.DB, projectId string, serviceName string, resp *gaetypes.GAEListVersionsResponse) {
 	if resp == nil {
 		panic("Unexpected list of projects")
 	}

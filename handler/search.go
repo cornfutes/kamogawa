@@ -37,28 +37,29 @@ func getFakeData(q string) []SearchResult {
 func getRealData(db *gorm.DB, q string) []SearchResult {
 	var searchResults []SearchResult
 
-	// This will be buggy. duplicate results?
-	for _, word := range strings.Fields(q) {
-		r, err := SearchInstances(db, word)
-		if err == nil {
-			searchResults = append(searchResults, r...)
-		}
-
-		r, err = searchProjects(db, word)
-		if err == nil {
-			searchResults = append(searchResults, r...)
-		}
-
-		r, err = searchGAEServices(db, word)
-		if err == nil {
-			searchResults = append(searchResults, r...)
-		}
-
-		r, err = searchGAEVersions(db, word)
-		if err == nil {
-			searchResults = append(searchResults, r...)
-		}
+	// TODO: renable multiworld. duplicate results
+	word := strings.Fields(q)[0]
+	// for _, word := range strings.Fields(q) {
+	r, err := SearchInstances(db, word)
+	if err == nil {
+		searchResults = append(searchResults, r...)
 	}
+
+	r, err = searchProjects(db, word)
+	if err == nil {
+		searchResults = append(searchResults, r...)
+	}
+
+	r, err = searchGAEServices(db, word)
+	if err == nil {
+		searchResults = append(searchResults, r...)
+	}
+
+	r, err = searchGAEVersions(db, word)
+	if err == nil {
+		searchResults = append(searchResults, r...)
+	}
+	// }
 	return searchResults
 }
 
@@ -173,7 +174,7 @@ func searchProjects(db *gorm.DB, q string) ([]SearchResult, error) {
 		" FROM project_dbs"+
 		" WHERE (name || ' ' || project_id || ' ' || project_number"+
 		" ILIKE ?)"+
-		" AND email = '1337gamer@gmail.com'"+
+		" AND email = 'null@hackernews.com'"+
 		" LIMIT 50", fmt.Sprintf("%%%v%%", q)).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")

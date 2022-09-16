@@ -85,7 +85,7 @@ func main() {
 
 	authed := r.Group("/", identity.GateAuth())
 	{
-		authed.GET("release.txt", asset.TXT(asset.Release))
+		authed.GET("release.txt", asset.Data(asset.MimeTypeTXT, asset.Release))
 
 		authed.GET("/glass_sample", func(c *gin.Context) {
 			core.HTMLWithGlobalState(c, "glass_sample.html", gin.H{})

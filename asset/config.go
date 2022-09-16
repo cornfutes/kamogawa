@@ -14,6 +14,18 @@ import (
 	minifyCss "github.com/tdewolff/minify/css"
 )
 
+type MimeType string
+
+const (
+	MimeTypeMP4 MimeType = "video/mp4"
+	MimeTypeTXT MimeType = "text/plain; charset=utf-8"
+	MimeTypePNG MimeType = "image/png"
+	MimeTypeCSS MimeType = "text/css; charset=utf-8"
+	MimeTypeJPG MimeType = "image/jpg"
+	MimeTypeGIF MimeType = "image/gif"
+	MimeTypeSVG MimeType = "image/svg+xml"
+)
+
 var (
 	//go:embed media/style.css
 	styleCss    []byte
@@ -98,33 +110,33 @@ func Config(r *gin.Engine) {
 		r.StaticFile("/style.css", "asset/media/style.css")
 		r.StaticFile("/style_glass.css", "asset/media/style_glass.css")
 	} else {
-		r.GET("style.css", css(styleCssMin))
+		r.GET("style.css", Data(MimeTypeCSS, styleCssMin))
 	}
-	r.GET("screensaver.mp4", mp4(mp4Screensaver))
-	r.GET("cloud_logo_aws.png", png(pngAWS))
-	r.GET("cloud_logo_gcp.png", png(pngGCP))
-	r.GET("cloud_logo_azure.png", png(pngAzure))
-	r.GET("graphql.png", png(pngGraphQl))
-	r.GET("blog_traffic.gif", gif(pngBlog1))
-	r.GET("blog_search.gif", gif(pngBlog2))
-	r.GET("blog_splash.jpg", jpg(pngBlog3))
-	r.GET("blog_login_error.gif", gif(pngBlog4))
-	r.GET("blog_simple.gif", png(pngBlog5))
-	r.GET("blog_widget.gif", png(pngBlog6))
-	r.GET("blog_docker.gif", gif(pngBlog7))
+	r.GET("screensaver.mp4", Data(MimeTypeMP4, mp4Screensaver))
+	r.GET("cloud_logo_aws.png", Data(MimeTypePNG, pngAWS))
+	r.GET("cloud_logo_gcp.png", Data(MimeTypePNG, pngGCP))
+	r.GET("cloud_logo_azure.png", Data(MimeTypePNG, pngAzure))
+	r.GET("graphql.png", Data(MimeTypePNG, pngGraphQl))
+	r.GET("blog_traffic.gif", Data(MimeTypeGIF, pngBlog1))
+	r.GET("blog_search.gif", Data(MimeTypeGIF, pngBlog2))
+	r.GET("blog_splash.jpg", Data(MimeTypeJPG, pngBlog3))
+	r.GET("blog_login_error.gif", Data(MimeTypeGIF, pngBlog4))
+	r.GET("blog_simple.gif", Data(MimeTypePNG, pngBlog5))
+	r.GET("blog_widget.gif", Data(MimeTypePNG, pngBlog6))
+	r.GET("blog_docker.gif", Data(MimeTypeGIF, pngBlog7))
 
-	r.GET("splash_landing.gif", gif(splashLanding))
-	r.GET("splash_fuji.gif", gif(splashFuji))
-	r.GET("splash_ship.gif", gif(splashShip))
-	r.GET("console.svg", svg(console))
-	r.GET("phone.svg", svg(phone))
-	r.GET("consent.png", png(consent))
-	r.GET("legal.txt", TXT(legal))
-	r.GET("security.txt", TXT(security))
-	r.GET("about.txt", TXT(about))
-	r.GET("api.txt", TXT(api))
-	r.GET("nft.gif", gif(gifProfile))
-	r.GET("big_sur.jpg", jpg(jpgBigSur))
+	r.GET("splash_landing.gif", Data(MimeTypeGIF, splashLanding))
+	r.GET("splash_fuji.gif", Data(MimeTypeGIF, splashFuji))
+	r.GET("splash_ship.gif", Data(MimeTypeGIF, splashShip))
+	r.GET("console.svg", Data(MimeTypeSVG, console))
+	r.GET("phone.svg", Data(MimeTypeSVG, phone))
+	r.GET("consent.png", Data(MimeTypePNG, consent))
+	r.GET("legal.txt", Data(MimeTypeTXT, legal))
+	r.GET("security.txt", Data(MimeTypeTXT, security))
+	r.GET("about.txt", Data(MimeTypeTXT, about))
+	r.GET("api.txt", Data(MimeTypeTXT, api))
+	r.GET("nft.gif", Data(MimeTypeGIF, gifProfile))
+	r.GET("big_sur.jpg", Data(MimeTypeJPG, jpgBigSur))
 
 	// Register static views.
 	for route, file := range staticHtml {
@@ -145,43 +157,14 @@ func preparecss(m *minify.M) {
 	}
 }
 
-func data(mime string, contents []byte) func(c *gin.Context) {
+func Data(mime MimeType, contents []byte) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		a := c.Request.Header["If-None-Match"]
 		if len(a) > 0 && a[0] == etag {
-			c.Data(http.StatusNotModified, mime, []byte{})
+			c.Data(http.StatusNotModified, string(mime), []byte{})
 		} else {
 			c.Header("ETag", etag)
-			c.Data(http.StatusOK, mime, contents)
+			c.Data(http.StatusOK, string(mime), contents)
 		}
 	}
-}
-
-func css(contents []byte) func(c *gin.Context) {
-	// TODO: by default browsers utf-8
-	return data("text/css; charset=utf-8", contents)
-}
-
-func png(contents []byte) func(c *gin.Context) {
-	return data("image/png", contents)
-}
-
-func jpg(contents []byte) func(c *gin.Context) {
-	return data("image/jpg", contents)
-}
-
-func gif(contents []byte) func(c *gin.Context) {
-	return data("image/gif", contents)
-}
-
-func svg(contents []byte) func(c *gin.Context) {
-	return data("image/svg+xml", contents)
-}
-
-func TXT(contents []byte) func(c *gin.Context) {
-	return data("text/plain; charset=utf-8", contents)
-}
-
-func mp4(contents []byte) func(c *gin.Context) {
-	return data("video/mp4", contents)
 }

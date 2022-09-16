@@ -3,7 +3,6 @@ package cache
 import (
 	"fmt"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"kamogawa/types"
 )
 
@@ -35,17 +34,10 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *t
 
 	gceInstanceDBs := types.GCEAggregatedInstancesToGCEInstanceDB(user, projectId, resp)
 
-	result := db.Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(&gceInstanceDBs)
-	if result.Error != nil {
-		fmt.Printf("Batch insert failed, trying individual\n")
-		for _, gceInstanceDB := range gceInstanceDBs {
-			db.Clauses(clause.OnConflict{
-				UpdateAll: true,
-			}).Create(&gceInstanceDB)
-		}
+	for _, gceInstanceDB := range gceInstanceDBs {
+		db.FirstOrCreate(&gceInstanceDB)
 	}
+
 }
 
 func ReadProjectsCache(db *gorm.DB, user types.User) (*types.ListProjectResponse, error) {
@@ -84,15 +76,7 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *types.ListProjectRes
 		projectDBs = append(projectDBs, v.ToProjectDB(user.Email))
 	}
 
-	result := db.Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(&projectDBs)
-	if result.Error != nil {
-		fmt.Printf("Batch insert failed, trying individual\n")
-		for _, projectDB := range projectDBs {
-			db.Clauses(clause.OnConflict{
-				UpdateAll: true,
-			}).Create(&projectDB)
-		}
+	for _, projectDB := range projectDBs {
+		db.FirstOrCreate(&projectDB)
 	}
 }

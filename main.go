@@ -33,7 +33,7 @@ func init() {
 	db = core.InitDB(shimogawaUrl)
 
 	// TODO: remove. for prototyping purposes.
-	db.Create(&types.User{
+	db.FirstOrCreate(&types.User{
 		Email:    "1337gamer@gmail.com",
 		Password: "1234",
 	})

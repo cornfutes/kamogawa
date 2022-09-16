@@ -37,7 +37,6 @@
   </p>
   {{else}}
   <p>
-
     We indexed up to the first 50 Projects and their assets.
     <a href="/plans" class="link_with_arrow">Increase this limit with Premium</a>
   </p>
@@ -63,25 +62,43 @@
     </tr>
     {{ end }}
   </table>
-  <ul style="font-style: italic;">
-    <li>Last indexing occured: {{.LastRunTime}} ago. ( triggered by scheduler ) </li>
-    <li>Next indexing scheduled in: {{.NextRunTime}}. <a href="/plans" class="link_with_arrow">Perform ad-hoc run
-        immediately</a>
-    </li>
-    <li>Indexing schedule every 24 hours.
-      <a href="/plans" class="link_with_arrow">Increase this limit with Premium</a>
-    </li>
-  </ul>
 
   {{else}}
   You don't have any projects.
   {{end}}
   {{end}}
 </div><br />
+
+<h2 class="🍜">Update Project Cache</h2>
+<p>
+  The full-graph traversal / cache invalidation runs on schedule.
+</p>
+<ul style="font-style: italic;">
+  <li>Last indexing occured: {{.LastRunTime}} ago. ( triggered by scheduler ) </li>
+  <li>Next indexing scheduled in: {{.NextRunTime}}.
+    <a href="/plans" class="link_with_arrow">Perform ad-hoc run immediately</a>
+  </li>
+  <li>Indexing schedule every 24 hours.
+    <a href="/plans" class="link_with_arrow">Increase this limit with Premium</a>
+  </li>
+</ul>
+<p>
+  You can manually refresh the cache for individual resources for free.
+</p>
+
+<button><a href="overview?r=true">Refresh Projects</a></button>
+
+<br />
+<br />
+
 <h2 class="🍜">Create a Project</h2> <br />
+
 <a href="https://console.cloud.google.com/projectcreate?authuser=2" class="link_with_arrow">Via GCP Web
   Console</a>
+
+<br />
+<br />
+
+
 </div>
-
-
 {{end}}

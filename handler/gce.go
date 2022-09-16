@@ -18,6 +18,8 @@ import (
 
 func GCE(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
+		useCache := len(c.Query("r")) == 0
+
 		var email, exists = c.Get(identity.IdentityContextkey)
 		if !exists {
 			panic("Unexpected")
@@ -34,7 +36,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		responseSuccess, responseError := gcp.GCPListProjects(db, user)
+		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "gce.html", gin.H{
 				"MissingScopes": true,
@@ -47,7 +49,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			respRefreshtoken := identity.GCPRefresh(c, db)
 			user.AccessToken = &sql.NullString{String: respRefreshtoken.AccessToken, Valid: true}
 			db.Save(&user)
-			responseSuccess, _ = gcp.GCPListProjects(db, user)
+			responseSuccess, _ = gcp.GCPListProjects(db, user, useCache)
 		}
 
 		var projectStrings []types.Project

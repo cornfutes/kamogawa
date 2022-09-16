@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/Jeffail/gabs"
-	"gorm.io/gorm"
 	"io"
 	"io/ioutil"
 	"kamogawa/cache"
@@ -13,6 +11,9 @@ import (
 	"kamogawa/types"
 	"log"
 	"net/http"
+
+	"github.com/Jeffail/gabs"
+	"gorm.io/gorm"
 )
 
 var ScopeGCE = "https://www.googleapis.com/auth/compute.readonly"

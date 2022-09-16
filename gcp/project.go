@@ -33,8 +33,8 @@ import (
 //   }
 // }
 
-func GCPListProjects(db *gorm.DB, user types.User) (*types.ListProjectResponse, *types.ErrorResponse) {
-	if config.CacheEnabled {
+func GCPListProjects(db *gorm.DB, user types.User, useCache bool) (*types.ListProjectResponse, *types.ErrorResponse) {
+	if config.CacheEnabled && useCache {
 		responseSuccess, err := cache.ReadProjectsCache(db, user)
 		if err == nil {
 			return responseSuccess, &types.ErrorResponse{}

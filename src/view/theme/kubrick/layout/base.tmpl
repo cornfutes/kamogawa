@@ -22,43 +22,35 @@
     </svg>
   </div>
   <div class="app">
-    <div class="header">
-      {{if .IsLoggedIn}}
-      <!-- <div class="menu-circle"></div> -->
+    <div class="header 🦠">
       <div class="header-menu">
-        <a class="menu-link" href="/">川</a>
+        <a href="/" style="color: #FF6600">川</a>
+        {{if .IsLoggedIn}}
         <a class="menu-link is-active notify" href="#">GCP</a>
         <a class="menu-link" href="#">AWS</a>
         <a class="menu-link notify" href="#">Azure</a>
+        {{end}}
       </div>
+      {{if .IsLoggedIn}}
       <div class="search-bar">
         <input type="text" placeholder="Type to search..." id="search-bar">
       </div>
-      <div class="header-profile">
-        <div class="profile">
-          <img class="profile-img" src="/static/nft.gif" alt="" id="profile-icon">
-          <div id="profile-dropdown">
-            <ul>
-              <li><a href=account>Account</a></li>
-              <li>
-                <form method=post action=/logout>
-                  <input type=hidden name=name value=value />
-                  <a onclick="this.parentNode.submit();" tabindex=0>Logout</a>
-                </form>
-              </li>
-            </ul>
-          </div>
-        </div>
+      <div>
+        <ul class="🔫 🐼">
+          <li><a href=account>Account</a></li>
+          <li>
+            <form method=post action=/logout>
+              <input type=hidden name=name value=value />
+              <a onclick="this.parentNode.submit();" tabindex=0>Logout</a>
+            </form>
+          </li>
+        </ul>
       </div>
       {{else}}
-      <div class="header-menu">
-        <a class="menu-link" href="/">川</a>
-      </div>
-      <div class="header-profile">
-        <div class="profile">
-          <!-- TODO this is not perfectly aligned with the profile that rplaces it-->
-          <a class="menu-link-main" href="/login">Login</a>
-        </div>
+      <div>
+        <ul class="🔫 🐼">
+          <a href="/login">Login</a>
+        </ul>
       </div>
       {{end}}
     </div> <!-- end header -->

@@ -9,6 +9,7 @@ import (
 	"kamogawa/cache/gcecache"
 	"kamogawa/config"
 	"kamogawa/types"
+	"kamogawa/types/gcp/coretypes"
 	"kamogawa/types/gcp/gcetypes"
 	"log"
 	"net/http"
@@ -34,24 +35,31 @@ import (
 //   }
 // }
 
-func GCPListProjects(db *gorm.DB, user types.User, useCache bool) (*gcetypes.ListProjectResponse, *gcetypes.ErrorResponse) {
+func GCPListProjects(db *gorm.DB, user types.User, useCache bool) ([]coretypes.ProjectDB, *gcetypes.ErrorResponse) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gcecache.ReadProjectsCache(db, user)
-		if err == nil {
-			return responseSuccess, &gcetypes.ErrorResponse{}
-		}
+		projectDBs := gcecache.ReadProjectsCache2(db, user)
+		return projectDBs, nil
 	}
 
 	responseSuccess, responseError := GCPListProjectsMain(db, user)
 	if responseSuccess == nil {
-		return nil, responseError
+		return []coretypes.ProjectDB{}, responseError
+	}
+
+	projectDBs := make([]coretypes.ProjectDB, 0, len(responseSuccess.Projects))
+	for _, v := range responseSuccess.Projects {
+		hasGCEEnabled, responseError := checkHasGCEEnabled(user, v)
+		if responseError.Error.Code == 401 {
+			return []coretypes.ProjectDB{}, responseError
+		}
+		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v, hasGCEEnabled))
 	}
 
 	if config.CacheEnabled {
-		gcecache.WriteProjectsCache(db, user, responseSuccess)
+		gcecache.WriteProjectsCache2(db, user, projectDBs)
 	}
 
-	return responseSuccess, responseError
+	return projectDBs, responseError
 }
 
 func GCPListProjectsMain(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, *gcetypes.ErrorResponse) {
@@ -100,4 +108,51 @@ func GCPListProjectsMain(db *gorm.DB, user types.User) (*gcetypes.ListProjectRes
 	fmt.Printf("response raw %v \n", string(reader1))
 	fmt.Printf("Fetched %v projects\n", len(responseSuccess.Projects))
 	return &responseSuccess, &responseError
+}
+
+func checkHasGCEEnabled(user types.User, project gcetypes.Project) (bool, *gcetypes.ErrorResponse) {
+	url := "https://serviceusage.googleapis.com/v1/projects/" + project.ProjectId + "/services/compute.googleapis.com"
+	log.Printf("User %v\n", user.AccessToken)
+	if !user.AccessToken.Valid {
+		panic("Access Token expected but not found %v\n")
+	}
+	var bearer = "Bearer " + user.AccessToken.String
+
+	fmt.Printf("Token %v\n", bearer)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		panic("Error while making request to project")
+	}
+	req.Header.Add("Authorization", bearer)
+	// Send req using http Client
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("Error on response.\n[ERROR] -", err)
+	}
+	defer resp.Body.Close()
+
+	buf := &bytes.Buffer{}
+	tee := io.TeeReader(resp.Body, buf)
+	reader1, _ := ioutil.ReadAll(tee)
+	reader2, _ := ioutil.ReadAll(buf)
+
+	var responseSuccess gcetypes.ServiceUsageAPIResponse
+	err = json.Unmarshal(reader1, &responseSuccess)
+	if err != nil {
+		panic(err)
+	}
+	var responseError gcetypes.ErrorResponse
+	err = json.Unmarshal(reader2, &responseError)
+	if err != nil {
+		panic(err)
+	}
+	if responseError.Error.Code == 401 {
+		if strings.HasPrefix(responseError.Error.Message, "Request had invalid authentication credentials.") {
+			return false, &responseError
+		}
+	}
+	fmt.Printf("response raw %v \n", string(reader1))
+	return responseSuccess.State == "ENABLED", &responseError
 }

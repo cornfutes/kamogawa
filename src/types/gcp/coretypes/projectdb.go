@@ -41,13 +41,13 @@ func (in *ProjectDB) ToLink() string {
 	return fmt.Sprintf("https://console.cloud.google.com/welcome?project=%v", in.ProjectId)
 }
 
-func ProjectToProjectDB(in *gcetypes.Project, hasGceEnabled bool) ProjectDB {
+func ProjectToProjectDB(in *gcetypes.Project, hasGCEEnabled bool) ProjectDB {
 	var out ProjectDB
 	out.ProjectNumber = in.ProjectNumber
 	out.ProjectId = in.ProjectId
 	out.LifeCycleState = in.LifeCycleState
 	out.Name = in.Name
 	out.CreateTime = in.CreateTime
-	out.HasGCEEnabled = hasGceEnabled
+	out.HasGCEEnabled = hasGCEEnabled
 	return out
 }

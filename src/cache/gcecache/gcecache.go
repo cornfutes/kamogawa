@@ -50,7 +50,6 @@ func ReadProjectsCache2(db *gorm.DB, user types.User) []coretypes.ProjectDB {
 
 	if len(projectDBs) == 0 {
 		fmt.Printf("Cache miss\n")
-		return nil
 	}
 	fmt.Printf("Cache hit\n")
 

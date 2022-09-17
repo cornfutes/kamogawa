@@ -38,6 +38,10 @@ type ErrorResponseError struct {
 	Details []errorResponseErrorDetail `json:"details"`
 }
 
+type ServiceUsageAPIResponse struct {
+	State string `json:"state"`
+}
+
 type ErrorGCEListInstanceErrorError struct {
 	Message string `json:"message"`
 	Domain  string `json:"domain"`

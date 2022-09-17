@@ -40,34 +40,22 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		}
 		fmt.Printf("User %v\n", user)
 
-		start := time.Now()
-		var responseSuccess *gcetypes.ListProjectResponse
-		var projectDBs []coretypes.ProjectDB = nil
-		if config.CacheEnabled && useCache {
-			projectDBs = gcecache.ReadProjectsCache2(db, user)
-		}
-		if projectDBs == nil {
-			var responseError *gcetypes.ErrorResponse
-			responseSuccess, responseError = gcp.GCPListProjectsMain(db, user)
-			if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-				core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
-					"MissingScopes": true,
-					"PageName":      "gcp_gce_overview",
-					"Section":       "gcp",
-				})
-				return
-			}
-			projectDBs = make([]coretypes.ProjectDB, 0, len(responseSuccess.Projects))
-			for _, p := range responseSuccess.Projects {
-				projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&p, true))
-			}
-			fmt.Printf("len %v\n", projectDBs)
+		var start = time.Now()
+
+		projectDBs, responseError := gcp.GCPListProjects(db, user, useCache)
+		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
+			core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
+				"MissingScopes": true,
+				"PageName":      "gcp_gce_overview",
+				"Section":       "gcp",
+			})
+			return
 		}
 
 		var htmlLines []string
-		cachedCalls := 0
-		for i, p := range projectDBs {
-			if !projectDBs[i].HasGCEEnabled {
+		var cachedCalls = 0
+		for _, p := range projectDBs {
+			if !p.HasGCEEnabled {
 				cachedCalls++
 				htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul><li>Compute Engine API has not been enabled on project.</li></ul>")
 				continue

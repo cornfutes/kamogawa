@@ -48,11 +48,7 @@ func GCPListProjects(db *gorm.DB, user types.User, useCache bool) ([]coretypes.P
 
 	projectDBs := make([]coretypes.ProjectDB, 0, len(responseSuccess.Projects))
 	for _, v := range responseSuccess.Projects {
-		hasGCEEnabled, responseError := checkHasGCEEnabled(user, v)
-		if responseError.Error.Code == 401 {
-			return []coretypes.ProjectDB{}, responseError
-		}
-		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v, hasGCEEnabled))
+		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v, checkHasGCEEnabled(user, v)))
 	}
 
 	if config.CacheEnabled {
@@ -110,49 +106,7 @@ func GCPListProjectsMain(db *gorm.DB, user types.User) (*gcetypes.ListProjectRes
 	return &responseSuccess, &responseError
 }
 
-func checkHasGCEEnabled(user types.User, project gcetypes.Project) (bool, *gcetypes.ErrorResponse) {
-	url := "https://serviceusage.googleapis.com/v1/projects/" + project.ProjectId + "/services/compute.googleapis.com"
-	log.Printf("User %v\n", user.AccessToken)
-	if !user.AccessToken.Valid {
-		panic("Access Token expected but not found %v\n")
-	}
-	var bearer = "Bearer " + user.AccessToken.String
-
-	fmt.Printf("Token %v\n", bearer)
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		panic("Error while making request to project")
-	}
-	req.Header.Add("Authorization", bearer)
-	// Send req using http Client
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Println("Error on response.\n[ERROR] -", err)
-	}
-	defer resp.Body.Close()
-
-	buf := &bytes.Buffer{}
-	tee := io.TeeReader(resp.Body, buf)
-	reader1, _ := ioutil.ReadAll(tee)
-	reader2, _ := ioutil.ReadAll(buf)
-
-	var responseSuccess gcetypes.ServiceUsageAPIResponse
-	err = json.Unmarshal(reader1, &responseSuccess)
-	if err != nil {
-		panic(err)
-	}
-	var responseError gcetypes.ErrorResponse
-	err = json.Unmarshal(reader2, &responseError)
-	if err != nil {
-		panic(err)
-	}
-	if responseError.Error.Code == 401 {
-		if strings.HasPrefix(responseError.Error.Message, "Request had invalid authentication credentials.") {
-			return false, &responseError
-		}
-	}
-	fmt.Printf("response raw %v \n", string(reader1))
-	return responseSuccess.State == "ENABLED", &responseError
+func checkHasGCEEnabled(user types.User, project gcetypes.Project) bool {
+	_, responseError := GCEListInstancesMain(user, project.ProjectId)
+	return !(responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Compute Engine API has not been used in project"))
 }

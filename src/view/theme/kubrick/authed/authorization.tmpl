@@ -1,16 +1,8 @@
 {{define "page"}}
 <div class="main-header">
-  <a class="menu-link-main" href="#">Search results</a>
-  <!-- <div class="header-menu">
-    <a class="main-header-link is-active" href="#">Desktop</a>
-    <a class="main-header-link" href="#">Mobile</a>
-    <a class="main-header-link" href="#">Web</a>
-  </div> -->
+  <a class="menu-link-main" href="#">Authorization</a>
 </div>
 <div class="content-wrapper">
-
-  <h2>Authorization</h2>
-  <h3 class="🍜">GCP</h3>
   {{if .GmailExists}}
   <p>
     We've been granted the following OAuth2 scopes for <span style="font-family: monospace; ">{{.Gmail}} </span>
@@ -82,15 +74,5 @@
     scopes (at your own risk). GCP did not properly make certain APIs granular,
     unfortunately.
   </p>
-  <h3 class="🍜">AWS</h3>
-  <p>
-    Disabled in demo. <a href="{{.EapUrl}}">Join Early Access Program.</a>
-  </p>
-
-  <h3 class="🍜">Azure</h3>
-  <p>
-    Disabled in demo. <a href="{{.EapUrl}}">Join Early Access Program.</a>
-  </p>
-
 </div>
 {{end}}

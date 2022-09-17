@@ -12,7 +12,9 @@
   });
 
   $$ = i => document.getElementById(i);
-  l = (el, ev, f) => el.addEventListener(ev, f);
+  l = (el, ev, f) => {
+    if (el) el.addEventListener(ev, f);
+  };
   w = u => window.location.href = u;
   s = q => w(`/search?q=${encodeURI(q)}`)
   elPD = $$('profile-dropdown')

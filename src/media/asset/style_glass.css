@@ -45,7 +45,7 @@ html {
 
 body {
   font-family: var(--body-font);
-  background-image: url(big_sur.jpg);
+  background-image: url(static/big_sur.jpg);
   background-size: cover;
   background-position: center;
   display: flex;

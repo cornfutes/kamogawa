@@ -215,7 +215,7 @@ body.light-mode .video-bg:before {
 }
 
 @media screen and (max-width: 1055px) {
-  .notify {
+  span.menu-link {
     display: none;
   }
 }

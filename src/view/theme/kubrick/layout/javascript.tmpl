@@ -50,6 +50,20 @@
     showSearchCount = !showSearchCount;
   });
 
+  elExportYes = $$('export-csv-yes')
+  elExportNo = $$('export-csv-no')
+  let exportable = false;
+  l($$("export-checkbox-projects"), 'change', e => {
+    exportable = e.target.checked;
+    if (exportable) {
+      elExportYes.classList.remove('ninja');
+      elExportNo.classList.add('ninja');
+    } else {
+      elExportYes.classList.add('ninja');
+      elExportNo.classList.remove('ninja');
+    }
+  });
+
   $(document).click(function (e) {
     var container = $(".status-button");
     var dd = $(".dropdown");

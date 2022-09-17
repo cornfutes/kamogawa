@@ -73,25 +73,5 @@
   <button class="disabled">Download as DuckDB</button>
 </p>
 
-<a href="{{.EapUrl}}" class="link_with_arrow">Request access to our Early Access Program</a>
-
-<script>
-  const checkbox = document.getElementById('download-checkbox-projects')
-
-  checkbox.addEventListener('change', (event) => {
-    if (event.currentTarget.checked) {
-      document.getElementById('download-csv').classList.remove('disabled');
-    } else {
-      document.getElementById('download-csv').classList.add('disabled');
-    }
-  })
-
-  document.getElementById('download-csv').addEventListener('click', e => {
-    if (checkbox.checked) {
-      window.location.href = 'project.csv?t=project';
-    }
-
-  });
-</script>
 
 {{end}}

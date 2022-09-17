@@ -994,10 +994,6 @@ body.light-mode .video-bg:before {
   flex-shrink: 0;
 }
 
-.app-card+.app-card {
-  margin-left: 20px;
-}
-
 .app-card span {
   display: flex;
   align-items: center;
@@ -1289,4 +1285,22 @@ hr {
  }
 .ninja {
   display: none; 
+}
+
+.🎴 h4  {
+  margin: 0 0 5px 0;
+}
+.🎴 h3  {
+  margin: 0;
+}
+.🎴.app-card {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.🎴.app-card .app-card__subtext {
+  margin: 0;
+  padding-bottom: 2px;
+}
+.🎴.app-card .app-card__content {
+  margin-top: 2px;
 }

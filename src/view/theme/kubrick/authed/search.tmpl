@@ -68,22 +68,24 @@
   {{if .Error }}
   <p>{{.Error}}</p>
   {{else if .HasResults}}
-  <div class="💪 🪜" style="padding: 10px;">
+  <div class="💪 🪜">
     {{ range .Results }}
-    <div class="🎴" style="overflow:hidden">
-      <h5 class="truncate"><a href="{{.Link}}">{{.Link}}</a></h5>
-      {{if eq .Product "GCE"}}
-      <h3>Compute Engine VM "{{.Name}}"</h3>
-      {{else if eq .Kind "Project"}}
-      <h3> GCP Project "{{.Name}}"</h3>
-      {{else if eq .Kind "Service"}}
-      <h3> GAE Service "{{.Name}}"</h3>
-      {{else if eq .Kind "Version"}}
-      <h3> GAE Version "{{.Name}}"</h3>
-      {{else}}
-      <h3></h3>
-      {{end}}
-      <p>{{.Text}}</p>
+    <div class="app-card 🎴">
+      <div class="app-card__subtext"><a href="{{.Link}}">{{.Link}}</a></div>
+      <div class="app-card__content">
+        {{if eq .Product "GCE"}}
+        <h3>Compute Engine VM "{{.Name}}"</h3>
+        {{else if eq .Kind "Project"}}
+        <h3> GCP Project "{{.Name}}"</h3>
+        {{else if eq .Kind "Service"}}
+        <h3> GAE Service "{{.Name}}"</h3>
+        {{else if eq .Kind "Version"}}
+        <h3> GAE Version "{{.Name}}"</h3>
+        {{else}}
+        <h3></h3>
+        {{end}}
+        <p>{{.Text}}</p>
+      </div>
     </div>
     {{ end }}
   </div>

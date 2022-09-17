@@ -29,6 +29,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 				"NumCachedCalls": 0,
 				"Unauthorized":   true,
+				"PageName":       "gcp_gce_overview",
 			})
 			return
 		}
@@ -50,6 +51,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 				core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 					"MissingScopes": true,
+					"PageName":      "gcp_gce_overview",
 				})
 				return
 			}
@@ -77,6 +79,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 					core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 						"MissingScopes": true,
+						"PageName":      "gcp_gce_overview",
 					})
 					return
 				}
@@ -108,6 +111,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			"Duration":       duration,
 			"NumCachedCalls": cachedCalls,
 			"AssetLines":     template.HTML(strings.Join(htmlLines[:], "")),
+			"PageName":       "gcp_gce_overview",
 		})
 
 		if config.CacheEnabled {

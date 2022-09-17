@@ -22,6 +22,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 		if user.AccessToken == nil {
 			core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 				"Unauthorized": true,
+				"PageName":     "gcp_sql_overview",
 			})
 			return
 		}
@@ -31,6 +32,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 		if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 				"MissingScopes": true,
+				"PageName":      "gcp_sql_overview",
 			})
 			return
 		}
@@ -51,6 +53,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 					core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 						"MissingScopes": true,
+						"PageName":      "gcp_sql_overview",
 					})
 					return
 				}
@@ -72,6 +75,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 
 		core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
+			"PageName":   "gcp_sql_overview",
 		})
 	}
 }

@@ -22,6 +22,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 		if user.AccessToken == nil {
 			core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 				"Unauthorized": true,
+				"PageName":     "gcp_fn_overview",
 			})
 			return
 		}
@@ -31,6 +32,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 		if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 				"MissingScopes": true,
+				"PageName":      "gcp_fn_overview",
 			})
 			return
 		}
@@ -51,6 +53,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 					core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 						"MissingScopes": true,
+						"PageName":      "gcp_fn_overview",
 					})
 					return
 				}
@@ -73,6 +76,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 
 		core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
+			"PageName":   "gcp_fn_overview",
 		})
 	}
 }

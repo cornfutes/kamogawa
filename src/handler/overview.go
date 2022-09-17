@@ -22,6 +22,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 		if user.AccessToken == nil {
 			core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 				"Unauthorized": true,
+				"PageName":     "gcp_overview",
 			})
 			return
 		}
@@ -31,6 +32,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 				"MissingScopes": true,
+				"PageName":      "gcp_overview",
 			})
 			return
 		}
@@ -79,6 +81,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			"Projects":    projectStrings,
 			"HasErrors":   responseError != nil && responseError.Error.Code > 0,
 			"Error":       responseError,
+			"PageName":    "gcp_overview",
 		})
 	}
 }

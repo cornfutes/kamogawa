@@ -76,6 +76,7 @@ func Authorization(db *gorm.DB) func(c *gin.Context) {
 			"Scopes":              scopes,
 			"HasMissingScopes":    len(missingScopeToUrl) > 0,
 			"MissingScopes":       missingScopeToUrl,
+			"PageName":            "gcp_auth",
 		})
 	}
 }

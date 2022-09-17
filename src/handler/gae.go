@@ -26,6 +26,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 				"Email":        email,
 				"Unauthorized": true,
 				"APICallCount": "-1",
+				"PageName":     "gcp_gae_overview",
 			})
 			return
 		}
@@ -36,6 +37,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "gae.tmpl", gin.H{
 				"MissingScopes": true,
+				"PageName":      "gcp_gae_overview",
 			})
 			return
 		}
@@ -104,6 +106,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			"Email":        email,
 			"AssetLines":   template.HTML(strings.Join(htmlLines[:], "")),
 			"APICallCount": strconv.Itoa(apiCallCount),
+			"PageName":     "gcp_gae_overview",
 		})
 	}
 }

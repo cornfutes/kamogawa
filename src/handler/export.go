@@ -7,5 +7,7 @@ import (
 )
 
 func Export(c *gin.Context) {
-	core.HTMLWithGlobalState(c, "export.tmpl", gin.H{})
+	core.HTMLWithGlobalState(c, "export.tmpl", gin.H{
+		"PageName": "gcp_export",
+	})
 }

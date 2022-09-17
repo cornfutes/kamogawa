@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"kamogawa/cache/gcecache"
+	"kamogawa/config"
 	"kamogawa/core"
 	"kamogawa/handler"
 	"kamogawa/identity"
@@ -43,6 +44,9 @@ func init() {
 }
 
 func main() {
+	if config.Env != config.Dev {
+		gin.SetMode("release")
+	}
 	r := gin.New()
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	r.Use(gin.Logger())

@@ -33,7 +33,7 @@ accessibility         access is the most important part of any workflow
 ├── e2e               Test automation w/ headless browser. Node.js, Playwright.
 ├── src               App Server which sends SSR HTML. Go, Gin Web Framework. 
 ├── team              Notes on PM and R&D
-└── tool_babbler      Golang 
+└── tool_babbler      Tool to generate mock data for DB.
 #+END_SRC
 
 Additional =README= are in-situ, in-context.
@@ -132,7 +132,7 @@ Deploy a CloudRun =Revision= by associating with a GCR Docker Image.
 /note:/ =ENV= for DB URL is 
 =postgres://postgres:dog@10.73.16.3:5432/shimogawa_db=
 
-/note:/ for all intensive purposes, default URL provided by CloudRun is not useful.
+For all intensive purposes, default URL provided by CloudRun is not useful.
 Only =http://localhost= and =https://diceduckmonk.com= are legitimized for our Google Auth Credentials.
 
 *** Debug

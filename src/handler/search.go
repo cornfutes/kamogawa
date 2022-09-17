@@ -2,16 +2,18 @@ package handler
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
+	"strings"
+	"time"
+
 	"kamogawa/core"
 	"kamogawa/identity"
 	"kamogawa/types"
 	"kamogawa/types/gcp/coretypes"
 	"kamogawa/types/gcp/gaetypes"
 	"kamogawa/types/gcp/gcetypes"
-	"strings"
-	"time"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type SearchResult struct {
@@ -24,19 +26,21 @@ type SearchResult struct {
 	Name     string
 }
 
-const SERPPageSize = 10
-const resultLimit = 50
-const minQueryLength int = 1
-const minQueryError string = "Query must be 4 characters or more."
-const maxQueryLength int = 80
-const maxQueryError string = "Query must be 80 characters or less."
+const (
+	SERPPageSize          = 10
+	resultLimit           = 50
+	minQueryLength int    = 1
+	minQueryError  string = "Query must be 4 characters or more."
+	maxQueryLength int    = 80
+	maxQueryError  string = "Query must be 80 characters or less."
+)
 
 func Search(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		user := identity.CheckSessionForUser(c, db)
 		// TODO: Handle non-GCP users
 		if user.AccessToken == nil || !user.Gmail.Valid {
-			core.HTMLWithGlobalState(c, "search.html", gin.H{
+			core.HTMLWithGlobalState(c, "search.tmpl", gin.H{
 				"Unauthorized": true,
 			})
 			return
@@ -60,7 +64,7 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 			results = allSearchResults
 		}
 		numTotalResults := len(allSearchResults)
-		core.HTMLWithGlobalState(c, "search.html", gin.H{
+		core.HTMLWithGlobalState(c, "search.tmpl", gin.H{
 			"HasFilter":         originalQ != q,
 			"Error":             nil,
 			"IsRegex":           queryIsRegex(q),
@@ -76,7 +80,7 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 
 func validateQuery(c *gin.Context, q string) bool {
 	if len(q) < minQueryLength {
-		core.HTMLWithGlobalState(c, "search.html", gin.H{
+		core.HTMLWithGlobalState(c, "search.tmpl", gin.H{
 			"Error":      minQueryError,
 			"Query":      q,
 			"HasResults": false,
@@ -86,7 +90,7 @@ func validateQuery(c *gin.Context, q string) bool {
 		return false
 	}
 	if len(q) > maxQueryLength {
-		core.HTMLWithGlobalState(c, "search.html", gin.H{
+		core.HTMLWithGlobalState(c, "search.tmpl", gin.H{
 			"Error":      maxQueryError,
 			"Query":      q,
 			"HasResults": false,
@@ -250,7 +254,6 @@ func searchGAEServices(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 	}
 
 	return searchResults, nil
-
 }
 
 func searchGAEVersions(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
@@ -288,5 +291,4 @@ func searchGAEVersions(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 	}
 
 	return searchResults, nil
-
 }

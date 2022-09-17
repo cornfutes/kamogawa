@@ -1,14 +1,14 @@
 package handler
 
 import (
+	"strconv"
+	"strings"
+	"time"
+
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
 	"kamogawa/types/gcp/gcetypes"
-	"strconv"
-	"strings"
-
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -20,7 +20,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 
 		user := identity.CheckSessionForUser(c, db)
 		if user.AccessToken == nil {
-			core.HTMLWithGlobalState(c, "overview.html", gin.H{
+			core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 				"Unauthorized": true,
 			})
 			return
@@ -29,7 +29,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-			core.HTMLWithGlobalState(c, "overview.html", gin.H{
+			core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 				"MissingScopes": true,
 			})
 			return
@@ -48,10 +48,10 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 		}
 
 		var hoursSinceLastRun int
-		var minutesSinceLastRun = 0
-		var nowHour = time.Now().Hour()
-		var nowMinute = time.Now().Minute()
-		var scheduledHour = 6
+		minutesSinceLastRun := 0
+		nowHour := time.Now().Hour()
+		nowMinute := time.Now().Minute()
+		scheduledHour := 6
 		if scheduledHour > nowHour {
 			hoursSinceLastRun = 24 - nowHour + scheduledHour
 			minutesSinceLastRun = nowMinute
@@ -59,20 +59,20 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			hoursSinceLastRun = nowHour
 			minutesSinceLastRun = nowMinute
 		}
-		var lastRunTime = ""
+		lastRunTime := ""
 		if hoursSinceLastRun > 0 {
 			lastRunTime = strconv.Itoa(hoursSinceLastRun) + " hours "
 		}
 		lastRunTime += strconv.Itoa(minutesSinceLastRun) + " mins"
-		var nextRunHours = 24 - hoursSinceLastRun - 1
-		var nextRunMinutes = 60 - minutesSinceLastRun
-		var nextRunTime = ""
+		nextRunHours := 24 - hoursSinceLastRun - 1
+		nextRunMinutes := 60 - minutesSinceLastRun
+		nextRunTime := ""
 		if nextRunHours > 0 {
 			nextRunTime = strconv.Itoa(nextRunHours) + " hours "
 		}
 		nextRunTime += strconv.Itoa(nextRunMinutes) + " mins"
 
-		core.HTMLWithGlobalState(c, "overview.html", gin.H{
+		core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 			"HasProjects": len(projectStrings) > 0,
 			"LastRunTime": lastRunTime,
 			"NextRunTime": nextRunTime,

@@ -1,28 +1,25 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"os"
+	"strings"
+	"unsafe"
+
 	"kamogawa/cache/gcecache"
 	"kamogawa/core"
 	"kamogawa/handler"
 	"kamogawa/identity"
 	"kamogawa/media"
 	"kamogawa/types"
-	"log"
-	"strings"
-	"unsafe"
-
-	"net/http"
-
-	"os"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-var (
-	db *gorm.DB
-)
+var db *gorm.DB
 
 func init() {
 	shimogawaUrl := os.Getenv("SHIMOGAWA_URL")
@@ -44,7 +41,6 @@ func init() {
 		Email:    "null@hackernews.com",
 		Password: "Pb$droV@a&t.a0e3",
 	})
-
 }
 
 func main() {
@@ -69,7 +65,7 @@ func main() {
 			c.Redirect(http.StatusFound, "/account")
 		}
 		if identity.ExtractClaimsEmail(tokenString, c) == nil {
-			core.HTMLWithGlobalState(c, "loggedout.html", gin.H{})
+			core.HTMLWithGlobalState(c, "loggedout.tmpl", gin.H{})
 		} else {
 			c.Redirect(http.StatusFound, "/account")
 		}
@@ -80,7 +76,7 @@ func main() {
 		authed.GET("release.txt", media.Data(media.MimeTypeTXT, media.Release))
 
 		authed.GET("/glass_sample", func(c *gin.Context) {
-			core.HTMLWithGlobalState(c, "glass_sample.html", gin.H{})
+			core.HTMLWithGlobalState(c, "glass_sample.tmpl", gin.H{})
 			c.Abort()
 		})
 
@@ -105,19 +101,19 @@ func main() {
 
 		// Fake privileged routes for demo
 		authed.GET("/password", func(c *gin.Context) {
-			core.HTMLWithGlobalState(c, "password.html", gin.H{})
+			core.HTMLWithGlobalState(c, "password.tmpl", gin.H{})
 			c.Abort()
 		})
 		authed.GET("/encryption", func(c *gin.Context) {
-			core.HTMLWithGlobalState(c, "encryption.html", gin.H{})
+			core.HTMLWithGlobalState(c, "encryption.tmpl", gin.H{})
 			c.Abort()
 		})
 		authed.GET("/2fa", func(c *gin.Context) {
-			core.HTMLWithGlobalState(c, "2fa.html", gin.H{})
+			core.HTMLWithGlobalState(c, "2fa.tmpl", gin.H{})
 			c.Abort()
 		})
 		authed.GET("/status", func(c *gin.Context) {
-			core.HTMLWithGlobalState(c, "status.html", gin.H{})
+			core.HTMLWithGlobalState(c, "status.tmpl", gin.H{})
 			c.Abort()
 		})
 
@@ -128,7 +124,7 @@ func main() {
 				return
 			}
 
-			var email, exists = c.Get(identity.IdentityContextKey)
+			email, exists := c.Get(identity.IdentityContextKey)
 			if !exists {
 				panic("Unexpected")
 			}
@@ -138,7 +134,7 @@ func main() {
 				panic("Unvalid DB state")
 			}
 			if user.AccessToken == nil {
-				core.HTMLWithGlobalState(c, "overview.html", gin.H{
+				core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 					"Unauthorized": true,
 				})
 				return

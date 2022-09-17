@@ -7,7 +7,7 @@ import (
 )
 
 func Reset(c *gin.Context) {
-	core.HTMLWithGlobalState(c, "reset.html", gin.H{
+	core.HTMLWithGlobalState(c, "reset.tmpl", gin.H{
 		"Resetted": c.Query("status") == "1",
 	})
 }

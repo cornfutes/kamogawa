@@ -10,7 +10,7 @@ import (
 func Account(c *gin.Context) {
 	email, _ := c.Get(identity.IdentityContextKey)
 
-	core.HTMLWithGlobalState(c, "account.html", gin.H{
+	core.HTMLWithGlobalState(c, "account.tmpl", gin.H{
 		"Email": email,
 	})
 }

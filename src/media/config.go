@@ -2,11 +2,11 @@ package media
 
 import (
 	_ "embed"
+	"net/http"
+
 	"kamogawa/config"
 	"kamogawa/core"
 	"kamogawa/view"
-
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -83,9 +83,9 @@ var (
 	consent []byte
 
 	staticHtml = map[string]string{
-		"/":        "landing.html",
-		"/docs":    "tbd.html",
-		"/mission": "mission.html",
+		"/":        "landing.tmpl",
+		"/docs":    "tbd.tmpl",
+		"/mission": "mission.tmpl",
 	}
 
 	etag string

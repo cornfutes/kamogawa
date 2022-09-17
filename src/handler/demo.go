@@ -8,5 +8,5 @@ import (
 
 // TODO: branch if logged in
 func Demo(c *gin.Context) {
-	core.HTMLWithGlobalState(c, "demo.html", gin.H{})
+	core.HTMLWithGlobalState(c, "demo.tmpl", gin.H{})
 }

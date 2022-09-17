@@ -1,21 +1,23 @@
 package handler
 
 import (
+	"net/url"
+	"sort"
+	"strings"
+
 	"kamogawa/config"
 	"kamogawa/core"
 	"kamogawa/identity"
 	"kamogawa/types"
-	"net/url"
-	"strings"
-
-	"sort"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-var redirectUri = config.RedirectUri
-var googleAuthUrl = getUrlWithScopes(GCPScopes)
+var (
+	redirectUri   = config.RedirectUri
+	googleAuthUrl = getUrlWithScopes(GCPScopes)
+)
 
 func getUrlWithScopes(scopes string) string {
 	return "https://accounts.google.com/o/oauth2/v2/auth?" +
@@ -30,7 +32,7 @@ func getUrlWithScopes(scopes string) string {
 
 func Authorization(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		var email, exists = c.Get(identity.IdentityContextKey)
+		email, exists := c.Get(identity.IdentityContextKey)
 		if !exists {
 			panic("Unexpected")
 		}
@@ -66,7 +68,7 @@ func Authorization(db *gorm.DB) func(c *gin.Context) {
 				missingScopeToUrl[getUrlWithScopes(metadata.Scope)] = metadata
 			}
 		}
-		core.HTMLWithGlobalState(c, "authorization.html", gin.H{
+		core.HTMLWithGlobalState(c, "authorization.tmpl", gin.H{
 			"ShowRevoke":          config.Env == config.Dev,
 			"GmailExists":         user.Gmail != nil && user.Gmail.Valid,
 			"Gmail":               gmail,

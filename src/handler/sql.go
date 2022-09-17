@@ -2,11 +2,12 @@ package handler
 
 import (
 	"html/template"
+	"strings"
+
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
 	"kamogawa/types/gcp/gcetypes"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -19,7 +20,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 
 		user := identity.CheckSessionForUser(c, db)
 		if user.AccessToken == nil {
-			core.HTMLWithGlobalState(c, "sql.html", gin.H{
+			core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 				"Unauthorized": true,
 			})
 			return
@@ -28,7 +29,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-			core.HTMLWithGlobalState(c, "sql.html", gin.H{
+			core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 				"MissingScopes": true,
 			})
 			return
@@ -48,7 +49,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 			if responseError != nil && responseError.Error.Code > 0 {
 				// Shortcircuit on first API call with missing scope to GCF.
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-					core.HTMLWithGlobalState(c, "sql.html", gin.H{
+					core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 						"MissingScopes": true,
 					})
 					return
@@ -69,7 +70,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 			}
 		}
 
-		core.HTMLWithGlobalState(c, "sql.html", gin.H{
+		core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
 		})
 	}

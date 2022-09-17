@@ -7,5 +7,5 @@ import (
 )
 
 func Status(c *gin.Context) {
-	core.HTMLWithGlobalState(c, "status.html", gin.H{})
+	core.HTMLWithGlobalState(c, "status.tmpl", gin.H{})
 }

@@ -3,6 +3,10 @@ package handler
 import (
 	"fmt"
 	"html/template"
+	"strconv"
+	"strings"
+	"time"
+
 	"kamogawa/cache/gcecache"
 	"kamogawa/config"
 	"kamogawa/core"
@@ -10,9 +14,6 @@ import (
 	"kamogawa/identity"
 	"kamogawa/types/gcp/coretypes"
 	"kamogawa/types/gcp/gcetypes"
-	"strconv"
-	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -25,7 +26,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 
 		user := identity.CheckSessionForUser(c, db)
 		if user.AccessToken == nil {
-			core.HTMLWithGlobalState(c, "gce.html", gin.H{
+			core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 				"NumCachedCalls": 0,
 				"Unauthorized":   true,
 			})
@@ -37,7 +38,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		}
 		fmt.Printf("User %v\n", user)
 
-		var start = time.Now()
+		start := time.Now()
 		var responseSuccess *gcetypes.ListProjectResponse
 		var projectDBs []coretypes.ProjectDB = nil
 		if config.CacheEnabled && useCache {
@@ -47,7 +48,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			var responseError *gcetypes.ErrorResponse
 			responseSuccess, responseError = gcp.GCPListProjectsMain(db, user)
 			if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-				core.HTMLWithGlobalState(c, "gce.html", gin.H{
+				core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 					"MissingScopes": true,
 				})
 				return
@@ -60,7 +61,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		}
 
 		var htmlLines []string
-		var cachedCalls = 0
+		cachedCalls := 0
 		for i, p := range projectDBs {
 			if !projectDBs[i].HasGCEEnabled {
 				cachedCalls++
@@ -74,7 +75,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 				// Shortcircuit if missing GCE scope.
 				// TODO: refactor to do oonce utside loop
 				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-					core.HTMLWithGlobalState(c, "gce.html", gin.H{
+					core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 						"MissingScopes": true,
 					})
 					return
@@ -103,7 +104,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		}
 
 		duration := time.Since(start)
-		core.HTMLWithGlobalState(c, "gce.html", gin.H{
+		core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 			"Duration":       duration,
 			"NumCachedCalls": cachedCalls,
 			"AssetLines":     template.HTML(strings.Join(htmlLines[:], "")),

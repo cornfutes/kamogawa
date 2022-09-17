@@ -2,13 +2,13 @@ package handler
 
 import (
 	"html/template"
+	"strconv"
+	"strings"
+
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
 	"kamogawa/types/gcp/gcetypes"
-
-	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -20,9 +20,9 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		useCache := len(c.Query("r")) == 0
 
 		user := identity.CheckSessionForUser(c, db)
-		var email, _ = c.Get(identity.IdentityContextKey)
+		email, _ := c.Get(identity.IdentityContextKey)
 		if user.AccessToken == nil {
-			core.HTMLWithGlobalState(c, "gae.html", gin.H{
+			core.HTMLWithGlobalState(c, "gae.tmpl", gin.H{
 				"Email":        email,
 				"Unauthorized": true,
 				"APICallCount": "-1",
@@ -31,10 +31,10 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		}
 		identity.CheckDBAndRefreshToken(c, user, db)
 
-		var apiCallCount = 1
+		apiCallCount := 1
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
-			core.HTMLWithGlobalState(c, "gae.html", gin.H{
+			core.HTMLWithGlobalState(c, "gae.tmpl", gin.H{
 				"MissingScopes": true,
 			})
 			return
@@ -100,7 +100,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			htmlLines = append(htmlLines, "</ul>")
 		}
 
-		core.HTMLWithGlobalState(c, "gae.html", gin.H{
+		core.HTMLWithGlobalState(c, "gae.tmpl", gin.H{
 			"Email":        email,
 			"AssetLines":   template.HTML(strings.Join(htmlLines[:], "")),
 			"APICallCount": strconv.Itoa(apiCallCount),

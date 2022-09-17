@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"unsafe"
 
 	"kamogawa/cache/gcecache"
 	"kamogawa/core"
@@ -148,19 +147,10 @@ func main() {
 					csvLines = append(csvLines, v.ProjectId+","+v.ProjectNumber)
 				}
 			}
-			c.Data(http.StatusOK, "text/csv; charset=utf-8", strToBytes(strings.Join(csvLines[:], "\n")))
+			c.Data(http.StatusOK, "text/csv; charset=utf-8", []byte(strings.Join(csvLines[:], "\n")))
 			c.Abort()
 		})
 	}
 
 	r.Run(":3000")
-}
-
-func strToBytes(s string) []byte {
-	return *(*[]byte)(unsafe.Pointer(
-		&struct {
-			string
-			Cap int
-		}{s, len(s)},
-	))
 }

@@ -28,29 +28,29 @@
     <a href="{{.SearchUrlMore}}"><span class="badge 🍺">More</span></a>
     {{end}}
   </div>
-  <a class="menu-link-main" href="#">
+  <a class="menu-link-main" id="search-tools" tabindex="0">
     Tools
   </a>
 </div>
 <div class="main-header">
-  <span class="menu-link-main" id="search-result-count">{{.CountTotalResults}} results ({{.Duration}})</span>
-</div>
-<div class="main-header" style="padding: 30px">
-  <select>
-    <option value="0">Any time</option>
-    <option value="1">Past hour</option>
-    <option value="2">Past 24 hours</option>
-    <option value="3">Past week</option>
-    <option value="4">Past month</option>
-    <option value="5">Past year</option>
-    <option value="6">Custom range...</option>
-  </select>
-  <select>
-    <option value="0">Substring</option>
-    <option value="1">Verbatim</option>
-    <option value="2">Full-text</option>
-  </select>
-  <span class="menu-link-main">Clear</span>
+  <span class="menu-link-main" id="search-count">{{.CountTotalResults}} results ({{.Duration}})</span>
+  <div id="search-filter" class="ninja" style="padding-left: 30px;">
+    <select>
+      <option value="0">Any time</option>
+      <option value="1">Past hour</option>
+      <option value="2">Past 24 hours</optgion>
+      <option value="3">Past week</option>
+      <option value="4">Past month</option>
+      <option value="5">Past year</option>
+      <option value="6">Custom range...</option>
+    </select>
+    <select>
+      <option value="0">Substring</option>
+      <option value="1">Verbatim</option>
+      <option value="2">Full-text</option>
+    </select>
+    <span class="menu-link-main">Clear</span>
+  </div>
 </div>
 
 <div class="content-wrapper">

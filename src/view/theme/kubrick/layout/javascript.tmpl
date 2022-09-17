@@ -30,10 +30,23 @@
     }
   });
 
-  l($$('profile-icon'), 'click', e =>
-    elPD.classList.contains('is-active') ? elPD.classList.remove('is-active') : elPD.classList.add('is-active')
-  );
+  // l($$('profile-icon'), 'click', e =>
+  //   elPD.classList.contains('is-active') ? elPD.classList.remove('is-active') : elPD.classList.add('is-active')
+  // );
 
+  elSearchFilter = $$('search-filter')
+  elSearchCount = $$('search-count')
+  let showSearchCount = true;
+  l($$('search-tools'), 'click', e => {
+    if (showSearchCount) {
+      elSearchFilter.classList.remove('ninja');
+      elSearchCount.classList.add('ninja');
+    } else {
+      elSearchFilter.classList.add('ninja');
+      elSearchCount.classList.remove('ninja');
+    }
+    showSearchCount = !showSearchCount;
+  });
 
   $(document).click(function (e) {
     var container = $(".status-button");

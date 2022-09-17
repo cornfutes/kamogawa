@@ -1,8 +1,9 @@
 {{define "main"}}
 <div class="wrapper">
+  {{if not .IsSearch}}
   {{ template "leftnav" .}}
+  {{end}}
   <div class="main-container">
-
     {{template "page" .}}
   </div>
 </div>

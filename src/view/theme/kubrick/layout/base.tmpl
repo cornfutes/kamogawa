@@ -26,9 +26,13 @@
       <div class="header-menu">
         <a href="/" style="color: #FF6600">川</a>
         {{if .IsLoggedIn}}
-        <a class="menu-link is-active notify" href="#">GCP</a>
+        {{if .IsSearch}}
+        <a class="menu-link notify" href="/overview">GCP</a>
+        {{else}}
+        <a class="menu-link is-active notify" href="/overview">GCP</a>
+        {{end}}
         <a class="menu-link" href="#">AWS</a>
-        <a class="menu-link notify" href="#">Azure</a>
+        <a class="menu-link" href="#">Azure</a>
         {{end}}
       </div>
       {{if .IsLoggedIn}}

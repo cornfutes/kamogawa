@@ -3,7 +3,12 @@
     - Postgres, Docker Intellisense, Go tooling 
   - Disabled backups on CloudSQL
   - Docs
-    - updated docs 
+    - Split
+  - Docker
+    - realized didn't need Air in remote build
+    - realized don't need Postgres logic in CloudRun. Wouldn't work either ways
+    - Can grossly simplify build for prod. reduced image 200mb -> 30mb 
+    - attempted using =scratch= instead of alpine but revealed we have OS dep
 
 ** 2022 Sep 16 
   - Added e2e test automation w/ Playwright. For now, just-ad hoc against prod.

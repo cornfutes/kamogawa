@@ -1,12 +1,9 @@
-FROM golang:1.19 as built
-WORKDIR /go/app/api
+FROM golang:1.19 as builder
+WORKDIR /foo
 COPY . .
-ENV CGO_ENABLED=0
-RUN go get -d -v ./...
-RUN go build -o /tmp/kamogawa-server ./*.go
+RUN go mod download
+RUN CGO_ENABLED=0 go build -o /foo/kamogawa-server
 
-FROM postgres:13.8-alpine
-COPY --from=built /tmp/kamogawa-server /usr/bin/kamogawa-server
-WORKDIR /usr/bin
+FROM alpine
+COPY --from=builder /foo/kamogawa-server /usr/bin/kamogawa-server
 CMD kamogawa-server;
-

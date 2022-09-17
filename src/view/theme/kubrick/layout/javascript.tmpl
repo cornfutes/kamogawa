@@ -102,9 +102,14 @@
     $(".pop-up").removeClass("visible");
   });
 
-  const toggleButton = document.querySelector('.dark-light');
-  toggleButton.addEventListener('click', () => {
+
+  l($$('lightswitch'), 'click', () => {
+    const isLight = document.body.classList.contains('light-mode');
     document.body.classList.toggle('light-mode');
+    localStorage.setItem('kubrick-daytime', isLight);
   });
+  if (localStorage.getItem('kubrick-daytime')) {
+    document.body.classList.add('light-mode');
+  }
 </script>
 {{end}}

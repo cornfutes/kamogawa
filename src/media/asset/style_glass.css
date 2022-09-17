@@ -240,7 +240,6 @@ body.light-mode .video-bg:before {
   height: 40px;
   display: flex;
   width: 100%;
-  max-width: 400px;
   padding-left: 16px;
   border-radius: 4px;
 }
@@ -1072,6 +1071,14 @@ body.light-mode .video-bg:before {
 .🎯 {
   align-items: center;
   justify-content: center;
+}
+
+/**
+normal flex, it is vertical align.
+when stack, this is similar to text-align center.
+*/
+.🎂 {
+  align-items: center;
 }
 
 a {

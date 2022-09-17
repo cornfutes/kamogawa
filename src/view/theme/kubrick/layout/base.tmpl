@@ -24,7 +24,7 @@
   </div>
   <div class="app">
     <div class="header 🦠">
-      <div class="header-menu">
+      <div class="header-menu" id="header-menu">
         <a href="/" style="color: #FF6600">川</a>
         {{if .IsLoggedIn}}
         {{if .IsSearch}}
@@ -37,11 +37,11 @@
         {{end}}
       </div>
       {{if .IsLoggedIn}}
-      <div class="search-bar" id="search-bar">
-        <input type="text" placeholder="Type to search..." id="search-bar">
-      </div>
-      <div>
-        <ul class="🔫 🐼">
+      <div class="🎂 💪 🌳">
+        <div class="search-bar">
+          <input type="text" placeholder="Type to search..." id="search-bar-input">
+        </div>
+        <ul class="🔫 🐼" id="top-session-links">
           <li><a href=account>Account</a></li>
           <li>
             <form method=post action=/logout>

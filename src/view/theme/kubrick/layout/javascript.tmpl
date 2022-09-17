@@ -18,14 +18,14 @@
   w = u => window.location.href = u;
   s = q => w(`/search?q=${encodeURI(q)}`)
   elPD = $$('profile-dropdown')
-  $(".search-bar input")
-    .focus(function () {
-      $(".header").addClass("wide");
-    })
-    .blur(function () {
-      $(".header").removeClass("wide");
-    });
-  l($$('search-bar'), 'keyup', e => {
+
+  l($$('search-bar-input'), 'focus', e => {
+    $$('top-session-links').classList.add('ninja');
+  });
+  l($$('search-bar-input'), 'blur', e => {
+    $$('top-session-links').classList.remove('ninja');
+  });
+  l($$('search-bar-input'), 'keyup', e => {
     if (e.code == 'Enter') {
       e.preventDefault();
       s(e.target.value);
@@ -49,6 +49,7 @@
     }
     showSearchCount = !showSearchCount;
   });
+
 
   elExportYes = $$('export-csv-yes')
   elExportNo = $$('export-csv-no')

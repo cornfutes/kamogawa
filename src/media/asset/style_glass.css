@@ -173,6 +173,7 @@ body.light-mode .video-bg:before {
   align-items: center;
 }
 
+.header-menu span, /** TODO: cleanup */
 .header-menu a {
   padding: 20px 30px;
   text-decoration: none;
@@ -187,8 +188,13 @@ body.light-mode .video-bg:before {
   }
 }
 
+ /** TODO: cleanup */
+.header-menu span {
+  cursor: not-allowed;
+}
+
 .header-menu a.is-active,
-.header-menu a:hover {
+.header-menu a:hover  {
   color: var(--theme-color);
   border-bottom: 2px solid var(--theme-color);
 }

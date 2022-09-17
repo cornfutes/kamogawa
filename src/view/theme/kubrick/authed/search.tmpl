@@ -2,19 +2,38 @@
 <div class="main-header 🦠">
   <div>
     <span class="menu-link-main">Search:</span>
-    <span class="badge 🔥">All</span>
-    <span class="badge 🍺">GCP</span>
-    <span class="badge 🍺">AWS</span>
-    <span class="badge 🍺">Azure</span>
-    <span class="badge 🍺">More</span>
+    {{if .IsAll}}
+    <a href="{{.SearchUrlBase}}"><span class="badge 🔥">All</span></a>
+    {{else}}
+    <a href="{{.SearchUrlBase}}"><span class="badge 🍺">All</span></a>
+    {{end}}
+    {{if .IsGCP}}
+    <a href="{{.SearchUrlGCP}}"><span class="badge 🔥">GCP</span></a>
+    {{else}}
+    <a href="{{.SearchUrlGCP}}"><span class="badge 🍺">GCP</span></a>
+    {{end}}
+    {{if .IsAWS}}
+    <a href="{{.SearchUrlAWS}}"><span class="badge 🔥">AWS</span></a>
+    {{else}}
+    <a href="{{.SearchUrlAWS}}"><span class="badge 🍺">AWS</span></a>
+    {{end}}
+    {{if .IsAzure}}
+    <a href="{{.SearchUrlAzure}}"><span class="badge 🔥">Azure</span></a>
+    {{else}}
+    <a href="{{.SearchUrlAzure}}"><span class="badge 🍺">Azure</span></a>
+    {{end}}
+    {{if .IsMore}}
+    <a href="{{.SearchUrlMore}}"><span class="badge 🔥">More</span></a>
+    {{else}}
+    <a href="{{.SearchUrlMore}}"><span class="badge 🍺">More</span></a>
+    {{end}}
   </div>
   <a class="menu-link-main" href="#">
     Tools
   </a>
 </div>
 <div class="main-header">
-  <!-- <span class="menu-link-main">{{.CountTotalResults}} results ({{.Duration}})</span> -->
-  <span class="menu-link-main" id="search-result-count">1,337 results (5034milliseconds)</span>
+  <span class="menu-link-main" id="search-result-count">{{.CountTotalResults}} results ({{.Duration}})</span>
 </div>
 <div class="main-header" style="padding: 30px">
   <select>

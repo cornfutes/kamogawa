@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 	"time"
 
@@ -53,9 +54,19 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 		if !validateQuery(c, q) {
 			return
 		}
+		isGcp := c.Query("p") == "gcp"
+		isAws := c.Query("p") == "aws"
+		isAzure := c.Query("p") == "azure"
+		isMore := c.Query("p") == "more"
+		isAll := !isGcp && !isAws && !isAzure && !isMore
 
 		start := time.Now()
-		allSearchResults := getSearchResults(db, user, q)
+		var allSearchResults []SearchResult
+		if isAll || isGcp {
+			allSearchResults = getSearchResults(db, user, q)
+		} else {
+			allSearchResults = nil
+		}
 		duration := time.Since(start)
 		var results []SearchResult
 		if len(allSearchResults) > SERPPageSize {
@@ -63,6 +74,8 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 		} else {
 			results = allSearchResults
 		}
+
+		fmt.Printf("%v\n", isAll)
 		numTotalResults := len(allSearchResults)
 		core.HTMLWithGlobalState(c, "search.tmpl", gin.H{
 			"HasFilter":         originalQ != q,
@@ -74,6 +87,16 @@ func Search(db *gorm.DB) func(c *gin.Context) {
 			"CountTotalResults": numTotalResults,
 			"Duration":          duration,
 			"IsSearch":          "yes",
+			"SearchUrlBase":     "/search?q=" + url.QueryEscape(originalQ),
+			"SearchUrlGCP":      "/search?p=gcp&q=" + url.QueryEscape(originalQ),
+			"SearchUrlAWS":      "/search?p=aws&q=" + url.QueryEscape(originalQ),
+			"SearchUrlAzure":    "/search?p=azure&q=" + url.QueryEscape(originalQ),
+			"SearchUrlMore":     "/search?p=more&q=" + url.QueryEscape(originalQ),
+			"IsAll":             isAll,
+			"IsGCP":             isGcp,
+			"IsAWS":             isAws,
+			"IsAzure":           isAzure,
+			"IsMore":            isMore,
 		})
 	}
 }

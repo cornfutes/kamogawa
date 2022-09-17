@@ -180,7 +180,7 @@ body.light-mode .video-bg:before {
   text-decoration: none;
   color: var(--inactive-color);
   border-bottom: 2px solid transparent;
-  transition: 0.3s;
+  /* transition: 0.3s; */
 }
 
 @media screen and (max-width: 610px) {
@@ -346,7 +346,7 @@ body.light-mode .video-bg:before {
 .wide .search-bar {
   max-width: 600px;
   margin: auto;
-  transition: 0.4s;
+  /* transition: 0.4s; */
   box-shadow: 0 0 0 1px var(--border-color);
   padding-left: 0;
 }
@@ -495,7 +495,7 @@ body.light-mode .video-bg:before {
 
 .content-wrapper.overlay {
   pointer-events: none;
-  transition: 0.3s;
+  /* transition: 0.3s; */
   background-color: var(--overlay-bg);
 }
 
@@ -509,7 +509,7 @@ body.light-mode .video-bg:before {
   background-color: rgba(36, 39, 59, 0.8);
   opacity: 0;
   visibility: hidden;
-  transition: 0.3s;
+  /* transition: 0.3s; */
 }
 
 .overlay-app.is-active {
@@ -1388,4 +1388,86 @@ hr {
 }
 .🐟 {
   text-decoration: underline;
+}
+
+#search-filter {
+  padding-left: 30px;
+}
+
+.widget__select_wrapper,
+.widget__select .widget__select_option {
+  /* font-size: 60px; */
+  font-weight: 700;
+  color: var(--theme-color);
+  text-decoration: none;
+}
+
+.widget__select {
+  display: inline-block;
+  position: relative;
+  margin-left: 6px;
+}
+
+.widget__select>.widget__select_value {
+  border-bottom: 4px solid;
+  cursor: pointer;
+  color: #FF6600;
+}
+
+.widget__select>ul.widget__select_options {
+  text-align: left;
+  position: absolute;
+  padding: 20px 20px 20px 20px;
+  margin: 0;
+  top: -20px;
+  left: -20px;
+  background-color: var(--dropdown-bg);
+  border-radius: 4px;
+  width: 200px;
+  z-index: 1;
+}
+
+.widget__select>ul.widget__select_options>li {
+  list-style: none;
+}
+
+.widget__select>ul.widget__select_options>li>.widget__select_option {
+  -webkit-transition: all .4s;
+  transition: all .4s;
+  color: #FF6600;
+  /** TODO I like this color */
+  /* color: #7b00ff; */
+  position: relative;
+}
+
+.widget__select>ul.widget__select_options>li>.widget__select_option:after {
+  position: absolute;
+  content: '';
+  height: 5px;
+  width: 0;
+  left: 0;
+  /* background: #b066ff; */
+  background: #FF6600;
+  bottom: 0;
+  -webkit-transition: all .4s ease-out;
+  transition: all .4s ease-out;
+}
+
+.widget__select>ul.widget__select_options>li>.widget__select_option:hover {
+  cursor: pointer;
+  color: #FF6600;
+}
+
+.widget__select>ul.widget__select_options>li>.widget__select_option:hover:after {
+  width: 100%;
+}
+
+.widget__select>ul.widget__select_options>li>.widget__select_option.widget__select_option_active:after {
+  position: absolute;
+  content: '';
+  height: 5px;
+  width: 100%;
+  left: 0;
+  background: #FF6600;
+  bottom: 0;
 }

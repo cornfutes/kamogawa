@@ -50,7 +50,6 @@
     showSearchCount = !showSearchCount;
   });
 
-
   elExportYes = $$('export-csv-yes')
   elExportNo = $$('export-csv-no')
   let exportable = false;
@@ -113,5 +112,13 @@
   if (localStorage.getItem('kubrick-daytime') == 'true') {
     document.body.classList.add('light-mode');
   }
+
+  const elSearchFilterDateDropdown = document.getElementById('search-filter-date-dropdown');
+  document.getElementById('search-filter-date-placeholder').addEventListener('click', e => {
+    elSearchFilterDateDropdown.classList.remove('ninja');
+  });
+  document.getElementById('search-filter-date-active').addEventListener('click', e => {
+    elSearchFilterDateDropdown.classList.add('ninja');
+  });
 </script>
 {{end}}

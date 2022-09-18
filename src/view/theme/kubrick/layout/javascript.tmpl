@@ -12,12 +12,13 @@
   });
 
   $$ = i => document.getElementById(i);
-  l = (el, ev, f) => {
-    if (el) el.addEventListener(ev, f);
-  };
+  l = (el, ev, f) => el && el.addEventListener(ev, f);
   w = u => window.location.href = u;
   s = q => w(`/search?q=${encodeURI(q)}`)
   elPD = $$('profile-dropdown')
+  rm = (el, c) => el && el.classList.remove(c);
+  ad = (el, c) => el && el.classList.add(c);
+
 
   // Focus and blur from input
   const elTopSearchInput = $$('search-bar-input');
@@ -132,7 +133,6 @@
   }
 
   l($$('search-filter-date-placeholder'), 'click', e => {
-    console.log('here');
     $$('search-filter-date-dropdown').classList.remove('ninja');
   });
   l($$('search-filter-date-active'), 'click', e => {
@@ -149,8 +149,11 @@
   let t = Date.now();
   let T_THRESHOLD = 750; // minimum milliseconds to show spinner for 
   var $onic = url => {
-    $$('control-center-spinner').classList.remove('ninja'); // TODO: deprecate spinner
-    $$('sonic-linear-waiting').classList.remove('ninja');
+    if (!$$(elSlot)) {
+      window.location.href = url;
+    }
+    rm($$('control-center-spinner'), 'ninja'); // TODO: deprecate spinner
+    rm($$('sonic-linear-waiting'), 'ninja');
     t = Date.now();
     return fetch(url)
       .then(res => res.text())
@@ -161,12 +164,12 @@
         if (earlyMillis > 0) {
           console.log("Eaely Millis", earlyMillis)
           setTimeout(_ => {
-            $$('control-center-spinner').classList.add('ninja');
-            $$('sonic-linear-waiting').classList.add('ninja');
+            ad($$('control-center-spinner'), 'ninja');
+            ad($$('sonic-linear-waiting'), 'ninja');
           }, earlyMillis);
         } else {
-          $$('control-center-spinner').classList.add('ninja');
-          $$('sonic-linear-waiting').classList.add('ninja');
+          ad($$('control-center-spinner'), 'ninja');
+          ad($$('sonic-linear-waiting'), 'ninja');
         }
       });
   };

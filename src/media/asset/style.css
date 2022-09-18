@@ -576,47 +576,6 @@ footer {
   display: none;
 }
 
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-  left: -130px;
-  top: -35px;
-}
-
-/* Tooltip text */
-.tooltip p {
-  visibility: visible;
-  width: 305px;
-  background-color: rgb(250, 233, 163);
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  padding: 11px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 5px;
-  color: rgb(80, 62, 48);
-  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltip .tooltiptext::before {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  bottom: 100%;
-  left: 150px;
-  border: 0.75rem solid transparent;
-  border-top: none;
-  border-bottom-color: rgb(250, 233, 163);
-  filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, 0.1));
-}
-
 #tag-beta {
   margin: 0 10px;
   padding: 3px 10px;

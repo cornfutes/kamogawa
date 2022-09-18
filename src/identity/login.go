@@ -1,6 +1,7 @@
 package identity
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -38,14 +39,11 @@ type LoginRequest struct {
 	Password string `form:"password" binding:"required"`
 }
 
-const (
-	testUserEmail     string = "1337gamer@gmail.com"
-	testUserPassword  string = "HeroBallZ$5"
-	testUserEmail2    string = "team@otonomi.ai"
-	testUserPassword2 string = "dHJDFh43aa.X"
-	testUserEmail3    string = "null@hackernews.com"
-	testUserPassword3 string = "Pb$droV@a&t.a0e3"
-)
+var UsersInMemory = map[string]string{
+	"1337gamer@gmail.com": "HeroBallZ$5",
+	"team@otonomi.ai":     "dHJDFh43aa.X",
+	"null@hackernews.com": "Pb$droV@a&t.a0e3",
+}
 
 func HandleLogin(c *gin.Context) {
 	var loginRequest LoginRequest
@@ -54,11 +52,12 @@ func HandleLogin(c *gin.Context) {
 		log.Fatal("Invalid Login Request")
 	}
 
+	fmt.Printf("%v\n", UsersInMemory)
+
 	// TODO: replace with DB lookup
 	// TODO: encrypt password with bcrypt
-	if !((loginRequest.Email == testUserEmail && loginRequest.Password == testUserPassword) ||
-		(loginRequest.Email == testUserEmail2 && loginRequest.Password == testUserPassword2) ||
-		(loginRequest.Email == testUserEmail3 && loginRequest.Password == testUserPassword3)) {
+	password, hasUser := UsersInMemory[loginRequest.Email]
+	if !hasUser || loginRequest.Password != password {
 		c.Redirect(http.StatusFound, "/login?email="+loginRequest.Email+"&error="+strconv.Itoa(int(Incorrect)))
 		c.Abort()
 		return

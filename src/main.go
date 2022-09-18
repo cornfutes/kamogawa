@@ -16,6 +16,7 @@ import (
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -29,18 +30,17 @@ func init() {
 	db = core.InitDB(shimogawaUrl)
 
 	// TODO: remove. for prototyping purposes.
-	db.FirstOrCreate(&types.User{
-		Email:    "1337gamer@gmail.com",
-		Password: "1234",
-	})
-	db.FirstOrCreate(&types.User{
-		Email:    "team@otonomi.ai",
-		Password: "dHJDFh43aa.X",
-	})
-	db.FirstOrCreate(&types.User{
-		Email:    "null@hackernews.com",
-		Password: "Pb$droV@a&t.a0e3",
-	})
+	// note: we currently ignore the stored DB password.
+	for email, password := range identity.UsersInMemory {
+		encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+		if err != nil {
+			panic("Error setting up initializing user credentials.")
+		}
+		db.FirstOrCreate(&types.User{
+			Email:    email,
+			Password: string(encryptedPassword),
+		})
+	}
 }
 
 func main() {

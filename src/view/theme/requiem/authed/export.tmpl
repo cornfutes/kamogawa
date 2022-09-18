@@ -15,7 +15,7 @@
 </p>
 
 <div class="💪 🦠" style="padding-bottom: 20px">
-  <div class="💪 🪜">
+  <div class="💪 🪜" id="page-export-options">
     <label class="container">
       <input type="checkbox" id="download-checkbox-projects">
       <span class="checkmark"></span>
@@ -73,5 +73,77 @@
   <button class="disabled">Download as DuckDB</button>
 </p>
 
+<style>
+  #page-export-options .container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
+  #page-export-options .container.disabled {
+    cursor: not-allowed;
+    text-decoration: line-through;
+    color: var(--g);
+  }
+
+  /* Hide the browser's default checkbox */
+  #page-export-options .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  /* Create a custom checkbox */
+  #page-export-options .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    background-color: var(-b);
+    border: 1px var(--f) solid;
+  }
+
+  #page-export-options .container.disabled .checkmark {
+    border: 1px solid var(--g)
+  }
+
+  #page-export-options .container:hover input~.checkmark {
+    background-color: var(-b);
+  }
+
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+  #page-export-options .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  /* Show the checkmark when checked */
+  #page-export-options .container input:checked~.checkmark:after {
+    display: block;
+  }
+
+  /* Style the checkmark/indicator */
+  #page-export-options .container .checkmark:after {
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 9px;
+    border: solid var(--e);
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(35deg);
+    -ms-transform: rotate(35deg);
+    transform: rotate(35deg);
+  }
+</style>
 {{end}}

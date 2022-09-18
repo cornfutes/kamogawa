@@ -4,9 +4,9 @@
     <div class="side-title">Admin</div>
       <div class="side-menu">
         {{if eq .PageName "gcp_auth"}}
-        <a href=authorization class="🐟">
+        <a href=authorization class="🐟" data-sonic>
         {{else}}
-        <a href=authorization>
+        <a href=authorization data-sonic>
         {{end}}
           <svg viewBox="0 0 488.932 488.932" fill="currentColor">
             <path
@@ -15,9 +15,9 @@
           Authorization
         </a>
         {{if eq .PageName "gcp_export"}}
-        <a href=authorization class="🐟">
+        <a href=export class="🐟" data-sonic>
         {{else}}
-        <a href=export>
+        <a href=export data-sonic>
           {{end}}
           <svg viewBox="0 0 512 512">
             <g xmlns="http://www.w3.org/2000/svg" fill="currentColor">
@@ -38,9 +38,9 @@
     <div class="side-title">Products</div>
     <div class="side-menu">
       {{if eq .PageName "gcp_overview"}}
-      <a href=overview class="🐟">
+      <a href=overview class="🐟" data-sonic>
       {{else}}
-      <a href=overview>
+      <a href=overview data-sonic>
       {{end}}
         <svg viewBox="0 0 488.455 488.455" fill="currentColor">
           <path
@@ -51,9 +51,9 @@
         Overview
       </a>
       {{if eq .PageName "gcp_gce_overview"}}
-      <a href=gce class="🐟">
+      <a href=gce class="🐟" data-sonic>
       {{else}}
-      <a href=gce>
+      <a href=gce data-sonic>
       {{end}}
         <svg viewBox="0 0 512 512" fill="currentColor">
           <circle cx="295.099" cy="327.254" r="110.96" transform="rotate(-45 295.062 327.332)" />
@@ -63,9 +63,9 @@
         VMs
       </a>
       {{if eq .PageName "gcp_gae_overview"}}
-      <a href=gae class="🐟">
+      <a href=gae class="🐟" data-sonic>
       {{else}}
-      <a href=gae>
+      <a href=gae data-sonic>
       {{end}}
         <svg viewBox="0 0 58 58" fill="currentColor">
           <path
@@ -74,9 +74,9 @@
         GAE
       </a>
       {{if eq .PageName "gcp_sql_overview"}}
-      <a href=sql class="🐟">
+      <a href=sql class="🐟" data-sonic>
       {{else}}
-      <a href=sql>
+      <a href=sql data-sonic>
       {{end}}
         <svg viewBox="0 0 512 512" fill="currentColor">
           <path
@@ -85,9 +85,9 @@
         PSQL
       </a>
       {{if eq .PageName "gcp_fn_overview"}}
-      <a href=functions class="🐟">
+      <a href=functions class="🐟" data-sonic>
       {{else}}
-      <a href=functions>
+      <a href=functions data-sonic>
       {{end}}
         <svg viewBox="0 0 512 512" fill="currentColor">
           <path

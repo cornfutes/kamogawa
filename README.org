@@ -10,7 +10,7 @@ additional segments of the user journey that are undeserved by incumbents.
 *** Virtues
 #+BEGIN_SRC plaintext
 performance           i.e. pages loads fast, runs fast
-basic UI              think Craigslist/HackerNews
+anti-modern           think Craigslist/HackerNews
 mobile-first     
 global                multi-cloud, cross-region, cross-Project, cross-Account
 minimal               quality over comprehensiveness 

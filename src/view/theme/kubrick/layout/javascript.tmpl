@@ -120,5 +120,26 @@
   l($$('search-filter-date-active'), 'click', e => {
     $$('search-filter-date-dropdown').classList.add('ninja');
   });
+
+  window.history.replaceState({}, '', window.location.href);
+
+  const elSlot = 'frame-content';
+  // Sonic.js
+  var $onic = url => {
+    return fetch(url)
+      .then(res => res.text())
+      .then(res => {
+        $$(elSlot).innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
+      });
+  };
+  var rings = document.querySelectorAll('[data-sonic]');
+  var i = rings.length;
+  while (i--) l(rings[i], 'click', e => {
+    e.preventDefault();
+    // TODO: handle anchors.
+    if (e.target.href != window.location.href) $onic(e.target.href).then(_ => window.history.pushState({}, '', e.target.href));
+  });
+  // TODO: restore scroll state.
+  l(window, 'popstate', e => e.state && $onic(window.location.href));
 </script>
 {{end}}

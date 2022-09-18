@@ -56,6 +56,9 @@ var (
 
 	//go:embed asset/splash_landing.gif
 	splashLanding []byte
+	//go:embed asset/splash_landing_hd.gif
+	splashLandingHD []byte
+
 	//go:embed asset/splash_fuji.gif
 	splashFuji []byte
 	//go:embed asset/splash_ship.gif
@@ -126,6 +129,7 @@ func Register(r *gin.Engine) {
 	r.GET(MediaBaseUrl+"blog_docker.gif", Data(MimeTypeGIF, pngBlog7))
 
 	r.GET(MediaBaseUrl+"splash_landing.gif", Data(MimeTypeGIF, splashLanding))
+	r.GET(MediaBaseUrl+"splash_landing_hd.gif", Data(MimeTypeGIF, splashLandingHD))
 	r.GET(MediaBaseUrl+"splash_fuji.gif", Data(MimeTypeGIF, splashFuji))
 	r.GET(MediaBaseUrl+"splash_ship.gif", Data(MimeTypeGIF, splashShip))
 	r.GET(MediaBaseUrl+"console.svg", Data(MimeTypeSVG, console))

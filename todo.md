@@ -50,5 +50,8 @@
 [ ] upgrade to Go 1.19 from our host machine
 [ ] bug 
   [ ] only landing page, GCP is selected. same ith login page. we need to add more bits
+  [ ] route from search to account page
 [ ] $onic 
   [ ] handle SPA navigation when left nav doesn't exist yet.
+[ ] control panel
+  [ ] hard refresh button 

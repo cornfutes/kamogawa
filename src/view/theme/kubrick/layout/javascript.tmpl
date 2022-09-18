@@ -172,12 +172,12 @@
   };
   var rings = document.querySelectorAll('[data-sonic]');
   var i = rings.length;
-  while (i--) l(rings[i], 'click', e => {
+  while (i--) l(rings[i], 'click', e => { // surprisingly works with keyboard nav, too.
     e.preventDefault();
     // TODO: handle anchors. lets say we navigate then come back to original url. window.location.href is still pegged.
     if (e.target.href != window.location.href) $onic(e.target.href).then(_ => window.history.pushState({}, '', e.target.href));
   });
-  // TODO: 
+  // TODO: add a mouse spinner icon
   // TODO: maintain cache.
   // TODO: restore scroll state.
   l(window, 'popstate', e => e.state && $onic(window.location.href));

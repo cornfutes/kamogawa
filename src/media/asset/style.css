@@ -121,8 +121,8 @@ body {
 }
 
 hr {
-  width: 300px;
-  background-color: grey;
+  width: 300px; /** TODO paramterize */
+  background-color: grey; /** TODO: paramterizer */
   border: none;
   height: 1px;
 }
@@ -131,6 +131,7 @@ header {
   flex: 0 1rem;
   padding: .5rem;
   border-bottom: var(--frame-thickness) solid var(--h);
+  justify-content: center;
 }
 #header-child {
   justify-content: space-between;
@@ -196,13 +197,7 @@ input[type="submit"]:hover {
   opacity: 1;
   transition: all 0.5s ease-in-out;
 }
-.landing {
-  font-size: 21px;
-  width: var(--width);
-}
-
 .splash-container {
-  width: var(--width);
   position: relative;
 }
 .splash-container > h1 {
@@ -243,7 +238,7 @@ h3 {
 
 footer {
   border-top: var(--frame-thickness) solid var(--h);
-  padding: 21px 0px;
+  padding-top: 10px;
 }
 footer>ul>li { display: inline-block; padding: 0 .5rem; }
 footer>ul>li:not(:last-child) { border-right: 1px solid #424245; }
@@ -280,11 +275,10 @@ td { padding: 10px; }
 button {
   background-color: transparent;
   outline: none;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--g);
+  border: 1px solid var(--g);
   color: var(--f);
   padding: 6px 10px;
+  cursor: pointer;
 }
 button:hover {
   border-color: var(--f);
@@ -297,7 +291,6 @@ button.disabled {
 }
 button.disabled:hover {
   border-color: var(--g);
-  color: var(--g);
 }
 
 #top-nav {
@@ -316,8 +309,8 @@ button.disabled:hover {
   aside { width: auto; border-right: 0; border-bottom: 1px solid #313231; }
   aside>nav { margin-top: 20px; padding-top: 0; }
   .content-narrow { padding: 10px; }
-  #header-child { flex-basis: 800px; justify-content: flex-start; align-items: flex-start; }
-  main, .landing, .splash-container { width: 800px; }
+  header { justify-content: flex-start;}
+  #header-child { flex-basis: auto; }
   table { min-width: 720px; }
   .splash-container>h1 {
     font-size: 36px;
@@ -330,8 +323,6 @@ button.disabled:hover {
   aside>nav, #logo, #top-nav { margin-left: 20px; }
   #content { padding: 20px; }
   section, .content-narrow { padding: 10px; }
-  #header-child { flex-basis: 600px; }
-  main, .splash-container, .landing { width: 600px; }
   table { min-width: 560px; }
   .splash-container > h1{
     font-size: 36px;
@@ -340,9 +331,6 @@ button.disabled:hover {
   }
 }
 @media all and (max-width: 600px) {
-  #header-child { flex-basis: 450px; }
-  /** TODO fix this on small screen. inline styles on element overides */
-  #landing-cloud-partners, .splash-container, main, .landing { width: 450px; }
   table { min-width: 410px; }
   .splash-container > h1  {
     font-size: 30px;
@@ -353,8 +341,6 @@ button.disabled:hover {
 }
 
 @media all and (max-width: 450px) {
-  #header-child { flex-basis: 350px; }
-  #landing-cloud-partners, .splash-container, main, .landing { width: 350px; }
   table { min-width: 310px; }
   .splash-container>h1 {
     font-size: 24px;

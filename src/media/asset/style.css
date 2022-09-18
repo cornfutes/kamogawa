@@ -21,8 +21,8 @@
 }
 
 .🍕 { font-style: italic; }
-.💪 { display: flex; }
-.🪜 { display: flex; flex-flow: column; }
+.💪, .🪜 { display: flex; }
+.🪜 { flex-flow: column; }
 .🦷 { gap: 1rem; }
 .🌳 { flex: 1; }
 .🌎 { border: 0; }

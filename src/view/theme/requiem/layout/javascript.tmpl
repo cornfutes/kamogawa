@@ -17,6 +17,7 @@ let $d = document,
     $t = $('session-nav'),
     $s = $('search-box'),
     $a = $('search-start'),
+     y = x => x.href.split('?')[0],
      v = e => e.target.value,
      s = q => window.location.href = `/search?q=${encodeURI(q)}`,
     fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
@@ -48,11 +49,13 @@ $i[z](u, e => {
 });
 $('search-cancel')[z](c, defo);
 
+// Not critical.
 const lNav = $("nav-gcp"); if (lNav) {
   if (localStorage.getItem('nav-gcp-open') == 'true') lNav.open = true;
   lNav[z]("toggle", _ => localStorage.setItem('nav-gcp-open', lNav.open));
 } 
 
+// Not critical
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
 
 {{if eq .IsSearch "yes" }}
@@ -132,12 +135,9 @@ $re[z](c, e => {
 $re[z](u, e => e.code == k && q != o && e[p]() && s(q));
 {{end}}
 
+// Not critical
 const lnl = $d.querySelectorAll('.left-nav-link');
-lnl && lnl.forEach(el => {
-  if (el.querySelector('a').href.split('?')[0] == window.location.href.split('?')[0]) {
-    el.classList.add('active');
-    return;
-  }
-});
+lnl && lnl.forEach(el => y(el.querySelector('a')) == y(window.location) && ad(el, 'active'));
+
 </script>
 {{end}}

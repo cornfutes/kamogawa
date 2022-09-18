@@ -10,30 +10,33 @@
     </nav>
   </div>
   <input id="query" value="{{.Query}}" placeholder="Type to search..."></input>
-  <div class=" 💪 🥷 🦠" id="query-builder">
-    <div>
-      <label for=provider>Provider:</label>
-      <select name=provider onchange="change(event, 0)">
-        <option value=all>All (implicit) </option>
-        <option value=gcp>GCP</option>
-        <option value=aws>AWS</option>
-        <option value=azure>Azure</option>
-      </select>
-      <label for=algo>Algo:</label>
-      <select name=algo onchange="change(event, 1)">
-        <option value=substring>substring (implicit) </option>
-        <option value=fulltext>Full-text</option>
-      </select>
-      <label for=time>Modified:</label>
-      <select name=time onchange="change(event, 2)">
-        <option value=all>All time</option>
-        <option value=last24>Last 24h</option>
-        <option value=lastmonth>Last Month (implicit) </option>
-      </select>
+  <div class="💪 🪜 🥷 🦠" id="query-builder">
+    <div class="💪  🦠">
+      <div>
+        <label for=provider>Provider:</label>
+        <select name=provider onchange="change(event, 0)">
+          <option value=all>All (implicit) </option>
+          <option value=gcp>GCP</option>
+          <option value=aws>AWS</option>
+          <option value=azure>Azure</option>
+        </select>
+        <label for=algo>Algo:</label>
+        <select name=algo onchange="change(event, 1)">
+          <option value=substring>substring (implicit) </option>
+          <option value=fulltext>Full-text</option>
+        </select>
+        <label for=time>Modified:</label>
+        <select name=time onchange="change(event, 2)">
+          <option value=all>All time</option>
+          <option value=last24>Last 24h</option>
+          <option value=lastmonth>Last Month (implicit) </option>
+        </select>
+      </div>
+      <div>
+        <span class="🐕 🥷" id="s-b-r">reset</spn>
+      </div>
     </div>
-    <div>
-      <span class="🐕 🥷" id="s-b-r">reset</spn>
-    </div>
+    <h3>*We are redesigning the filter mechanism in the <a href="http://localhost:3000/set_theme?theme=kubrick">"Web3.0"</a> version.</h3>
   </div>
 </div>
 {{if .Unauthorized}}
@@ -83,7 +86,7 @@
   #query-builder {
     font-size: 14px;
     padding: 0px 20px 8px 20px;
-    max-height: 50px;
+    max-height: 80px;
     overflow: hidden;
     transition: max-height 1s;
   }

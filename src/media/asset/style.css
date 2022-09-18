@@ -298,13 +298,18 @@ input[type="submit"]:hover {
   position: relative;
 }
 
-.splash-text {
+.splash-container > h1 {
   position: absolute;
   bottom: 100px;
   left: 150px;
   width: 400px;
   font-weight: 500;
   text-shadow: 10px 10px 15px black;
+}
+
+.splash-container > img {
+  border-radius: 12px;
+  width: 100%;
 }
 
 .content-narrow {
@@ -441,11 +446,6 @@ button.disabled:hover {
 
 #top-link {
   display: inline-flex;
-
-}
-
-.splash-image {
-  border-radius: 12px;
 }
 
 @media all and (max-width: 1000px) {
@@ -494,15 +494,15 @@ button.disabled:hover {
     position: relative;
   }
 
-  .content-narrow {
-    padding: 10px;
-  }
-
-  h1.splash-text {
+  .splash-container>h1 {
     font-size: 36px;
     left: 60px;
     bottom: 80px;
     width: 350px;
+  }
+
+  .content-narrow {
+    padding: 10px;
   }
 }
 
@@ -545,6 +545,12 @@ button.disabled:hover {
     width: 600px;
     position: relative;
   }
+  .splash-container > h1{
+    font-size: 36px;
+    left: 60px;
+    bottom: 80px;
+    width: 350px;
+  }
 
   .content-narrow {
     padding: 10px;
@@ -556,13 +562,6 @@ button.disabled:hover {
 
   .content-narrow {
     padding: 10px;
-  }
-
-  h1.splash-text {
-    font-size: 36px;
-    left: 60px;
-    bottom: 80px;
-    width: 350px;
   }
 
   table {
@@ -600,13 +599,17 @@ button.disabled:hover {
     width: 450px;
   }
 
-  h1.splash-text {
+  .splash-container {
+    width: 450px;
+    overflow: hidden;
+  }
+
+  .splash-container > h1  {
     font-size: 24px;
     left: 36px;
     bottom: 50px;
     width: 450px;
   }
-
 
   .landing {
     font-size: 21px;
@@ -614,15 +617,11 @@ button.disabled:hover {
     padding-top: 10px;
   }
 
-  .splash-container {
-    width: 450px;
-    overflow: hidden;
-  }
-
   .content-narrow {
     padding: 10px;
   }
 
+  /** TODO fix this on small screen. inline styles on element overides */
   #landing-cloud-partners {
     width: 450px;
     margin: 0;
@@ -664,23 +663,22 @@ button.disabled:hover {
     width: 350px;
   }
 
-  h1.splash-text {
+  .splash-container {
+    width: 350px;
+    overflow: hidden;
+  }
+
+  .splash-container>h1 {
     font-size: 24px;
     left: 36px;
     bottom: 50px;
     width: 350px;
   }
 
-
   .landing {
     font-size: 21px;
     width: 350px;
     padding-top: 10px;
-  }
-
-  .splash-container {
-    width: 350px;
-    overflow: hidden;
   }
 
   .content-narrow {

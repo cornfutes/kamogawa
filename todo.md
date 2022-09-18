@@ -47,6 +47,7 @@
 [ ] add 404, 500 page 
 [ ] look into this gin warning about proxies trusting all
 [ ] look into removing plans.html and tbd.html as it seems like deadcode
+[x] fix demo /logout redirect behavior
 [ ] upgrade to Go 1.19 from our host machine
 [ ] bug 
   [ ] only landing page, GCP is selected. same ith login page. we need to add more bits
@@ -55,3 +56,4 @@
   [ ] handle SPA navigation when left nav doesn't exist yet.
 [ ] control panel
   [ ] hard refresh button 
+[ ] update reset password page 

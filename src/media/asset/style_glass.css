@@ -1134,7 +1134,7 @@ a:hover {
   align-items: flex-start
 }
 
-.link_with_arrow:after {
+.💘:after {
   content: "❯";
   padding-left: .3rem;
 }

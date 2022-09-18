@@ -91,8 +91,8 @@ header a { color: var(--e); }
   font-size: .9rem;
   background-color: var(--x);
 }
-#session-nav { flex-direction: row-reverse; }
 #session-nav a { opacity: .7; font-size: .9rem; }
+#session-nav { flex-direction: row-reverse; }
 footer { border-top: var(--frame-thickness) solid var(--h); padding-top: 10px; }
 footer>ul>li { display: inline-block; padding: 0 .5rem; }
 footer>ul>li:not(:last-child) { border-right: 1px solid #424245; }
@@ -100,7 +100,7 @@ footer>ul>li>a { color: #a1a1a6; }
 
 main { width: var(--width); }
 
-aside { width: 14em; border-right: var(--frame-thickness) solid var(--h); }
+aside { flex-basis: 14em; border-right: var(--frame-thickness) solid var(--h); }
 aside nav { margin-top: 40px; }
 aside li { padding: .5rem 0; }
 aside li.active { border-right: .5rem solid var(--f); }
@@ -165,20 +165,6 @@ hr {
   height: 1px;
 }
 
-input[type="submit"] {
-  background-color: #0071e3;
-  opacity: .9;
-  border-radius: 1rem;
-  padding: 4px 11px;
-  font-size: 17px;
-  color: var(--j);
-}
-input[type="submit"]:hover {
-  background-color: #0077ed;
-  opacity: 1;
-  transition: all 0.5s ease-in-out;
-}
-
 .👻, input[type=checkbox]:checked~label { display: none;}
 
 .splash-container { position: relative; }
@@ -194,18 +180,17 @@ input[type="submit"]:hover {
 
 .content-narrow { padding: 0px 150px 51px 150px; border-bottom: 1px solid rgb(66, 66, 69);}
 
-/** TODO: use shorter name */
-.link_with_arrow:after { content: "❯"; padding-left: .3rem; }
+.💘:after { content: "❯"; padding-left: .3rem; }
 
 @media all and (max-width: 1000px) {
   header { justify-content: flex-start;}
-  header>div { flex-basis: auto; }
-  #top-nav, main,  header>div { flex-direction: column; }
-  aside, #top-nav { padding-bottom: 20px; }
-  aside { width: auto; border-right: 0; border-bottom: 1px solid #313231;}
+  header>div, aside { flex-basis: auto; }
+  #session-nav, main, header>div { flex-direction: column; }
+  aside, #session-nav { padding-bottom: 20px; }
+  aside {  border-right: 0; border-bottom: 1px solid var(--h);}
 
   #content { padding: 20px; }
-  #top-nav, aside>nav, #logo { margin-left: 20px; }
+  #session-nav, aside>nav, #logo { margin-left: 20px; }
   aside>nav { margin-top: 12px; padding-top: 0; }
   .content-narrow { padding: 10px; }
   .splash-container>h1 { font-size: 32px; left: 40px; }

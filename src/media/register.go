@@ -30,6 +30,10 @@ var (
 	//go:embed asset/style.css
 	styleCss    []byte
 	styleCssMin []byte
+	//go:embed asset/style_glass.css
+	styleCssKubrick            []byte
+	styleCssStyleCssKubrickMin []byte
+
 	//go:embed asset/screensaver.mp4
 	mp4Screensaver []byte
 	//go:embed asset/cloud_logo_aws.png
@@ -115,6 +119,7 @@ func Register(r *gin.Engine) {
 		r.StaticFile("/style_glass.css", "media/asset/style_glass.css")
 	} else {
 		r.GET("style.css", Data(MimeTypeCSS, styleCssMin))
+		r.GET("style_glass.css", Data(MimeTypeCSS, styleCssStyleCssKubrickMin))
 	}
 	r.GET(MediaBaseUrl+"screensaver.mp4", Data(MimeTypeMP4, mp4Screensaver))
 	r.GET(MediaBaseUrl+"cloud_logo_aws.png", Data(MimeTypePNG, pngAWS))
@@ -157,6 +162,7 @@ func preparecss(m *minify.M) {
 	m.AddFunc("text/css", minifyCss.Minify)
 	var err error
 	styleCssMin, err = m.Bytes("text/css", styleCss)
+	styleCssStyleCssKubrickMin, err = m.Bytes("text/css", styleCssKubrick)
 	if err != nil {
 		panic(err)
 	}

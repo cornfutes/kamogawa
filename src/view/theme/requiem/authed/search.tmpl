@@ -74,4 +74,65 @@
 <p>No results found</p>
 {{end}}
 {{end}}
+<style>
+  #search-hero {
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--g);
+  }
+
+  #query-builder {
+    font-size: 14px;
+    padding: 0px 20px 8px 20px;
+    max-height: 50px;
+    overflow: hidden;
+    transition: max-height 1s;
+  }
+
+  #query-builder>* {
+    padding-top: 14px;
+  }
+
+  #query-builder.🥷 {
+    max-height: 1px;
+    display: flex;
+  }
+
+  #query-builder label {
+    margin-right: 4px;
+  }
+
+  #query-builder select {
+    background-color: transparent;
+    color: var(--f);
+    padding: 0 1em 0 0;
+    margin: 0;
+    outline: 1px solid var(--g);
+    margin-right: 12px;
+  }
+
+  .🎴 {
+    border: 1px solid var(--e);
+    margin-bottom: 7px;
+  }
+
+  .🎴>h3 {
+    padding-left: 20px;
+  }
+
+  .🎴>h5.truncate {
+    width: 500px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px 20px;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .🎴>p {
+    font-size: 12px;
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+</style>
 {{end}}

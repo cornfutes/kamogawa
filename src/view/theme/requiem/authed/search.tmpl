@@ -134,5 +134,50 @@
     padding-left: 20px;
     margin-bottom: 20px;
   }
+
+  .🐉 h3 {
+    padding-right: 0;
+    margin-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .🐉 input {
+    color: var(--a);
+    opacity: 1;
+    background-color: var(--f);
+    margin: 0;
+    border-radius: 20px;
+    border: 0;
+    outline: none;
+    font-family: monospace;
+    font-size: 20px;
+    font-weight: 300px;
+    padding: 10px;
+    box-shadow: 0 0 15px var(--f);
+    transition: opacity 1s, border-radius .5s, box-shadow 1s;
+  }
+
+  .🐉 input:focus {
+    opacity: .8;
+    border-radius: 0px;
+    transition: opacity 1s, border-radius .5s, box-shadow 1s;
+    box-shadow: 0 0 0 black;
+  }
+
+  #s-re {
+    border-bottom: 5px solid var(--f);
+  }
+
+  #s-re.⚡ {
+    border-bottom: 0;
+    opacity: .65;
+    border-top: none;
+    text-decoration: line-through;
+    color: var(--i);
+  }
+
+  #s-re.⚡:hover {
+    cursor: not-allowed;
+  }
 </style>
 {{end}}

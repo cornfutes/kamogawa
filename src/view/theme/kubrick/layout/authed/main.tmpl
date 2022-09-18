@@ -3,8 +3,10 @@
   {{if not .IsSearch}}
   {{ template "leftnav" .}}
   {{end}}
-  <div class="main-container" id="frame-content">
-    {{template "page" .}}
+  <div class="main-container">
+    <div id="frame-content" class="main-container">
+      {{template "page" .}}
+    </div>
     <div class="widget__loading-bar ninja" id="sonic-linear-waiting">
       <div class="widget__loading-bar-value"></div>
     </div>

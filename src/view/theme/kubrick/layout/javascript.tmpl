@@ -124,25 +124,42 @@
   window.history.replaceState({}, '', window.location.href);
 
   const elSlot = 'frame-content';
+
+  // TODO: cancel any outstanding backing loads. i.e. load app engine, then load something else,
+  // then app engine comes back.
   // Sonic.js
+  let t = Date.now();
+  let T_THRESHOLD = 750; // minimum milliseconds to show spinner for 
   var $onic = url => {
     $$('control-center-spinner').classList.remove('ninja'); // TODO: deprecate spinner
     $$('sonic-linear-waiting').classList.remove('ninja');
+    t = Date.now();
     return fetch(url)
       .then(res => res.text())
       .then(res => {
         $$(elSlot).innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
-        $$('control-center-spinner').classList.add('ninja');
-        $$('sonic-linear-waiting').classList.add('ninja');
+        const elapsed = Date.now() - t;
+        const earlyMillis = Math.max(T_THRESHOLD - elapsed, 0);
+        if (earlyMillis > 0) {
+          console.log("Eaely Millis", earlyMillis)
+          setTimeout(_ => {
+            $$('control-center-spinner').classList.add('ninja');
+            $$('sonic-linear-waiting').classList.add('ninja');
+          }, earlyMillis);
+        } else {
+          $$('control-center-spinner').classList.add('ninja');
+          $$('sonic-linear-waiting').classList.add('ninja');
+        }
       });
   };
   var rings = document.querySelectorAll('[data-sonic]');
   var i = rings.length;
   while (i--) l(rings[i], 'click', e => {
     e.preventDefault();
-    // TODO: handle anchors.
+    // TODO: handle anchors. lets say we navigate then come back to original url. window.location.href is still pegged.
     if (e.target.href != window.location.href) $onic(e.target.href).then(_ => window.history.pushState({}, '', e.target.href));
   });
+  // TODO: maintain cache.
   // TODO: restore scroll state.
   l(window, 'popstate', e => e.state && $onic(window.location.href));
 </script>

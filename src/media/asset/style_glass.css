@@ -19,7 +19,7 @@
   --popup-bg: rgb(22 25 37);
   --search-bg: #14162b;
   --overlay-bg: rgba(36, 39, 59, 0.3);
-  --scrollbar-bg: rgb(1 2 3 / 40%);
+  --scrollbar-bg:rgb(255 206 69 / 70%);  /**  rgb(1 2 3 / 40%);*/
 }
 
 .light-mode {
@@ -34,7 +34,8 @@
   --border-color: rgb(255 255 255 / 35%);
   --popup-bg: rgb(255 255 255);
   --hover-menu-bg: rgba(255 255 255 / 35%);
-  --scrollbar-bg: rgb(255 253 253 / 57%);
+  /* --scrollbar-bg: rgb(255 253 253 / 57%); */
+  --scrollbar-bg: rgb(123 0 255 / 40%);
   --content-title-color: --theme-color;
 }
 

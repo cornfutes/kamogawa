@@ -126,7 +126,7 @@
   const elSlot = 'frame-content';
   // Sonic.js
   var $onic = url => {
-    $$('control-center-spinner').classList.remove('ninja');
+    $$('control-center-spinner').classList.remove('ninja'); // TODO: deprecate spinner
     $$('sonic-linear-waiting').classList.remove('ninja');
     return fetch(url)
       .then(res => res.text())

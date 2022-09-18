@@ -6,7 +6,7 @@
       <span id="s-re" class="🐕 ⚡" tabindex=0 onkeyup="">
         search
       </span>
-      <span tabindex=0 class="🐕 arrow down" id="s-mod">tools<i></i></span>
+      <span tabindex=0 class="🐕 filter-expander-arrow filter-expander-arrow-down" id="s-mod">tools<i></i></span>
     </nav>
   </div>
   <input id="query" value="{{.Query}}" placeholder="Type to search..."></input>
@@ -184,6 +184,20 @@
     .🎴>h5.truncate {
       width: 300px;
     }
+  }
+
+  .filter-expander-arrow>i {
+    border: solid var(--e);
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    /** consider adding class */
+    padding: 4px;
+    margin-left: 10px;
+    /** consider remove */
+  }
+
+  .filter-expander-arrow-down>i {
+    transform: rotate(45deg) translateX(-3px)
   }
 </style>
 {{end}}

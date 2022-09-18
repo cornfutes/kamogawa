@@ -52,7 +52,7 @@ img {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  max-width: 100%;
+  max-width: 100%; /** TODO: consider merging with splash image */
 }
 
 #content {
@@ -71,9 +71,9 @@ img {
 .arrow>i {
   border: solid var(--e);
   border-width: 0 2px 2px 0;
-  display: inline-block;
+  display: inline-block; /** consider adding class */
   padding: 4px;
-  margin-left: 10px;
+  margin-left: 10px; /** consider remove */
 }
 
 .down>i {
@@ -142,14 +142,15 @@ header>div {
   flex: 0 0 var(--width);
 }
 
+
 #logo {
-  font-weight: 400;
+  font-weight: 400; /**  TODO: Refactor */
   font-size: 1.2rem;
-  line-height: 38px;
-  align-items: center;
+  line-height: 38px; /** TODO: refactor to variable */
+  align-items: center; /** TODO: seems obsolete */
 }
 #logo a {
-  color: var(--e);
+  color: var(--e); /** TODO: can probably refactor */
   opacity: 1;
 }
 #logo #logo-image {
@@ -161,7 +162,7 @@ header>div {
   display: inline-block;
 }
 
-main {
+main {  /** TODO: maybe use util class directly */
   align-items: center;
   width: 100%;
 }
@@ -225,7 +226,7 @@ input[type="submit"]:hover {
 }
 .splash-container > img {
   border-radius: 12px;
-  width: 100%;
+  width: 100%; 
 }
 
 .content-narrow {
@@ -233,7 +234,7 @@ input[type="submit"]:hover {
   border-bottom: 1px solid rgb(66, 66, 69);
 }
 
-.content {
+.content { /** TODO: revisit */
   margin-bottom: 51px;
 }
 
@@ -242,7 +243,7 @@ input[type="submit"]:hover {
   padding-left: .3rem;
 }
 
-h2 {
+h2, h3 {
   margin: 0 0 16px 0;
   padding-bottom: 5px;
   border-bottom: 1px solid var(--g);
@@ -252,14 +253,10 @@ h2 {
 }
 
 h3 {
-  margin: 0 0 16px 0;
-  padding-bottom: 5px;
-  border-bottom: 1px solid var(--g);
-  font-weight: 300;
   font-size: 20px;
-  color: var(--i);
 }
 
+/** TODO: only used on blog and landing. can refactor  */
 section { margin-top: 16px; padding: 3rem 0; }
 
 footer {
@@ -270,7 +267,6 @@ footer {
 footer>ul>li { display: inline-block; padding: 0 .5rem; }
 footer>ul> li:not(:last-child) { border-right: 1px solid #424245; }
 footer > ul > li>a { color: #a1a1a6; }
-
 
 .👻, input[type=checkbox]:checked~label { display: none;}
 
@@ -340,14 +336,13 @@ button.disabled:hover {
 
 @media all and (max-width: 1000px) {
   #top-nav, #main-child,  #header-child { flex-direction: column; }
-  #top-nav { margin-left: 40px; }
+  #top-nav, aside>nav { margin-left: 40px; }
   aside { width: auto; border-right: 0; border-bottom: 1px solid #313231; }
-  aside>nav { margin-top: 20px; padding-top: 0;  margin-left: 40px; }
+  aside>nav { margin-top: 20px; padding-top: 0; }
   .content-narrow { padding: 10px; }
   #header-child { flex-basis: 800px; justify-content: flex-start; align-items: flex-start; }
   #main-child, .landing, .splash-container { width: 800px; }
   table { min-width: 720px; }
-  .splash-container { position: relative; }
   .splash-container>h1 {
     font-size: 36px;
     left: 60px;
@@ -356,8 +351,7 @@ button.disabled:hover {
   }
 }
 @media all and (max-width: 800px) {
-  aside>nav { margin-left: 20px; }
-  #top-nav { margin-left: 20px; }
+  aside>nav, #logo, #top-nav { margin-left: 20px; }
   #content { padding: 20px; }
   section, .content-narrow { padding: 10px; }
   #header-child { flex-basis: 600px; }
@@ -367,7 +361,6 @@ button.disabled:hover {
     font-size: 36px;
     left: 60px;
     bottom: 80px;
-    width: 350px;
   }
 }
 @media all and (max-width: 600px) {
@@ -376,7 +369,7 @@ button.disabled:hover {
   #landing-cloud-partners, .splash-container, #main-child, .landing { width: 450px; }
   table { min-width: 410px; }
   .splash-container > h1  {
-    font-size: 22px;
+    font-size: 30px;
     left: 36px;
     bottom: 50px;
     width: 350px;
@@ -389,8 +382,5 @@ button.disabled:hover {
   table { min-width: 310px; }
   .splash-container>h1 {
     font-size: 24px;
-    left: 36px;
-    bottom: 50px;
-    width: 350px;
   }
 }

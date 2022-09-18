@@ -1316,11 +1316,12 @@ hr {
 
 .splash-text {
   position: absolute;
-  bottom: 100px;
+  bottom: 40px;
   left: 150px;
-  width: 400px;
+  width: 340px;
   font-weight: 500;
   text-shadow: 10px 10px 15px black;
+  color: #DAD7CD;
 }
 
 .🔫 {
@@ -1533,3 +1534,22 @@ hr {
     transform:  translateX(100%) scaleX(0.5);
   }
 }
+
+#landing-content {
+   margin-left: 150px; margin-right: 150px;
+}
+#landing-content h2 {
+  margin: 25px 0 0  0;
+}
+
+@media all and (max-width: 1000px) {
+  .splash-container>h1 { font-size: 32px; left: 40px; }
+  #landing-content { margin: 10px; }
+  body { padding: 0}
+  #content-wrapper { padding: 10px; }
+}
+
+@media all and (max-width: 500px) {
+  .splash-container>h1 { width: 230px; font-size: 20px; }
+}
+

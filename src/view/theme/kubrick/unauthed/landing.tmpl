@@ -1,70 +1,73 @@
 {{define "page"}}
-<div class="content-wrapper">
+<div class="content-wrapper" id="content-wrapper">
   <div class="💪 🪜 splash-container">
     <img src="/static/splash_landing_hd.gif" class="splash-image"
       alt="Illustration of Japanese torii gate in water under the moonlight. Courtesy of https://www.pixeltrue.com/scenic-illustrations">
     <h1 class="splash-text">Gateway to Your Cloud Infrastructure</h1>
   </div>
-  <p>
-    At first, cloud is overwhelming. At scale, unwieldy. Entropy runs rampant.
-  </p>
-  <p>
-    Every cloud workflows involve referencing assets or finding relevant
-    entrypoints. Currently, this is a bottleneck of and for cloud adoption.
-    It is an economic drain without inherent value.
-  </p>
-  <p>
-    Existing tools make humans serve them, which is backwards.
-  </p>
-  <p>
-    We make cloud accessible.
-    We've built a search engine to this end.
-  </p>
-  <p>
-    <a href="/demo">Try it out!</a>
-  </p>
-  <hr />
-  <section class="💪 🪜 content-narrow">
-    <h2>Supported Integrations</h2>
-    <div class="💪 🍏">
-      <div class="💪 🪜 🎂">
-        <img src="/static/cloud_logo_aws.png" alt="logo of AWS">
-        AWS
-      </div>
-      <div class="💪 🪜 🎂">
-        <img src="/static/cloud_logo_azure.png" alt="logo of Azure">
-        Azure
-      </div>
-      <div class="💪 🪜 🎂">
-        <img src="/static/cloud_logo_gcp.png" alt="logo of GCP">
-        GCP
-      </div>
-    </div>
-  </section>
+  <div id="landing-content">
+    <section>
+      <p>
+        At first, cloud is overwhelming. At scale, unwieldy.
+        Entropy has taken hold.
+      </p>
+      <p>
+        Every cloud workflows involve referencing assets or finding relevant
+        entrypoints. This is a bottleneck to cloud adoption.
+        It is an economic drain without inherent value.
+      </p>
+      <p>
+        Existing tools make humans serve them, which is backwards.
+      </p>
+      <p>
+        We make cloud accessible.
+        We've built a search engine to this end.
+      </p>
+      <p>
+        <a href="/demo">Try it out!</a>
+      </p>
+    </section>
 
-  <section class="💪 🪜">
-    <h2>Want to learn more?</h2>
-    <p>
-      Talk to <span style="text-decoration: line-through;">
-        our sales team</span> us (technical founders) to learn how we
-      save developers' time while providing operational visibility for business executives.
-      If you came here from YCombinator, we have a demo using live rather cached data.
-    </p>
-    <p>
-      <a href="mailto: {{.ContactEmail}}" class="💘">Email us</a><br />
-      <a href="{{.EapUrl}}" class="💘">Early Access Program</a>
-    </p>
-  </section>
-
-  <section class="💪 🪜">
-    <h2 class=" 🍜">System Status</h2>
-    <p>If you’re experiencing an issue with developer tools or services,
-      find out if there’s maintenance in progress or a
-      known issue.
-    </p>
-    <p>
-      <a href="/status" class="💘">View system status</a>
-    </p>
-  </section>
+    <section class="💪 🪜">
+      <h2>Supported Integrations</h2>
+      <div class="💪" style="gap: 40px">
+        <div class="💪 🪜 🎂">
+          <img src="/static/cloud_logo_aws.png" alt="logo of AWS">
+          AWS
+        </div>
+        <div class="💪 🪜 🎂">
+          <img src="/static/cloud_logo_azure.png" alt="logo of Azure">
+          Azure
+        </div>
+        <div class="💪 🪜 🎂">
+          <img src="/static/cloud_logo_gcp.png" alt="logo of GCP">
+          GCP
+        </div>
+      </div>
+    </section>
+    <section class="💪 🪜">
+      <h2>Ready to learn more?</h2>
+      <p>
+        Talk to <span style="text-decoration: line-through;">
+          our sales team</span> us (technical founders) to learn how we
+        save developers' time while providing operational visibility for business executives.
+        If you came here from YCombinator, we have a demo using live rather cached data.
+      </p>
+      <p>
+        <a href="mailto: {{.ContactEmail}}" class="💘">Email us</a><br />
+        <a href="{{.EapUrl}}" class="💘">Early Access Program</a>
+      </p>
+    </section>
+    <section class="💪 🪜">
+      <h2 class=" 🍜">System Status</h2>
+      <p>If you’re experiencing an issue with developer tools or services,
+        find out if there’s maintenance in progress or a
+        known issue.
+      </p>
+      <p>
+        <a href="/status" class="💘">View system status</a>
+      </p>
+    </section>
+  </div>
 </div>
 {{end}}

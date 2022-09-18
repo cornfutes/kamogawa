@@ -101,13 +101,7 @@ func init() {
 	}
 
 	if os.Getenv("SPA_ENABLED") == "hellyes" {
-		if DefaultTheme != "kubrick" {
-			panic("************* Expected Kubrick to be enabled")
-		}
 		SPAEnabled = true
-	} else if os.Getenv("SPA_ENABLED") == "no" {
-		SPAEnabled = true
-		panic("Fuck you")
 	} else {
 		SPAEnabled = false
 	}

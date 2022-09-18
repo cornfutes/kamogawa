@@ -1,11 +1,11 @@
 package identity
 
 import (
-	"kamogawa/config"
 	"log"
 	"net/http"
-
 	"strconv"
+
+	"kamogawa/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -38,14 +38,14 @@ type LoginRequest struct {
 	Password string `form:"password" binding:"required"`
 }
 
-const testUserEmail string = "1337gamer@gmail.com"
-const testUserPassword string = "HeroBallZ$5"
-
-const testUserEmail2 string = "team@otonomi.ai"
-const testUserPassword2 string = "dHJDFh43aa.X"
-
-const testUserEmail3 string = "null@hackernews.com"
-const testUserPassword3 string = "Pb$droV@a&t.a0e3"
+const (
+	testUserEmail     string = "1337gamer@gmail.com"
+	testUserPassword  string = "HeroBallZ$5"
+	testUserEmail2    string = "team@otonomi.ai"
+	testUserPassword2 string = "dHJDFh43aa.X"
+	testUserEmail3    string = "null@hackernews.com"
+	testUserPassword3 string = "Pb$droV@a&t.a0e3"
+)
 
 func HandleLogin(c *gin.Context) {
 	var loginRequest LoginRequest

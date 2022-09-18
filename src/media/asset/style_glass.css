@@ -83,19 +83,45 @@ img {
   max-width: 100%;
 }
 
-.dark-light {
+
+.widget__control_center {
   position: fixed;
   bottom: 50px;
   right: 30px;
-  background-color: var(--dropdown-bg);
-  box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
-  padding: 8px;
-  border-radius: 50%;
   z-index: 3;
-  cursor: pointer;
 }
 
-.dark-light svg {
+.widget__control_center .widget__control_center_spinner {
+  border: 5px solid var(--dropdown-bg);
+  -webkit-animation: loader-spin 1s linear infinite;
+  animation: loader-spin 1s linear infinite;
+  border-top: 5px solid #ffce45;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+  box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.4);
+}
+.light-mode .widget__control_center .widget__control_center_spinner {
+  border-top: 5px solid var(--theme-color);
+}
+
+@keyframes loader-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.widget__control_center .widget__control_center_lightswitch {
+  background-color: var(--dropdown-bg);
+  box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.4);
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+}
+
+.widget__control_center .widget__control_center_lightswitch svg {
   width: 24px;
   flex-shrink: 0;
   fill: #ffce45;
@@ -103,7 +129,7 @@ img {
   transition: 0.5s;
 }
 
-.light-mode .dark-light svg {
+.light-mode .widget__control_center .widget__control_center_lightswitch svg {
   fill: transparent;
   stroke: var(--theme-color);
 }

@@ -103,7 +103,7 @@
   });
 
 
-  l($$('lightswitch'), 'click', () => {
+  l($$('control-center-lightswitch'), 'click', () => {
     const isLight = document.body.classList.contains('light-mode');
     document.body.classList.toggle('light-mode');
     console.log(isLight);
@@ -126,10 +126,12 @@
   const elSlot = 'frame-content';
   // Sonic.js
   var $onic = url => {
+    $$('control-center-spinner').classList.remove('ninja');
     return fetch(url)
       .then(res => res.text())
       .then(res => {
         $$(elSlot).innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
+        $$('control-center-spinner').classList.add('ninja');
       });
   };
   var rings = document.querySelectorAll('[data-sonic]');

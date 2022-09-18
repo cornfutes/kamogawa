@@ -127,11 +127,13 @@
   // Sonic.js
   var $onic = url => {
     $$('control-center-spinner').classList.remove('ninja');
+    $$('sonic-linear-waiting').classList.remove('ninja');
     return fetch(url)
       .then(res => res.text())
       .then(res => {
         $$(elSlot).innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
         $$('control-center-spinner').classList.add('ninja');
+        $$('sonic-linear-waiting').classList.add('ninja');
       });
   };
   var rings = document.querySelectorAll('[data-sonic]');

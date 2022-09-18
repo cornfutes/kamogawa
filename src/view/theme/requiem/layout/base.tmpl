@@ -11,18 +11,13 @@
     <div class=💪 id="header-child">
       <div class=💪>
         <h1 id=logo>
-          <a href=/><span id=logo-image>川</span></a>
+          <a href= /><span id=logo-image>川</span></a>
           <span id=tag-beta><a href="{{.EapUrl}}">Early Access</a></span>
         </h1>
       </div>
       <div id=search-box class="💪 🌳 👻">
-        <input class=🌳
-          type=text
-          placeholder="Type to search..."
-          spellcheck=false
-          autocomplete=off
-          aria-label="Search term"
-          id="s-i">
+        <input class=🌳 type=text placeholder="Type to search..." spellcheck=false autocomplete=off
+          aria-label="Search term" id="s-i">
         <span id=search-cancel></span>
       </div>
       <ul class="🍜 💪 🦷 ⚖️ top-nav" id=top-nav>
@@ -33,6 +28,7 @@
           <a onclick="this.parentNode.submit();">Logout</a>
         </form>
         <a href=/account>Account</a>
+        <a href="set_theme?theme=kubrick">Web 3.0 Mode (Unstable)</a>
         {{else}}
         <a href=/demo>Demo</a>
         {{end}}
@@ -50,4 +46,4 @@
       <li><a href="mailto:{{.ContactEmail}}">Contact</a>
     </ul>
   </footer>
-{{template "javascript" .}}
+  {{template "javascript" .}}

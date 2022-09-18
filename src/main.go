@@ -13,6 +13,7 @@ import (
 	"kamogawa/identity"
 	"kamogawa/media"
 	"kamogawa/types"
+	"kamogawa/view"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
@@ -72,6 +73,15 @@ func main() {
 		} else {
 			c.Redirect(http.StatusFound, "/account")
 		}
+	})
+
+	r.GET("/set_theme", func(c *gin.Context) {
+		theme := c.Query("theme")
+		if !view.IsValidTheme(theme) {
+			theme = config.DefaultTheme
+		}
+		c.SetCookie(identity.CookieKeyTheme, theme, 2147483647, "/", config.Host, config.CookieHttpsOnly, true)
+		c.Redirect(http.StatusFound, c.Request.Referer())
 	})
 
 	authed := r.Group("/", identity.GateAuth())

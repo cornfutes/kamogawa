@@ -27,7 +27,7 @@ var (
 	ContactEmail    string
 	BrandName       string
 	CookieHttpsOnly bool
-	Theme           string
+	DefaultTheme    string
 	SPAEnabled      bool
 )
 
@@ -38,9 +38,9 @@ func init() {
 	}
 	fmt.Printf("Host=%v\n", Host)
 
-	Theme = os.Getenv("THEME")
-	if Theme != "kubrick" {
-		Theme = "requiem"
+	DefaultTheme = os.Getenv("DEFAULT_THEME")
+	if DefaultTheme != "kubrick" {
+		DefaultTheme = "requiem"
 	}
 
 	RedirectUri = os.Getenv("REDIRECT_URI")
@@ -101,7 +101,7 @@ func init() {
 	}
 
 	if os.Getenv("SPA_ENABLED") == "hellyes" {
-		if Theme != "kubrick" {
+		if DefaultTheme != "kubrick" {
 			panic("************* Expected Kubrick to be enabled")
 		}
 		SPAEnabled = true

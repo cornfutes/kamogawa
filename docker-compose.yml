@@ -27,7 +27,7 @@ services:
     env_file:
       - config.env
     environment:
-      THEME: ${THEME:-}
+      DEFAULT_THEME: ${DEFAULT_THEME:-}
       SPA_ENABLED: ${SPA_ENABLED:-}
   shimogawa_service:
     image: postgres:13.8-alpine

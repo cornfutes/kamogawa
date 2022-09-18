@@ -15,7 +15,6 @@
   --z: #4EA5D9;
   --frame-thickness: 1px;
   --width: 980px;
-
   --text: #2B3044;
   --line: #BBC1E1;
   --line-active: #275EFE;
@@ -23,7 +22,7 @@
 
 .🍕 { font-style: italic; }
 .💪 { display: flex; }
-.🪜 { flex-flow: column; }
+.🪜 { display: flex; flex-flow: column; }
 .🦷 { gap: 1rem; }
 .🌳 { flex: 1; }
 .🌎 { border: 0; }
@@ -74,11 +73,9 @@ img {
   padding: 4px;
   margin-left: 10px; /** consider remove */
 }
-
 .down>i {
   transform: rotate(45deg) translateX(-3px);
 }
-
 #s-i {
   font-size: 17px;
   height: 38px;
@@ -135,16 +132,20 @@ header {
   padding: .5rem;
   border-bottom: var(--frame-thickness) solid var(--h);
 }
-header>div {
+#header-child {
+  justify-content: space-between;
+  align-items: center;
   flex: 0 0 var(--width);
 }
-
+/** TODO: add an ID  for this element */
+main {
+  width: var(--width);
+}
 
 #logo {
   font-weight: 400; /**  TODO: Refactor */
   font-size: 1.2rem;
   line-height: 38px; /** TODO: refactor to variable */
-  align-items: center; /** TODO: seems obsolete */
 }
 #logo a {
   color: var(--e); /** TODO: can probably refactor */
@@ -157,11 +158,6 @@ header>div {
   -o-transform: scale(-1, 1);
   -ms-transform: scale(-1, 1);
   display: inline-block;
-}
-
-/** TODO: add an ID  for this element */
-main>div {
-  width: var(--width);
 }
 
 aside {
@@ -241,7 +237,6 @@ h2, h3 {
   font-size: 40px;
   color: var(--i);
 }
-
 h3 {
   font-size: 20px;
 }
@@ -249,11 +244,10 @@ h3 {
 footer {
   border-top: var(--frame-thickness) solid var(--h);
   padding: 21px 0px;
-  align-items: center;
 }
 footer>ul>li { display: inline-block; padding: 0 .5rem; }
-footer>ul> li:not(:last-child) { border-right: 1px solid #424245; }
-footer > ul > li>a { color: #a1a1a6; }
+footer>ul>li:not(:last-child) { border-right: 1px solid #424245; }
+footer>ul>li>a { color: #a1a1a6; }
 
 .👻, input[type=checkbox]:checked~label { display: none;}
 
@@ -306,11 +300,6 @@ button.disabled:hover {
   color: var(--g);
 }
 
-#header-child {
-  justify-content: space-between;
-  align-items: center;
-}
-
 #top-nav {
   flex-direction: row-reverse;
 }
@@ -322,13 +311,13 @@ button.disabled:hover {
 }
 
 @media all and (max-width: 1000px) {
-  #top-nav, #main-child,  #header-child { flex-direction: column; }
+  #top-nav, main,  #header-child { flex-direction: column; }
   #top-nav, aside>nav { margin-left: 40px; }
   aside { width: auto; border-right: 0; border-bottom: 1px solid #313231; }
   aside>nav { margin-top: 20px; padding-top: 0; }
   .content-narrow { padding: 10px; }
   #header-child { flex-basis: 800px; justify-content: flex-start; align-items: flex-start; }
-  #main-child, .landing, .splash-container { width: 800px; }
+  main, .landing, .splash-container { width: 800px; }
   table { min-width: 720px; }
   .splash-container>h1 {
     font-size: 36px;
@@ -342,7 +331,7 @@ button.disabled:hover {
   #content { padding: 20px; }
   section, .content-narrow { padding: 10px; }
   #header-child { flex-basis: 600px; }
-  #main-child, .splash-container, .landing { width: 600px; }
+  main, .splash-container, .landing { width: 600px; }
   table { min-width: 560px; }
   .splash-container > h1{
     font-size: 36px;
@@ -353,7 +342,7 @@ button.disabled:hover {
 @media all and (max-width: 600px) {
   #header-child { flex-basis: 450px; }
   /** TODO fix this on small screen. inline styles on element overides */
-  #landing-cloud-partners, .splash-container, #main-child, .landing { width: 450px; }
+  #landing-cloud-partners, .splash-container, main, .landing { width: 450px; }
   table { min-width: 410px; }
   .splash-container > h1  {
     font-size: 30px;
@@ -365,7 +354,7 @@ button.disabled:hover {
 
 @media all and (max-width: 450px) {
   #header-child { flex-basis: 350px; }
-  #landing-cloud-partners, .splash-container, #main-child, .landing { width: 350px; }
+  #landing-cloud-partners, .splash-container, main, .landing { width: 350px; }
   table { min-width: 310px; }
   .splash-container>h1 {
     font-size: 24px;

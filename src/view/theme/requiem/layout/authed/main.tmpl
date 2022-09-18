@@ -1,13 +1,11 @@
 {{define "main"}}
-<main class="💪 🪜" id="main">
-  <div class="💪 🌳" id="main-child">
-    <aside class="💪 🦠 🪜 🚫">
-      {{template "leftnav" .}}
+<main class="💪">
+  <aside class="💪 🦠 🪜 🚫">
+    {{template "leftnav" .}}
 
-    </aside>
-    <div id="content" class="🌳">
-      {{template "page" .}}
-    </div>
+  </aside>
+  <div id="content" class="🌳">
+    {{template "page" .}}
   </div>
 </main>
 {{end}}

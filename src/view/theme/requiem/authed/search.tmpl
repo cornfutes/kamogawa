@@ -1,5 +1,5 @@
 {{define "page"}}
-<div class="🐉 💪 🪜" id="search-hero">
+<div class="🐉 🪜" id="search-hero">
   <div class="💪 🦠">
     <h3 id="s-h">Search Results for: <span id="search-original-query"></span></h3>
     <nav class="💪 🦷 ⚖️" style="padding-top: 3px">
@@ -51,7 +51,7 @@
 <p>{{.Error}}</p>
 {{else if .HasResults}}
 <p>{{.CountTotalResults}} results ({{.Duration}})</p>
-<div class="💪 🪜" style="padding: 10px;">
+<div class="🪜" style="padding: 10px;">
   {{ range .Results }}
   <div class="🎴" style="overflow:hidden">
     <h5 class="truncate"><a href="{{.Link}}">{{.Link}}</a></h5>

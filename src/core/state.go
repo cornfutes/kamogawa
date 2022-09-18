@@ -1,9 +1,10 @@
 package core
 
 import (
+	"net/http"
+
 	"kamogawa/config"
 	"kamogawa/identity"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,5 +16,6 @@ func HTMLWithGlobalState(c *gin.Context, page string, obj map[string]interface{}
 	obj["EapUrl"] = config.EapUrl
 	obj["ContactEmail"] = config.ContactEmail
 	obj["BrandName"] = config.BrandName
+	obj["SpaEnabled"] = config.SPAEnabled
 	c.HTML(http.StatusOK, page, obj)
 }

@@ -28,6 +28,7 @@ services:
       - config.env
     environment:
       THEME: ${THEME:-}
+      SPA_ENABLED: ${SPA_ENABLED:-}
   shimogawa_service:
     image: postgres:13.8-alpine
     volumes:

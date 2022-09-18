@@ -28,6 +28,7 @@ var (
 	BrandName       string
 	CookieHttpsOnly bool
 	Theme           string
+	SPAEnabled      bool
 )
 
 func init() {
@@ -97,5 +98,17 @@ func init() {
 	GCPClientSecret = os.Getenv("GCP_CLIENT_SECRET")
 	if len(GCPClientSecret) == 0 {
 		panic("Missing $GCP_CLIENT_SECRET env variable")
+	}
+
+	if os.Getenv("SPA_ENABLED") == "hellyes" {
+		if Theme != "kubrick" {
+			panic("************* Expected Kubrick to be enabled")
+		}
+		SPAEnabled = true
+	} else if os.Getenv("SPA_ENABLED") == "no" {
+		SPAEnabled = true
+		panic("Fuck you")
+	} else {
+		SPAEnabled = false
 	}
 }

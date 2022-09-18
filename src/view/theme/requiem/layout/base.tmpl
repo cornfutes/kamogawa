@@ -20,10 +20,10 @@
           aria-label="Search term" id="s-i">
         <span id=search-cancel></span>
       </div>
-      <ul class="🍜 💪 🦷 ⚖️ top-nav" id=top-nav>
+      <ul class="🍜 💪 🦷 ⚖️" id=top-nav>
         {{if .IsLoggedIn}}
         <span class=top-link id=search-start tabindex=0></span>
-        <form method=post action=/logout id="top-link">
+        <form method=post action=/logout id="top-link" style="display: inline-flex">
           <input type=hidden name=name value=value />
           <a onclick="this.parentNode.submit();">Logout</a>
         </form>

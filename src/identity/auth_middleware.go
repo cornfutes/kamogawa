@@ -2,9 +2,11 @@ package identity
 
 import (
 	"fmt"
-	"kamogawa/config"
 	"log"
 	"net/http"
+	"strconv"
+
+	"kamogawa/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -19,7 +21,6 @@ func ExtractClaimsEmail(tokenString string, c *gin.Context) *string {
 		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
 		return jwtSecretKey, nil
 	})
-
 	if err != nil {
 		log.Printf("Error validating JWT")
 		return nil
@@ -53,7 +54,7 @@ func GateAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, exists := c.Get(IdentityContextKey)
 		if !exists {
-			c.Redirect(http.StatusFound, "/demo") // login?&error="+strconv.Itoa(int(Unauthorized)))
+			c.Redirect(http.StatusFound, "/login?&error="+strconv.Itoa(int(Unauthorized)))
 			c.Abort()
 		}
 	}

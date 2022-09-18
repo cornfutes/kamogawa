@@ -28,7 +28,7 @@ func (s IdentityError) String() string {
 	case Incorrect:
 		return "Your email or password was incorrect."
 	case Unauthorized:
-		return "Please use the demo to login."
+		return "Please login first."
 	}
 
 	return "An unexpected error occurred."

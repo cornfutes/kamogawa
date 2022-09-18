@@ -64,15 +64,7 @@ func main() {
 	r.POST("/login", identity.HandleLogin)
 	r.POST("/reset", identity.HandleReset)
 	r.GET("/loggedout", func(c *gin.Context) {
-		tokenString, err := c.Cookie(identity.SessionCookieKey)
-		if err != nil {
-			c.Redirect(http.StatusFound, "/account")
-		}
-		if identity.ExtractClaimsEmail(tokenString, c) == nil {
-			core.HTMLWithGlobalState(c, "loggedout.tmpl", gin.H{})
-		} else {
-			c.Redirect(http.StatusFound, "/account")
-		}
+		core.HTMLWithGlobalState(c, "loggedout.tmpl", gin.H{})
 	})
 
 	r.GET("/set_theme", func(c *gin.Context) {

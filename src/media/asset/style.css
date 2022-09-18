@@ -21,89 +21,27 @@
   --line-active: #275EFE;
 }
 
-.🍕 {
-  font-style: italic;
-}
-
-.💪 {
-  display: flex;
-}
-
-.🪜 {
-  flex-flow: column;
-}
-
-.🦷 {
-  gap: 1rem;
-}
-
-.🌳 {
-  flex: 1;
-}
-
-.🌎 {
-  border: 0;
-}
-
-.🥷 {
-  display: none;
-}
-
-.📜 {
-  overflow: auto;
-}
-
-.⚖️ {
-  justify-content: center;
-}
-
-.🦠 {
-  justify-content: space-between;
-}
-
-.🍏 {
-  gap: 40px;
-}
-
-.🎯 {
-  align-items: center;
-  justify-content: center;
-}
-
-/**
-normal flex, it is vertical align.
-when stack, this is similar to text-align center.
-*/
-.🎂 {
-  align-items: center;
-}
-
-
-.📞 {
-  text-align: center;
-}
-
-/************* Whitespace *************/
-.🚫 {
-  padding: 0;
-}
-
-h1, .🍜 {
-  margin: 0;
-}
-
-/************* Misc. *************/
-.🔫 {
-  list-style: none;
-}
+.🍕 { font-style: italic; }
+.💪 { display: flex; }
+.🪜 { flex-flow: column; }
+.🦷 { gap: 1rem; }
+.🌳 { flex: 1; }
+.🌎 { border: 0; }
+.🥷 { display: none; }
+.📜 { overflow: auto; }
+.⚖️  { justify-content: center; }
+.🦠 { justify-content: space-between; }
+.🎯 { justify-content: center; align-items: center; }
+.🎂 { align-items: center; } /** vert align. when 🪜, center align */
+.📞 { text-align: center; }
+.🚫 { padding: 0; }
+h1, .🍜 { margin: 0; }
+.🔫 { list-style: none; }
 
 /************* Resets *************/
 a, span.🐕 {
   text-decoration: none;
   color: var(--z);
-}
-
-span.🐕 {
   cursor: pointer;
 }
 
@@ -116,7 +54,6 @@ img {
   -ms-user-select: none;
   max-width: 100%;
 }
-
 
 #content {
   padding: 40px;
@@ -293,7 +230,7 @@ input[type="submit"]:hover {
 }
 
 .content-narrow {
-  padding: 0px 150px 150px 51px;
+  padding: 0px 150px 51px 150px;
   border-bottom: 1px solid rgb(66, 66, 69);
 }
 
@@ -324,27 +261,19 @@ h3 {
   color: var(--i);
 }
 
-section {
-  margin-top: 16px;
-  padding: 3rem 0;
-}
+section { margin-top: 16px; padding: 3rem 0; }
 
 footer {
   border-top: var(--frame-thickness) solid var(--h);
   padding: 21px 0px;
   align-items: center;
 }
-footer >ul> li {
-  display: inline-block;
-  padding: 0 .5rem;
-}
+footer>ul>li { display: inline-block; padding: 0 .5rem; }
 footer>ul> li:not(:last-child) { border-right: 1px solid #424245; }
 footer > ul > li>a { color: #a1a1a6; }
 
 
-.👻, input[type=checkbox]:checked~label {
-  display: none;
-}
+.👻, input[type=checkbox]:checked~label { display: none;}
 
 #tag-beta {
   vertical-align: middle;
@@ -471,14 +400,11 @@ button.disabled:hover {
 @media all and (max-width: 800px) {
   aside>nav {
     margin-left: 20px;
+    padding-top: 20px;
   }
 
   #content {
     padding: 20px;
-  }
-
-  aside nav {
-    padding-top: 20px;
   }
 
   aside>details {
@@ -533,16 +459,8 @@ button.disabled:hover {
 
 
 @media all and (max-width: 600px) {
-  aside>nav {
-    margin-left: 20px;
-  }
-
   #content {
     padding: 20px;
-  }
-
-  aside nav {
-    padding-top: 20px;
   }
 
   aside>details {
@@ -595,16 +513,8 @@ button.disabled:hover {
 }
 
 @media all and (max-width: 450px) {
-  aside>nav {
-    margin-left: 20px;
-  }
-
   #content {
     padding: 20px;
-  }
-
-  aside nav {
-    padding-top: 20px;
   }
 
   aside>details {

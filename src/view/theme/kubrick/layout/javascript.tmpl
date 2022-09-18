@@ -113,12 +113,12 @@
     document.body.classList.add('light-mode');
   }
 
-  const elSearchFilterDateDropdown = document.getElementById('search-filter-date-dropdown');
-  document.getElementById('search-filter-date-placeholder').addEventListener('click', e => {
-    elSearchFilterDateDropdown.classList.remove('ninja');
+  l($$('search-filter-date-placeholder'), 'click', e => {
+    console.log('here');
+    $$('search-filter-date-dropdown').classList.remove('ninja');
   });
-  document.getElementById('search-filter-date-active').addEventListener('click', e => {
-    elSearchFilterDateDropdown.classList.add('ninja');
+  l($$('search-filter-date-active'), 'click', e => {
+    $$('search-filter-date-dropdown').classList.add('ninja');
   });
 </script>
 {{end}}

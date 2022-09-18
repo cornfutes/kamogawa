@@ -26,53 +26,53 @@
     <p>
       <a href="/demo">Try it out!</a>
     </p>
-    <hr />
-    <section class="🪜 content-narrow ⚖️ 🎂" style="
+  </div>
+  <section class="🪜 content-narrow ⚖️ 🎂" style="
         background-color: rgb(48, 102, 104);
         background: linear-gradient(90deg, var(--b) 0%, rgb(48, 102, 104) 50%, var(--b) 100%);">
-      <h2>Supported Integrations</h2>
-      <div class="💪" style="gap: 40px;">
-        <div class="🪜 🎂">
-          <img src="/static/cloud_logo_aws.png" alt="logo of AWS">
-          AWS
-        </div>
-        <div class="🪜 🎂">
-          <img src="/static/cloud_logo_azure.png" alt="logo of Azure">
-          Azure
-        </div>
-        <div class="🪜 🎂">
-          <img src="/static/cloud_logo_gcp.png" alt="logo of GCP">
-          GCP
-        </div>
+    <h2>Supported Integrations</h2>
+    <div class="💪" style="gap: 40px;">
+      <div class="🪜 🎂">
+        <img src="/static/cloud_logo_aws.png" alt="logo of AWS">
+        AWS
       </div>
+      <div class="🪜 🎂">
+        <img src="/static/cloud_logo_azure.png" alt="logo of Azure">
+        Azure
+      </div>
+      <div class="🪜 🎂">
+        <img src="/static/cloud_logo_gcp.png" alt="logo of GCP">
+        GCP
+      </div>
+    </div>
+    <p>
+      <a href="{{.EapUrl}}" class="💘">Learn more about our service coverage</a>
+    </p>
+  </section>
+  <section class="📞 🎂 🪜 content-narrow">
+    <div style="max-width: 650px;">
+      <img src="/static/phone.svg" width="64" height="64" style="filter: invert(1)">
+      <h2 style="font-size: 32px;">Ready to learn more?</h2>
       <p>
-        <a href="{{.EapUrl}}" class="💘">Learn more about our service coverage</a>
+        Talk to <span style="text-decoration: line-through;">
+          our sales team</span> us (technical founders) to learn how we
+        save developers' time while providing operational visibility for business executives.
+        If you came here from YCombinator, we have a demo using live rather cached data.
       </p>
-    </section>
-    <section class="📞 🎂 🪜">
-      <div style="max-width: 650px;">
-        <img src="/static/phone.svg" width="64" height="64" style="filter: invert(1)">
-        <h2 style="font-size: 32px;">Ready to learn more?</h2>
-        <p>
-          Talk to <span style="text-decoration: line-through;">
-            our sales team</span> us (technical founders) to learn how we
-          save developers' time while providing operational visibility for business executives.
-          If you came here from YCombinator, we have a demo using live rather cached data.
-        </p>
-        <a href="mailto: {{.ContactEmail}}" class="💘">Email us</a><br />
-        <a href="{{.EapUrl}}" class="💘">Early Access Program</a>
-      </div>
-    </section>
-    <section class="📞 🤍 🪜 ⚖️ 🎂 content-narrow" style="
+      <a href="mailto: {{.ContactEmail}}" class="💘">Email us</a><br />
+      <a href="{{.EapUrl}}" class="💘">Early Access Program</a>
+    </div>
+  </section>
+  <section class="📞 🪜 ⚖️ 🎂 content-narrow" style="
         background-color: var(--d);
         background: linear-gradient(90deg, var(--b) 0%, var(--d) 50%, var(--b) 100%);
         padding-bottom: 16px;">
-      <h2 class=" 🍜">System Status</h2>
-      <p>If you’re experiencing an issue with developer tools or services,
-        find out if there’s maintenance in progress or a
-        known issue.
-      </p>
-      <a href="/status" class="💘">View system status</a>
-    </section>
-  </div>
-  {{end}}
+    <h2 class=" 🍜">System Status</h2>
+    <p>If you’re experiencing an issue with developer tools or services,
+      find out if there’s maintenance in progress or a
+      known issue.
+    </p>
+    <a href="/status" class="💘">View system status</a>
+  </section>
+</div>
+{{end}}

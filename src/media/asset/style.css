@@ -178,7 +178,7 @@ hr {
 }
 .splash-container > img { border-radius: 12px; width: 100%; } /** Handle image being smaller than container*/
 
-.content-narrow { padding: 0px 150px 51px 150px; border-bottom: 1px solid rgb(66, 66, 69);}
+.content-narrow { padding: 20px 150px; }
 
 .💘:after { content: "❯"; padding-left: .3rem; }
 

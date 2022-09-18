@@ -497,17 +497,6 @@ button.disabled:hover {
   border-radius: 12px;
 }
 
-#landing-cloud-partners {
-  background-color: rgb(48, 102, 104);
-  background: linear-gradient(90deg, var(--b) 0%, rgb(48, 102, 104) 50%, var(--b) 100%);
-}
-
-#system-status {
-  background-color: var(--d);
-  background: linear-gradient(90deg, var(--b) 0%, var(--d) 50%, var(--b) 100%);
-  padding-bottom: 16px;
-}
-
 @media all and (max-width: 1000px) {
   #main-child {
     flex-direction: column;

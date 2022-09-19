@@ -53,47 +53,64 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 
 			responseSuccessAPI, _ := gcp.GCPListProjectAPIs(db, user, p, useCache)
 			if !responseSuccessAPI[0].IsGAEEnabled {
-				htmlLines = append(htmlLines, "<li>App Engine not initialized for this Project.</li></ul>")
+				htmlLines = append(htmlLines, "<li>App Engine not initialized for this Project.</li>")
+				htmlLines = append(htmlLines, "</ul>")
 				continue
 			}
 
 			responseSuccessService, responseErrorService := gcp.GAEListServices(db, user, p.ProjectId, useCache)
 			if responseErrorService.Error.Code == 404 {
 				htmlLines = append(htmlLines, "<li>App engine state unknown for this Project.</li>")
-			} else {
-				// Enumerate GAE Service(s) for Project
-				for _, service := range responseSuccessService.Services {
-					htmlLines = append(htmlLines, "<li>"+service.Id+" ( Service )<ul>")
-					apiCallCount++
-					responseSuccessVersion, responseErrorVersion := gcp.GAEListVersions(db, user, p.ProjectId, service.Id, useCache)
-					if responseErrorVersion.Error.Code > 0 {
-						htmlLines = append(htmlLines, "<li>")
-						htmlLines = append(htmlLines, "Versions is an unknown state.")
-						htmlLines = append(htmlLines, "</li>")
-					} else {
-						// Enumerate GAE Version(s) for Service
-						for _, version := range responseSuccessVersion.Versions {
-							htmlLines = append(htmlLines, "<li>"+version.Id+" ( Version ) <ul>")
-							responseSuccessInstance, responseErrorInstance := gcp.GAEListInstances(db, user, p.ProjectId, service.Id, version.Id, useCache)
-							if responseErrorInstance.Error.Code > 0 {
-								htmlLines = append(htmlLines, "<li>Instances are in unknown state.</li>")
-							} else {
-								if len(responseSuccessInstance.Instances) == 0 {
-									htmlLines = append(htmlLines, "<li>There are no Instances deployed for this version.</li>")
-								}
-								apiCallCount++
-								// Enumerate GAE Version(s) for Version
-								for _, instance := range responseSuccessInstance.Instances {
-									htmlLines = append(htmlLines, "<li style=\"align-items-center;display:flex;\"><div style=\"white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block; width: 200px\">"+instance.Id+"</div>( Instance )</li>")
-								}
-							}
-							htmlLines = append(htmlLines, "</ul></li>")
-						}
-					}
-					htmlLines = append(htmlLines, "</ul></li>")
-				}
+				htmlLines = append(htmlLines, "</ul>")
+				continue
+			}
+			if responseSuccessService == nil {
+				htmlLines = append(htmlLines, "</ul>")
+				continue
 			}
 
+			// Enumerate GAE Service(s) for Project
+			for _, service := range responseSuccessService.Services {
+				htmlLines = append(htmlLines, "<li>"+service.Id+" ( Service )<ul>")
+				apiCallCount++
+				responseSuccessVersion, responseErrorVersion := gcp.GAEListVersions(db, user, p.ProjectId, service.Id, useCache)
+				if responseErrorVersion.Error.Code > 0 {
+					htmlLines = append(htmlLines, "<li>")
+					htmlLines = append(htmlLines, "Versions is an unknown state.")
+					htmlLines = append(htmlLines, "</li>")
+					htmlLines = append(htmlLines, "</ul></li>")
+					continue
+				}
+				if responseSuccessVersion == nil {
+					htmlLines = append(htmlLines, "</ul></li>")
+					continue
+				}
+
+				// Enumerate GAE Version(s) for Service
+				for _, version := range responseSuccessVersion.Versions {
+					htmlLines = append(htmlLines, "<li>"+version.Id+" ( Version ) <ul>")
+					responseSuccessInstance, responseErrorInstance := gcp.GAEListInstances(db, user, p.ProjectId, service.Id, version.Id, useCache)
+					if responseErrorInstance.Error.Code > 0 {
+						htmlLines = append(htmlLines, "<li>Instances are in unknown state.</li>")
+						htmlLines = append(htmlLines, "</ul></li>")
+						continue
+					}
+					if responseSuccessInstance == nil || len(responseSuccessInstance.Instances) == 0 {
+						htmlLines = append(htmlLines, "<li>There are no Instances deployed for this version.</li>")
+						htmlLines = append(htmlLines, "</ul></li>")
+						continue
+					}
+					apiCallCount++
+					// Enumerate GAE Version(s) for Version
+					for _, instance := range responseSuccessInstance.Instances {
+						htmlLines = append(htmlLines, "<li style=\"align-items-center;display:flex;\"><div style=\"white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block; width: 200px\">"+instance.Id+"</div>( Instance )</li>")
+					}
+
+					htmlLines = append(htmlLines, "</ul></li>")
+				}
+
+				htmlLines = append(htmlLines, "</ul></li>")
+			}
 			htmlLines = append(htmlLines, "</ul>")
 		}
 

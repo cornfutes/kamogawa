@@ -42,10 +42,8 @@ import (
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services/list
 func GAEListServices(db *gorm.DB, user types.User, projectId string, useCache bool) (*gaetypes.GAEListServicesResponse, *gaetypes.ErrorAdminAPI) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gaecache.ReadServicesCache(db, user, projectId)
-		if err == nil {
-			return responseSuccess, &gaetypes.ErrorAdminAPI{}
-		}
+		responseSuccess, _ := gaecache.ReadServicesCache(db, user, projectId)
+		return responseSuccess, &gaetypes.ErrorAdminAPI{}
 	}
 
 	responseSuccess, responseError := GAEListServicesMain(user, projectId)
@@ -102,10 +100,8 @@ func GAEListServicesMain(user types.User, projectId string) (*gaetypes.GAEListSe
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions/list
 func GAEListVersions(db *gorm.DB, user types.User, projectId string, serviceName string, useCache bool) (*gaetypes.GAEListVersionsResponse, *gaetypes.ErrorAdminAPI) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gaecache.ReadVersionsCache(db, user, projectId, serviceName)
-		if err == nil {
-			return responseSuccess, &gaetypes.ErrorAdminAPI{}
-		}
+		responseSuccess, _ := gaecache.ReadVersionsCache(db, user, projectId, serviceName)
+		return responseSuccess, &gaetypes.ErrorAdminAPI{}
 	}
 
 	responseSuccess, responseError := GAEListVersionsMain(user, projectId, serviceName)
@@ -162,10 +158,8 @@ func GAEListVersionsMain(user types.User, projectId string, serviceName string) 
 // https://cloud.google.com/appengine/docs/admin-api/reference/rest/v1/apps.services.versions.instances/list
 func GAEListInstances(db *gorm.DB, user types.User, projectId string, serviceName string, versionName string, useCache bool) (*gaetypes.GAEListInstancesResponse, *gaetypes.ErrorAdminAPI) {
 	if config.CacheEnabled && useCache {
-		responseSuccess, err := gaecache.ReadInstancesCache(db, user, projectId, serviceName, versionName)
-		if err == nil {
-			return responseSuccess, &gaetypes.ErrorAdminAPI{}
-		}
+		responseSuccess, _ := gaecache.ReadInstancesCache(db, user, projectId, serviceName, versionName)
+		return responseSuccess, &gaetypes.ErrorAdminAPI{}
 	}
 
 	responseSuccess, responseError := GAEListInstancesMain(user, projectId, serviceName, versionName)

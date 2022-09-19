@@ -73,7 +73,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 					htmlLines = append(htmlLines, "<li>Unknown error with code: "+strconv.Itoa(responseError.Error.Code)+"</li>")
 				}
 			} else {
-				if len(responseSuccess.Zones) == 0 {
+				if responseSuccess == nil || len(responseSuccess.Zones) == 0 {
 					htmlLines = append(htmlLines, "<li>There are no instances in this project.</li>")
 				} else {
 					for _, zone := range responseSuccess.Zones {

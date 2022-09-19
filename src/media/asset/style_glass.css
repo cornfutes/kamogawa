@@ -402,11 +402,11 @@ body.light-mode .video-bg:before {
   flex-shrink: 0;
 }
 
-@media screen and (max-width: 945px) {
+/* @media screen and (max-width: 945px) {
   .left-side {
     display: none;
   }
-}
+} */
 
 .side-wrapper+.side-wrapper {
   margin-top: 20px;
@@ -1576,6 +1576,7 @@ hr {
     width: 100%;
     display: flex;
     gap: 20px;
+    margin-top: 10px;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 0;
   }
@@ -1590,7 +1591,37 @@ hr {
     height: auto;
     padding: 10px;
   }
+  .header-menu span, .header-menu a {
+    padding: 4px 20px;
+  }
+  .header-menu a.notify:before {
+    display: none;
+  }
 }
+@media all and (max-width: 900px) {
+  #main-parent {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .left-side { 
+    display: flex;
+    flex-basis: auto;
+    border-bottom: 1px solid var(--border-color);
+    flex-direction: row;
+    padding: 0 16px;
+  }
+  .left-side .side-wrapper {
+    display: flex;
+    margin-top: 0;
+    border-right: 2px solid var(--border-color);
+  }
+  .side-title {display: none;}
+  .side-menu {
+    flex-direction: row;
+  }
+}
+
 @media screen and (max-width: 565px) {
   .🎴.app-card {
     width: calc(100%-20px);

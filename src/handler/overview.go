@@ -1,17 +1,14 @@
 package handler
 
 import (
-	"strconv"
-	"strings"
-	"time"
-
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
-	"kamogawa/types/gcp/gcetypes"
-
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
+	"strconv"
+	"strings"
+	"time"
 )
 
 func Overview(db *gorm.DB) func(*gin.Context) {
@@ -28,8 +25,11 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 		identity.CheckDBAndRefreshToken(c, user, db)
+		if user.Scope == nil || !user.Scope.Valid {
+			panic("Missing scope")
+		}
 
-		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
+		projectDBs, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 				"MissingScopes": true,
@@ -39,15 +39,9 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		var projectStrings []gcetypes.Project
-		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []gcetypes.Project{}
-		} else {
-			projectStrings = responseSuccess.Projects
-			for i, project := range projectStrings {
-				if project.ProjectId == project.Name {
-					projectStrings[i].ProjectId = "--same as Project Name--"
-				}
+		for i, p := range projectDBs {
+			if p.ProjectId == p.Name {
+				projectDBs[i].ProjectId = "--same as Project Name--"
 			}
 		}
 
@@ -77,10 +71,10 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 		nextRunTime += strconv.Itoa(nextRunMinutes) + " mins"
 
 		core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
-			"HasProjects": len(projectStrings) > 0,
+			"HasProjects": len(projectDBs) > 0,
 			"LastRunTime": lastRunTime,
 			"NextRunTime": nextRunTime,
-			"Projects":    projectStrings,
+			"Projects":    projectDBs,
 			"HasErrors":   responseError != nil && responseError.Error.Code > 0,
 			"Error":       responseError,
 			"PageName":    "gcp_overview",

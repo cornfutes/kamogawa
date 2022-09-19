@@ -10,12 +10,12 @@
 </head>
 
 <body>
-  <div class="video-bg">
+  <!-- <div class="video-bg">
     <video width="320" height="240" autoplay loop muted>
       <source src="/static/screensaver.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-  </div>
+  </div> -->
   <div class="widget__control_center">
     <div id="control-center-spinner" class="widget__control_center_spinner ninja"></div>
     <div id="control-center-lightswitch" class="widget__control_center_lightswitch">
@@ -40,11 +40,11 @@
         {{end}}
       </div>
       {{if .IsLoggedIn}}
-      <div class="🎂 💪 🌳">
+      <div class="🎂 💪 🌳" id="session-nav">
         <div class="search-bar">
           <input type="text" placeholder="Type to search..." id="search-bar-input">
         </div>
-        <ul class="🔫 🐼" id="top-session-links">
+        <ul class="🔫 🐼 💪" id="top-session-links">
           <li><a href="set_theme?theme=requiem">Web 1.0 Mode</a></li>
           <li><a href=account data-sonic>Account</a></li>
           <li>
@@ -57,7 +57,7 @@
       </div>
       {{else}}
       <div>
-        <ul class="🔫 🐼">
+        <ul class="🔫  💪">
           <a href="/login">Login</a>
         </ul>
       </div>

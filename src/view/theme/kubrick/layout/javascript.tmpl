@@ -37,12 +37,13 @@
   });
 
   // Hide the profile elements when search input focus
-  l($$('search-bar-input'), 'focus', e => {
-    $$('top-session-links').classList.add('ninja');
-  });
-  l($$('search-bar-input'), 'blur', e => {
-    $$('top-session-links').classList.remove('ninja');
-  });
+  // TODO: renable when we have mobile CSS rules such that this doesn't cause layout hs
+  // l($$('search-bar-input'), 'focus', e => {
+  //   $$('top-session-links').classList.add('ninja');
+  // });
+  // l($$('search-bar-input'), 'blur', e => {
+  //   $$('top-session-links').classList.remove('ninja');
+  // });
   // Submit form
   l($$('search-bar-input'), 'keyup', e => {
     if (e.code == 'Enter') {

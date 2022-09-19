@@ -147,9 +147,16 @@
   // then app engine comes back.
   // Sonic.js
   let t = Date.now();
-  let T_THRESHOLD = 750; // minimum milliseconds to show spinner for 
-  var $onic = url => {
+  let T_THRESHOLD = 750; // minimum milliseconds to show spinner for
+
+  // To prevent background requests from racing and applied to page too late.
+  let mostRecentPage = null;
+
+  var $onic = (url, updateHistory) => {
     if (!$elSlot) { window.location.href = url; return; }
+
+    mostRecentPage = url;
+
     // rm($$('control-center-spinner'), 'ninja'); // TODO: deprecate spinner
     rm($$('sonic-linear-waiting'), 'ninja');
     $elSlot.innerHTML = '';
@@ -158,6 +165,11 @@
     return fetch(url)
       .then(res => res.text())
       .then(res => {
+        console.log('done with ' + url);
+        if(url != mostRecentPage) {
+          console.log("Too late, some other request took your place")
+          return;
+        }
         $elSlot.innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
         const elapsed = Date.now() - t;
         const earlyMillis = Math.max(T_THRESHOLD - elapsed, 0);
@@ -170,6 +182,10 @@
           // ad($$('control-center-spinner'), 'ninja');
           ad($$('sonic-linear-waiting'), 'ninja');
         }
+
+        if(updateHistory) {
+          window.history.pushState({}, '', url);
+        }
       });
   };
   var rings = document.querySelectorAll('[data-sonic]');
@@ -178,9 +194,9 @@
   while (i--) l(rings[i], 'click', e => { // surprisingly works with keyboard nav, too.
     e.preventDefault();
     // TODO: handle anchors. lets say we navigate then come back to original url. window.location.href is still pegged.
-    if (e.target.href != window.location.href) $onic(e.target.href).then(_ => window.history.pushState({}, '', e.target.href));
+    if (e.target.href != window.location.href) $onic(e.target.href, true);
   });
-  l(window, 'popstate', e => e.state && $onic(window.location.href));
+  l(window, 'popstate', e => e.state && $onic(window.location.href, false));
   {{end}}
   // TODO: add a mouse spinner icon
   // TODO: maintain cache.

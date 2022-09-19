@@ -1,3 +1,5 @@
+create extension pg_trgm;
+
 create table users
 (
     id            bigserial,

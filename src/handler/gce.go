@@ -3,13 +3,11 @@ package handler
 import (
 	"fmt"
 	"html/template"
-	"kamogawa/cache/gcpcache/gcecache"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"kamogawa/config"
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
@@ -52,7 +50,8 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		var htmlLines []string
 		var cachedCalls = 0
 		for _, p := range projectDBs {
-			if !p.HasGCEEnabled {
+			responseSuccessAPI, _ := gcp.GCPListProjectAPIs(db, user, p, useCache)
+			if !responseSuccessAPI[0].IsEnabled("Compute Engine API") {
 				cachedCalls++
 				htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul><li>Compute Engine API has not been enabled on project.</li></ul>")
 				continue
@@ -70,11 +69,6 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 						"Section":       "gcp",
 					})
 					return
-				}
-
-				if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Compute Engine API has not been used in project") {
-					htmlLines = append(htmlLines, "<li>Compute Engine API has not been enabled on project.</li>")
-					projectDBs[i].HasGCEEnabled = false
 				} else {
 					htmlLines = append(htmlLines, "<li>Unknown error with code: "+strconv.Itoa(responseError.Error.Code)+"</li>")
 				}
@@ -102,10 +96,5 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			"PageName":       "gcp_gce_overview",
 			"Section":        "gcp",
 		})
-
-		if config.CacheEnabled {
-			fmt.Printf("writing cache %v\n", len(projectDBs))
-			gcecache.WriteProjectsCache2(db, user, projectDBs)
-		}
 	}
 }

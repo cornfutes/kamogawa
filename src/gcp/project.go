@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"kamogawa/cache/gcpcache"
 	"kamogawa/cache/gcpcache/gcecache"
 	"kamogawa/config"
 	"kamogawa/types"
@@ -48,7 +49,7 @@ func GCPListProjects(db *gorm.DB, user types.User, useCache bool) ([]coretypes.P
 
 	projectDBs := make([]coretypes.ProjectDB, 0, len(responseSuccess.Projects))
 	for _, v := range responseSuccess.Projects {
-		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v, checkHasGCEEnabled(user, v)))
+		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v))
 	}
 
 	if config.CacheEnabled {
@@ -106,7 +107,58 @@ func GCPListProjectsMain(db *gorm.DB, user types.User) (*gcetypes.ListProjectRes
 	return &responseSuccess, &responseError
 }
 
-func checkHasGCEEnabled(user types.User, project gcetypes.Project) bool {
-	_, responseError := GCEListInstancesMain(user, project.ProjectId)
-	return !(responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Compute Engine API has not been used in project"))
+func GCPListProjectAPIs(db *gorm.DB, user types.User, projectDB coretypes.ProjectDB, useCache bool) ([]coretypes.GCPProjectAPI, *gcetypes.ErrorResponse) {
+	if config.CacheEnabled && useCache {
+		return gcpcache.ReadGCPProjectAPIsCache(db, user, projectDB), nil
+	}
+
+	responseSuccess, responseError := GCPListProjectAPIsMain(user, projectDB)
+	if responseError != nil {
+		return []coretypes.GCPProjectAPI{}, responseError
+	}
+
+	gcpProjectAPI := coretypes.GCPProjectAPI{ProjectId: projectDB.ProjectId}
+	gcpProjectAPI.API.Scan(responseSuccess)
+	gcpProjectAPIs := []coretypes.GCPProjectAPI{gcpProjectAPI}
+
+	if config.CacheEnabled {
+		gcpcache.WriteGCPProjectAPIsCache(db, gcpProjectAPIs)
+	}
+
+	return gcpProjectAPIs, responseError
+}
+
+func GCPListProjectAPIsMain(user types.User, projectDB coretypes.ProjectDB) (string, *gcetypes.ErrorResponse) {
+	url := "https://serviceusage.googleapis.com/v1/projects/" + projectDB.ProjectId + "/services?filter=state:ENABLED"
+	log.Printf("User %v\n", user.AccessToken)
+	if !user.AccessToken.Valid {
+		panic("Access Token expected but not found %v\n")
+	}
+	var bearer = "Bearer " + user.AccessToken.String
+
+	fmt.Printf("Token %v\n", bearer)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		panic("Error while making request to project")
+	}
+	req.Header.Add("Authorization", bearer)
+	// Send req using http Client
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("Error on response.\n[ERROR] -", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 200 {
+		bytes, _ := io.ReadAll(resp.Body)
+		return string(bytes), nil
+	} else {
+		var responseError gcetypes.ErrorResponse
+		if err := json.NewDecoder(resp.Body).Decode(&responseError); err != nil {
+			panic(err)
+		}
+		return "", &responseError
+	}
 }

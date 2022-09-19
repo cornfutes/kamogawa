@@ -22,6 +22,7 @@ func InitDB(url string) *gorm.DB {
 		&types.User{},
 		&coretypes.ProjectAuth{},
 		&coretypes.ProjectDB{},
+		&coretypes.GCPProjectAPI{},
 		&gcetypes.GCEInstanceAuth{},
 		&gcetypes.GCEInstanceDB{},
 		&gaetypes.GAEServiceAuth{},

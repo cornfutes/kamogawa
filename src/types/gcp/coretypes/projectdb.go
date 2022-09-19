@@ -1,10 +1,12 @@
 package coretypes
 
 import (
+	"bytes"
 	"fmt"
 	"kamogawa/types/gcp/gcetypes"
 	"time"
 
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -18,9 +20,13 @@ type ProjectDB struct {
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	gcetypes.Project
-	ProjectId     string `gorm:"primaryKey:idx"`
-	HasGCEEnabled bool
+	ProjectId string `gorm:"primaryKey:idx"`
 	//Parent         ProjectParent
+}
+
+type GCPProjectAPI struct {
+	ProjectId string `gorm:"primaryKey:idx"`
+	API       datatypes.JSON
 }
 
 func (in *ProjectDB) ToProject() gcetypes.Project {
@@ -41,13 +47,16 @@ func (in *ProjectDB) ToLink() string {
 	return fmt.Sprintf("https://console.cloud.google.com/welcome?project=%v", in.ProjectId)
 }
 
-func ProjectToProjectDB(in *gcetypes.Project, hasGCEEnabled bool) ProjectDB {
+func ProjectToProjectDB(in *gcetypes.Project) ProjectDB {
 	var out ProjectDB
 	out.ProjectNumber = in.ProjectNumber
 	out.ProjectId = in.ProjectId
 	out.LifeCycleState = in.LifeCycleState
 	out.Name = in.Name
 	out.CreateTime = in.CreateTime
-	out.HasGCEEnabled = hasGCEEnabled
 	return out
+}
+
+func (in *GCPProjectAPI) IsEnabled(title string) bool {
+	return bytes.Contains(in.API, []byte(title))
 }

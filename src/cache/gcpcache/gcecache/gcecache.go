@@ -66,7 +66,7 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 
 	projectDBs := make([]coretypes.ProjectDB, 0, len(resp.Projects))
 	for _, v := range resp.Projects {
-		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v, true))
+		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v))
 	}
 	for _, projectDB := range projectDBs {
 		db.FirstOrCreate(&projectDB)

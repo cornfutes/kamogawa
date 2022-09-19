@@ -5,12 +5,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
-	"kamogawa/types/gcp/gcetypes"
-
-	"github.com/gin-gonic/gin"
 
 	"gorm.io/gorm"
 )
@@ -32,6 +30,9 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 		identity.CheckDBAndRefreshToken(c, user, db)
+		if user.Scope == nil || !user.Scope.Valid {
+			panic("Missing scope")
+		}
 
 		apiCallCount := 1
 		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
@@ -44,16 +45,9 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		var projectStrings []gcetypes.Project
-		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []gcetypes.Project{}
-		} else {
-			projectStrings = responseSuccess.Projects
-		}
-
 		var htmlLines []string
 		// Enumerate Projects for credentials
-		for _, p := range projectStrings {
+		for _, p := range responseSuccess.Projects {
 			apiCallCount++
 			responseSuccessService, responseErrorService := gcp.GAEListServices(db, user, p.ProjectId, useCache)
 			htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul>")

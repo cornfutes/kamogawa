@@ -1,0 +1,51 @@
+{{define "page"}}
+<div class="main-header">
+  <a class="menu-link-main" href="#">APIs Enabled Overview</a>
+</div>
+<div class="content-wrapper">
+  {{if .Unauthorized}}
+  <p>
+    You've not authorized us for GCP access. <a href="authorization">Securely grant access.</a>
+  </p>
+  {{else if .MissingScopes}}
+  <p>
+    The following OAuth2 Scopes are needed but not yet granted:
+
+  <ul>
+    <li>https://www.googleapis.com/auth/cloud-platform.read-only
+    <li>https://www.googleapis.com/auth/compute.readonly
+  </ul>
+
+  <a href="authorization">Securely grant access</a>
+  (note: we applied principle of least privilege in the demo account. initially and, by default, only read scopes
+  requested.
+  write scopes (due to lazy API practices on GCP's part) are on opt-in basis.
+  </p>
+
+  {{else}}
+  <p>
+    Lists all the APIs enabled across projects
+  </p>
+  <p>
+    Cache avoided {{.NumCachedCalls}} API calls
+  </p>
+  <p>Query took ({{.Duration}})</p>
+
+
+  <ul>{{.AssetLines}}</ul>
+
+  <div class="content-section">
+    <h2>Update Cache Subtree</h2>
+    <p>
+      You can manually refresh the cache for subtrees such as this for free.
+    </p>
+    <button class="content-button status-button open">Disabled in demo</button>
+    <p>
+      <a href=overview>See Overview on details on traversing entire graph</a>
+    </p>
+  </div>
+
+  {{end}}
+
+</div>
+{{end}}

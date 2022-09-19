@@ -93,6 +93,7 @@ func main() {
 		authed.GET("/gae", handler.GAE(db))
 		authed.GET("/sql", handler.SQL(db))
 		authed.GET("/functions", handler.Functions(db))
+		authed.GET("/apis_enabled", handler.APIsEnabled(db))
 
 		authed.GET("/export", handler.Export)
 		authed.GET("/authorization", handler.Authorization(db))

@@ -1592,6 +1592,7 @@ hr {
   #main-parent {
     display: flex;
     flex-direction: column;
+    overflow: auto;
   }
 
   .left-side { 

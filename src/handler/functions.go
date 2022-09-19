@@ -4,12 +4,10 @@ import (
 	"html/template"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"kamogawa/core"
 	"kamogawa/gcp"
 	"kamogawa/identity"
-	"kamogawa/types/gcp/gcetypes"
-
-	"github.com/gin-gonic/gin"
 
 	"gorm.io/gorm"
 )
@@ -28,9 +26,12 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 		identity.CheckDBAndRefreshToken(c, user, db)
+		if user.Scope == nil || !user.Scope.Valid {
+			panic("Missing scope")
+		}
 
-		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
-		if responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
+		projectDBs, responseError := gcp.GCPListProjects(db, user, useCache)
+		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 				"MissingScopes": true,
 				"PageName":      "gcp_fn_overview",
@@ -39,16 +40,9 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		var projectStrings []gcetypes.Project
-		if user.Scope == nil || !user.Scope.Valid {
-			projectStrings = []gcetypes.Project{}
-		} else {
-			projectStrings = responseSuccess.Projects
-		}
-
 		var htmlLines []string
 		// Enumerate Projects for credentials
-		for _, p := range projectStrings {
+		for _, p := range projectDBs {
 			responseSuccess, responseError := gcp.GCFListFunctions(user, p.ProjectId, nil)
 			if responseError != nil && responseError.Error.Code > 0 {
 				// Shortcircuit on first API call with missing scope to GCF.

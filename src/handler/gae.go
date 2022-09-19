@@ -35,7 +35,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 		}
 
 		apiCallCount := 1
-		responseSuccess, responseError := gcp.GCPListProjects(db, user, useCache)
+		projectDBs, responseError := gcp.GCPListProjects(db, user, useCache)
 		if responseError != nil && responseError.Error.Code == 403 && strings.HasPrefix(responseError.Error.Message, "Request had insufficient authentication scopes.") {
 			core.HTMLWithGlobalState(c, "gae.tmpl", gin.H{
 				"MissingScopes": true,
@@ -47,20 +47,19 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 
 		var htmlLines []string
 		// Enumerate Projects for credentials
-		for _, p := range responseSuccess.Projects {
+		for _, p := range projectDBs {
 			apiCallCount++
-			responseSuccessService, responseErrorService := gcp.GAEListServices(db, user, p.ProjectId, useCache)
 			htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul>")
 
-			if responseErrorService.Error.Code == 404 {
-				htmlLines = append(htmlLines, "<li>")
-				if strings.HasPrefix(responseErrorService.Error.Message, "App does not exist.") {
-					htmlLines = append(htmlLines, "App Engine not initialized for this Project.")
-				} else {
-					htmlLines = append(htmlLines, "App engine state unknown for this Project.")
-				}
-				htmlLines = append(htmlLines, "</li>")
+			responseSuccessAPI, _ := gcp.GCPListProjectAPIs(db, user, p, useCache)
+			if !responseSuccessAPI[0].IsGAEEnabled {
+				htmlLines = append(htmlLines, "<li>App Engine not initialized for this Project.</li></ul>")
+				continue
+			}
 
+			responseSuccessService, responseErrorService := gcp.GAEListServices(db, user, p.ProjectId, useCache)
+			if responseErrorService.Error.Code == 404 {
+				htmlLines = append(htmlLines, "<li>App engine state unknown for this Project.</li>")
 			} else {
 				// Enumerate GAE Service(s) for Project
 				for _, service := range responseSuccessService.Services {

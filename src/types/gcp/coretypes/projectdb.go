@@ -25,8 +25,9 @@ type ProjectDB struct {
 }
 
 type GCPProjectAPI struct {
-	ProjectId string `gorm:"primaryKey:idx"`
-	API       datatypes.JSON
+	ProjectId    string `gorm:"primaryKey:idx"`
+	API          datatypes.JSON
+	IsGAEEnabled bool
 }
 
 func (in *ProjectDB) ToProject() gcetypes.Project {

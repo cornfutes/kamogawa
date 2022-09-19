@@ -112,13 +112,14 @@ func GCPListProjectAPIs(db *gorm.DB, user types.User, projectDB coretypes.Projec
 		return gcpcache.ReadGCPProjectAPIsCache(db, user, projectDB), nil
 	}
 
-	responseSuccess, responseError := GCPListProjectAPIsMain(user, projectDB)
+	responseSuccess, responseError := gcpListProjectAPIsMain(user, projectDB)
 	if responseError != nil {
 		return []coretypes.GCPProjectAPI{}, responseError
 	}
 
 	gcpProjectAPI := coretypes.GCPProjectAPI{ProjectId: projectDB.ProjectId}
 	gcpProjectAPI.API.Scan(responseSuccess)
+	gcpProjectAPI.IsGAEEnabled = gcpIsGAEEnabled(user, projectDB)
 	gcpProjectAPIs := []coretypes.GCPProjectAPI{gcpProjectAPI}
 
 	if config.CacheEnabled {
@@ -128,7 +129,7 @@ func GCPListProjectAPIs(db *gorm.DB, user types.User, projectDB coretypes.Projec
 	return gcpProjectAPIs, responseError
 }
 
-func GCPListProjectAPIsMain(user types.User, projectDB coretypes.ProjectDB) (string, *gcetypes.ErrorResponse) {
+func gcpListProjectAPIsMain(user types.User, projectDB coretypes.ProjectDB) (string, *gcetypes.ErrorResponse) {
 	url := "https://serviceusage.googleapis.com/v1/projects/" + projectDB.ProjectId + "/services?filter=state:ENABLED"
 	log.Printf("User %v\n", user.AccessToken)
 	if !user.AccessToken.Valid {
@@ -161,4 +162,38 @@ func GCPListProjectAPIsMain(user types.User, projectDB coretypes.ProjectDB) (str
 		}
 		return "", &responseError
 	}
+}
+
+// gcpIsGAEEnabled GAE is special, need to check if it's initialized not just if API enabled
+func gcpIsGAEEnabled(user types.User, projectDB coretypes.ProjectDB) bool {
+	url := "https://appengine.googleapis.com/v1/apps/" + projectDB.ProjectId
+	log.Printf("User %v\n", user.AccessToken)
+	if !user.AccessToken.Valid {
+		panic("Access Token expected but not found %v\n")
+	}
+	var bearer = "Bearer " + user.AccessToken.String
+
+	fmt.Printf("Token %v\n", bearer)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		panic("Error while making request to project")
+	}
+	req.Header.Add("Authorization", bearer)
+	// Send req using http Client
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("Error on response.\n[ERROR] -", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 404 {
+		var responseError gcetypes.ErrorResponse
+		if err := json.NewDecoder(resp.Body).Decode(&responseError); err != nil {
+			panic(err)
+		}
+		return !strings.HasPrefix(responseError.Error.Message, "App does not exist.")
+	}
+	return true
 }

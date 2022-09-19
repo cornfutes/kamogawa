@@ -3,6 +3,7 @@ package gcpcache
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"kamogawa/types"
 	"kamogawa/types/gcp/coretypes"
 )
@@ -32,7 +33,7 @@ func WriteGCPProjectAPIsCache(db *gorm.DB, gcpProjectAPIs []coretypes.GCPProject
 	if len(gcpProjectAPIs) == 0 {
 		return
 	}
-	for _, v := range gcpProjectAPIs {
-		db.FirstOrCreate(&v)
-	}
+	db.Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(&gcpProjectAPIs)
 }

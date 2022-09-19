@@ -142,34 +142,32 @@
 
   window.history.replaceState({}, '', window.location.href);
 
-  const elSlot = 'frame-content';
-
+  const $elSlot = $$('frame-content');
   // TODO: cancel any outstanding backing loads. i.e. load app engine, then load something else,
   // then app engine comes back.
   // Sonic.js
   let t = Date.now();
   let T_THRESHOLD = 750; // minimum milliseconds to show spinner for 
   var $onic = url => {
-    if (!$$(elSlot)) {
-      window.location.href = url;
-    }
-    rm($$('control-center-spinner'), 'ninja'); // TODO: deprecate spinner
+    if (!$elSlot) { window.location.href = url; return; }
+    // rm($$('control-center-spinner'), 'ninja'); // TODO: deprecate spinner
     rm($$('sonic-linear-waiting'), 'ninja');
+    $elSlot.innerHTML = '';
+    console.log('begin');
     t = Date.now();
     return fetch(url)
       .then(res => res.text())
       .then(res => {
-        $$(elSlot).innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
+        $elSlot.innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
         const elapsed = Date.now() - t;
         const earlyMillis = Math.max(T_THRESHOLD - elapsed, 0);
         if (earlyMillis > 0) {
-          console.log("Eaely Millis", earlyMillis)
           setTimeout(_ => {
-            ad($$('control-center-spinner'), 'ninja');
+            // ad($$('control-center-spinner'), 'ninja');
             ad($$('sonic-linear-waiting'), 'ninja');
           }, earlyMillis);
         } else {
-          ad($$('control-center-spinner'), 'ninja');
+          // ad($$('control-center-spinner'), 'ninja');
           ad($$('sonic-linear-waiting'), 'ninja');
         }
       });

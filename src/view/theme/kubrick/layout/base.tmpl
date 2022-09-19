@@ -39,12 +39,14 @@
         <span class="menu-link">Azure</span>
         {{end}}
       </div>
-      {{if .IsLoggedIn}}
       <div class="🎂 💪 🌳" id="session-nav">
+        {{if .IsLoggedIn}}
         <div class="search-bar">
           <input type="text" placeholder="Type to search..." id="search-bar-input">
         </div>
+        {{end}}
         <ul class="🔫 🐼 💪" id="top-session-links">
+          {{if .IsLoggedIn}}
           <li><a href="set_theme?theme=requiem">Web 1.0 Mode</a></li>
           <li><a href=account data-sonic>Account</a></li>
           <li>
@@ -53,15 +55,11 @@
               <a onclick="this.parentNode.submit();" tabindex=0>Logout</a>
             </form>
           </li>
+          {{else}}
+          <li><a href="/login">Login</a>
+            {{end}}
         </ul>
       </div>
-      {{else}}
-      <div>
-        <ul class="🔫  💪">
-          <a href="/login">Login</a>
-        </ul>
-      </div>
-      {{end}}
     </div> <!-- end header -->
     {{template "main" .}}
 

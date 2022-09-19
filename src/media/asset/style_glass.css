@@ -57,6 +57,9 @@ body {
   width: 100%;
   height: 100vh;
   margin: 0;
+  /** https://stackoverflow.com/questions/46037922/prevent-page-from-be-dragged-left-and-right-in-mobile-version*/
+  overflow-x: hidden; /** Prevent body from being draggable on mobile */
+  overflow-y: hidden;
 }
 
 @media screen and (max-width: 480px) {

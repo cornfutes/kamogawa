@@ -1626,3 +1626,13 @@ hr {
   .splash-container>h1 { width: 230px; font-size: 20px; }
 }
 
+.🏰 {
+  opacity: 1;
+  transition: opacity .3s;
+
+}
+
+.🏰.pre-animation {
+  opacity:0;
+}
+

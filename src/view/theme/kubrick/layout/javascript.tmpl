@@ -147,7 +147,7 @@
   // then app engine comes back.
   // Sonic.js
   let t = Date.now();
-  let T_THRESHOLD = 750; // minimum milliseconds to show spinner for
+  let T_THRESHOLD = 500; // minimum milliseconds to show spinner for
 
   // To prevent background requests from racing and applied to page too late.
   let mostRecentPage = null;
@@ -161,7 +161,8 @@
 
     // rm($$('control-center-spinner'), 'ninja'); // TODO: deprecate spinner
     rm($$('sonic-linear-waiting'), 'ninja');
-    $elSlot.innerHTML = '';
+    $elSlot.classList.add('pre-animation');
+
     t = Date.now();
     abortCtrl = new AbortController();
     const signal = abortCtrl.signal;
@@ -172,6 +173,7 @@
           return;
         }
         $elSlot.innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
+        $elSlot.classList.remove('pre-animation');
         const elapsed = Date.now() - t;
         const earlyMillis = Math.max(T_THRESHOLD - elapsed, 0);
         if (earlyMillis > 0) {

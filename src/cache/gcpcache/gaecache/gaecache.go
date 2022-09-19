@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"kamogawa/types"
 	"kamogawa/types/gcp/gaetypes"
+	"kamogawa/utility"
 )
 
 func ReadServicesCache(db *gorm.DB, user types.User, projectId string) (*gaetypes.GAEListServicesResponse, error) {
@@ -58,10 +59,7 @@ func WriteServicesCache(db *gorm.DB, user types.User, projectId string, resp *ga
 		})
 	}
 
-	for _, serviceDB := range serviceDBs {
-		db.FirstOrCreate(&serviceDB)
-	}
-
+	utility.BatchUpsertOrElseSingleGAEServiceDB(db, serviceDBs)
 	WriteServicesAuth(db, user, serviceDBs)
 }
 
@@ -74,9 +72,8 @@ func WriteServicesAuth(db *gorm.DB, user types.User, gaeServiceDBs []gaetypes.GA
 	for _, v := range gaeServiceDBs {
 		gaeServiceAuths = append(gaeServiceAuths, gaetypes.GAEServiceAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
-	for _, v := range gaeServiceAuths {
-		db.FirstOrCreate(&v)
-	}
+
+	utility.BatchUpsertOrElseSingleGAEServiceAuth(db, gaeServiceAuths)
 }
 
 func ReadVersionsCache(db *gorm.DB, user types.User, projectId string, serviceName string) (*gaetypes.GAEListVersionsResponse, error) {
@@ -132,10 +129,7 @@ func WriteVersionsCache(db *gorm.DB, user types.User, projectId string, serviceN
 		})
 	}
 
-	for _, v := range gaeVersionDBs {
-		db.FirstOrCreate(&v)
-	}
-
+	utility.BatchUpsertOrElseSingleGAEVersionDB(db, gaeVersionDBs)
 	WriteVersionsAuth(db, user, gaeVersionDBs)
 }
 
@@ -148,9 +142,8 @@ func WriteVersionsAuth(db *gorm.DB, user types.User, gaeVersionDBs []gaetypes.GA
 	for _, v := range gaeVersionDBs {
 		gaeVersionAuths = append(gaeVersionAuths, gaetypes.GAEVersionAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
-	for _, v := range gaeVersionAuths {
-		db.FirstOrCreate(&v)
-	}
+
+	utility.BatchUpsertOrElseSingleGAEVersionAuth(db, gaeVersionAuths)
 }
 
 func ReadInstancesCache(db *gorm.DB, user types.User, projectId string, serviceName string, versionName string) (*gaetypes.GAEListInstancesResponse, error) {
@@ -207,12 +200,8 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, service
 		})
 	}
 
-	for _, gaeInstanceDB := range gaeInstanceDBs {
-		db.FirstOrCreate(&gaeInstanceDB)
-	}
-
+	utility.BatchUpsertOrElseSingleGAEInstanceDB(db, gaeInstanceDBs)
 	WriteInstancesAuth(db, user, gaeInstanceDBs)
-
 }
 
 func WriteInstancesAuth(db *gorm.DB, user types.User, gaeInstanceDBs []gaetypes.GAEInstanceDB) {
@@ -224,7 +213,6 @@ func WriteInstancesAuth(db *gorm.DB, user types.User, gaeInstanceDBs []gaetypes.
 	for _, v := range gaeInstanceDBs {
 		gaeInstanceAuths = append(gaeInstanceAuths, gaetypes.GAEInstanceAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
-	for _, v := range gaeInstanceAuths {
-		db.FirstOrCreate(&v)
-	}
+
+	utility.BatchUpsertOrElseSingleGAEInstanceAuth(db, gaeInstanceAuths)
 }

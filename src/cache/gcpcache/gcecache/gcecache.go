@@ -3,10 +3,10 @@ package gcecache
 import (
 	"fmt"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"kamogawa/types"
 	"kamogawa/types/gcp/coretypes"
 	"kamogawa/types/gcp/gcetypes"
+	"kamogawa/utility"
 )
 
 func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectResponse, error) {
@@ -68,24 +68,18 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 	for _, v := range resp.Projects {
 		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v))
 	}
-	for _, projectDB := range projectDBs {
-		db.FirstOrCreate(&projectDB)
-	}
 
+	utility.BatchUpsertOrElseSingleProjectDB(db, projectDBs)
 	WriteProjectsAuth(db, user, resp)
 }
 
-func WriteProjectsCache2(db *gorm.DB, user types.User, projects []coretypes.ProjectDB) {
-	if len(projects) == 0 {
+func WriteProjectsCache2(db *gorm.DB, user types.User, projectDBs []coretypes.ProjectDB) {
+	if len(projectDBs) == 0 {
 		return
 	}
-	for _, projectDB := range projects {
-		db.Clauses(clause.OnConflict{
-			UpdateAll: true,
-		}).Create(&projectDB)
-	}
 
-	WriteProjectsAuth2(db, user, projects)
+	utility.BatchUpsertOrElseSingleProjectDB(db, projectDBs)
+	WriteProjectsAuth2(db, user, projectDBs)
 }
 
 func WriteProjectsAuth(db *gorm.DB, user types.User, resp *gcetypes.ListProjectResponse) {
@@ -100,9 +94,8 @@ func WriteProjectsAuth(db *gorm.DB, user types.User, resp *gcetypes.ListProjectR
 	for _, v := range resp.Projects {
 		projectAuths = append(projectAuths, coretypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
 	}
-	for _, v := range projectAuths {
-		db.FirstOrCreate(&v)
-	}
+
+	utility.BatchUpsertOrElseSingleProjectAuth(db, projectAuths)
 }
 
 func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []coretypes.ProjectDB) {
@@ -114,9 +107,8 @@ func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []coretypes.Proje
 	for _, v := range projects {
 		projectAuths = append(projectAuths, coretypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
 	}
-	for _, v := range projectAuths {
-		db.FirstOrCreate(&v)
-	}
+
+	utility.BatchUpsertOrElseSingleProjectAuth(db, projectAuths)
 }
 
 func ReadInstancesCache(db *gorm.DB, user types.User, projectId string) (*gcetypes.GCEAggregatedInstances, error) {
@@ -151,10 +143,7 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *g
 	}
 
 	gceInstanceDBs := gcetypes.GCEAggregatedInstancesToGCEInstanceDB(user, projectId, resp)
-	for _, gceInstanceDB := range gceInstanceDBs {
-		db.FirstOrCreate(&gceInstanceDB)
-	}
-
+	utility.BatchUpsertOrElseSingleGCEInstanceDB(db, gceInstanceDBs)
 	WriteInstancesAuth(db, user, gceInstanceDBs)
 }
 
@@ -167,7 +156,6 @@ func WriteInstancesAuth(db *gorm.DB, user types.User, gceInstanceDBs []gcetypes.
 	for _, v := range gceInstanceDBs {
 		instanceAuths = append(instanceAuths, gcetypes.GCEInstanceAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
-	for _, v := range instanceAuths {
-		db.FirstOrCreate(&v)
-	}
+
+	utility.BatchUpsertOrElseSingleGCEInstanceAuth(db, instanceAuths)
 }

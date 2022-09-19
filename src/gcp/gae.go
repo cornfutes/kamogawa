@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"kamogawa/cache/gaecache"
+	"kamogawa/cache/gcpcache/gaecache"
 	"kamogawa/config"
 	"kamogawa/types"
 	"kamogawa/types/gcp/gaetypes"

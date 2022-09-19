@@ -151,23 +151,24 @@
 
   // To prevent background requests from racing and applied to page too late.
   let mostRecentPage = null;
-
+  let abortCtrl;
   var $onic = (url, updateHistory) => {
     if (!$elSlot) { window.location.href = url; return; }
-
+    if(abortCtrl) {
+      abortCtrl.abort();
+    }
     mostRecentPage = url;
 
     // rm($$('control-center-spinner'), 'ninja'); // TODO: deprecate spinner
     rm($$('sonic-linear-waiting'), 'ninja');
     $elSlot.innerHTML = '';
-    console.log('begin');
     t = Date.now();
-    return fetch(url)
+    abortCtrl = new AbortController();
+    const signal = abortCtrl.signal;
+    return fetch(url,  { signal })
       .then(res => res.text())
       .then(res => {
-        console.log('done with ' + url);
         if(url != mostRecentPage) {
-          console.log("Too late, some other request took your place")
           return;
         }
         $elSlot.innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;

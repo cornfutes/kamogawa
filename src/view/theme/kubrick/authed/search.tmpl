@@ -1,7 +1,6 @@
 {{define "page"}}
 <div class="main-header 🦠" id="main-header">
-  <div>
-    <span class="menu-link-main">Search:</span>
+  <div id="search-scopes">
     {{if .IsAll}}
     <a href="{{.SearchUrlBase}}"><span class="badge 🔥">All</span></a>
     {{else}}

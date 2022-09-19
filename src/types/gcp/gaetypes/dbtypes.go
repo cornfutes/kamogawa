@@ -2,25 +2,34 @@ package gaetypes
 
 import (
 	"fmt"
+	"time"
 )
 
 type GAEServiceAuth struct {
-	Gmail string `gorm:"primaryKey:idx"`
-	Id    string `gorm:"primaryKey:idx"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Gmail     string `gorm:"primaryKey:idx"`
+	Id        string `gorm:"primaryKey:idx"`
 }
 
 type GAEServiceDB struct {
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	Name      string
 	Id        string `gorm:"primaryKey"`
 	ProjectId string `gorm:"primaryKey"`
 }
 
 type GAEVersionAuth struct {
-	Gmail string `gorm:"primaryKey:idx"`
-	Id    string `gorm:"primaryKey:idx"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Gmail     string `gorm:"primaryKey:idx"`
+	Id        string `gorm:"primaryKey:idx"`
 }
 
 type GAEVersionDB struct {
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
 	Name          string
 	Id            string `gorm:"primaryKey"`
 	ProjectId     string
@@ -30,11 +39,15 @@ type GAEVersionDB struct {
 }
 
 type GAEInstanceAuth struct {
-	Gmail string `gorm:"primaryKey:idx"`
-	Id    string `gorm:"primaryKey:idx"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Gmail     string `gorm:"primaryKey:idx"`
+	Id        string `gorm:"primaryKey:idx"`
 }
 
 type GAEInstanceDB struct {
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 	Name        string
 	Id          string `gorm:"primaryKey"`
 	ProjectId   string

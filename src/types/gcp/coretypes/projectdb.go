@@ -7,10 +7,11 @@ import (
 	"time"
 
 	"gorm.io/datatypes"
-	"gorm.io/gorm"
 )
 
 type ProjectAuth struct {
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	Gmail     string `gorm:"primaryKey:idx"`
 	ProjectId string `gorm:"primaryKey:idx"`
 }
@@ -18,13 +19,14 @@ type ProjectAuth struct {
 type ProjectDB struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
 	gcetypes.Project
 	ProjectId string `gorm:"primaryKey:idx"`
 	//Parent         ProjectParent
 }
 
 type GCPProjectAPI struct {
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 	ProjectId    string `gorm:"primaryKey:idx"`
 	API          datatypes.JSON
 	IsGAEEnabled bool

@@ -2,17 +2,20 @@ package gcetypes
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"kamogawa/types"
+	"time"
 )
 
 type GCEInstanceAuth struct {
-	Gmail string `gorm:"primaryKey:idx"`
-	Id    string `gorm:"primaryKey:idx"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Gmail     string `gorm:"primaryKey:idx"`
+	Id        string `gorm:"primaryKey:idx"`
 }
 
 type GCEInstanceDB struct {
-	gorm.Model
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	GCEInstance
 	Id        string `gorm:"primaryKey:idx"`
 	ProjectId string

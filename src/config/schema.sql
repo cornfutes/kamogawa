@@ -21,6 +21,8 @@ create index idx_users_deleted_at
 
 create table project_auths
 (
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
     gmail      text not null,
     project_id text not null,
     constraint project_auths_pkey
@@ -31,37 +33,44 @@ create table project_dbs
 (
     created_at       timestamp with time zone,
     updated_at       timestamp with time zone,
-    deleted_at       timestamp with time zone,
     project_number   text,
     project_id       text not null,
     life_cycle_state text,
     name             text,
     create_time      text,
-    has_gce_enabled  boolean,
     constraint project_dbs_pkey
         primary key (project_id)
 );
 
-create index idx_project_dbs_deleted_at
-    on project_dbs (deleted_at);
-
 create index project_dbs_idx
     on project_dbs using gin (((name || ' '::text) || project_id) gin_trgm_ops);
 
+create table gcp_project_apis
+(
+    created_at     timestamp with time zone,
+    updated_at     timestamp with time zone,
+    project_id     text not null,
+    api            jsonb,
+    is_gae_enabled boolean,
+    constraint gcp_project_apis_pkey
+        primary key (project_id)
+);
+
 create table gce_instance_auths
 (
-    gmail text not null,
-    id    text not null,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    gmail      text not null,
+    id         text not null,
     constraint gce_instance_auths_pkey
         primary key (gmail, id)
 );
 
 create table gce_instance_dbs
 (
-    id         text not null,
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
-    deleted_at timestamp with time zone,
+    id         text not null,
     name       text,
     status     text,
     project_id text,
@@ -70,23 +79,24 @@ create table gce_instance_dbs
         primary key (id)
 );
 
-create index idx_gce_instance_dbs_deleted_at
-    on gce_instance_dbs (deleted_at);
-
 create index gce_instance_dbs_idx
     on gce_instance_dbs using gin (((((((((id || ' '::text) || name) || ' '::text) || status) || ' '::text) ||
                                       project_id) || ' '::text) || zone) gin_trgm_ops);
 
 create table gae_service_auths
 (
-    gmail text not null,
-    id    text not null,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    gmail      text not null,
+    id         text not null,
     constraint gae_service_auths_pkey
         primary key (gmail, id)
 );
 
 create table gae_service_dbs
 (
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
     name       text,
     id         text not null,
     project_id text not null,
@@ -99,14 +109,18 @@ create index gae_service_dbs_idx
 
 create table gae_version_auths
 (
-    gmail text not null,
-    id    text not null,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    gmail      text not null,
+    id         text not null,
     constraint gae_version_auths_pkey
         primary key (gmail, id)
 );
 
 create table gae_version_dbs
 (
+    created_at     timestamp with time zone,
+    updated_at     timestamp with time zone,
     name           text,
     id             text not null,
     project_id     text,
@@ -124,14 +138,18 @@ create index gae_version_dbs_idx
 
 create table gae_instance_auths
 (
-    gmail text not null,
-    id    text not null,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    gmail      text not null,
+    id         text not null,
     constraint gae_instance_auths_pkey
         primary key (gmail, id)
 );
 
 create table gae_instance_dbs
 (
+    created_at   timestamp with time zone,
+    updated_at   timestamp with time zone,
     name         text,
     id           text not null,
     project_id   text,

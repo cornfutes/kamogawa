@@ -1546,6 +1546,10 @@ hr {
   display: flex;
 }
 
+#session-nav {
+  justify-content: flex-end;
+}
+
 #top-session-links { padding: 10px 0 10px 10px; margin: 0; }
 #search-scopes { display: flex; align-items: center; }
 #main-header { overflow: auto;}
@@ -1560,14 +1564,13 @@ hr {
     padding-right: 30px;
     gap: 10px;
   }
-  #session-nav {
-    width: 100%;
-  }
   .app {
     min-height: 100vh;
     border-radius: 0;
   }
   #session-nav  {
+    width: 100%;
+    justify-content: flex-end;
     flex-direction: column;
     align-items: flex-start;
   }

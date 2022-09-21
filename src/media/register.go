@@ -2,6 +2,8 @@ package media
 
 import (
 	_ "embed"
+	"html/template"
+	"log"
 	"net/http"
 
 	"kamogawa/config"
@@ -62,6 +64,10 @@ var (
 	splashLanding []byte
 	//go:embed asset/splash_landing_hd.gif
 	splashLandingHD []byte
+	//go:embed asset/landing_clock.png
+	landingClockPng []byte
+	//go:embed asset/landing_screenshot.png
+	landingScreenshot []byte
 
 	//go:embed asset/splash_fuji.gif
 	splashFuji []byte
@@ -90,7 +96,7 @@ var (
 	consent []byte
 
 	staticHtml = map[string]string{
-		"/":        "landing.tmpl",
+		// "/":        "landing.tmpl",
 		"/docs":    "tbd.tmpl",
 		"/mission": "mission.tmpl",
 	}
@@ -111,7 +117,16 @@ const MediaBaseUrl = "static/"
 
 // Wire up HTML, css and media assets
 func Register(r *gin.Engine) {
-	r.HTMLRender = view.HTMLRenderer()
+	x := view.HTMLRenderer()
+	t, err := template.ParseFS(view.Views, "theme/requiem/unauthed/landing.tmpl")
+	if err != nil {
+		log.Fatal(err)
+	}
+	x.Add("xanax", t)
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "xanax", gin.H{})
+	})
+	r.HTMLRender = x
 
 	// Register static assets.
 	if config.Env == config.Dev {
@@ -142,6 +157,8 @@ func Register(r *gin.Engine) {
 	r.GET(MediaBaseUrl+"consent.png", Data(MimeTypePNG, consent))
 	r.GET(MediaBaseUrl+"nft.gif", Data(MimeTypeGIF, gifProfile))
 	r.GET(MediaBaseUrl+"big_sur.jpg", Data(MimeTypeJPG, jpgBigSur))
+	r.GET(MediaBaseUrl+"landing_clock.png", Data(MimeTypePNG, landingClockPng))
+	r.GET(MediaBaseUrl+"landing_screenshot.png", Data(MimeTypePNG, landingScreenshot))
 
 	r.GET("legal.txt", Data(MimeTypeTXT, legal))
 	r.GET("security.txt", Data(MimeTypeTXT, security))

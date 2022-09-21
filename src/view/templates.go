@@ -13,7 +13,7 @@ import (
 )
 
 //go:embed theme/*
-var views embed.FS
+var Views embed.FS
 
 type Theme int8
 
@@ -55,12 +55,12 @@ func registerTheme(r multitemplate.Renderer, theme Theme) {
 	unauthedViewsGlob := "theme/" + theme.String() + "/unauthed/*.tmpl"
 	authedViewsGlob := "theme/" + theme.String() + "/authed/*.tmpl"
 
-	unauthedViews, err := fs.Glob(views, unauthedViewsGlob)
+	unauthedViews, err := fs.Glob(Views, unauthedViewsGlob)
 	if err != nil {
 		panic(err.Error())
 	}
 	for _, unauthedView := range unauthedViews {
-		t, err := template.ParseFS(views, baseLayoutPath, unauthedLayoutsPath, unauthedView)
+		t, err := template.ParseFS(Views, baseLayoutPath, unauthedLayoutsPath, unauthedView)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -70,12 +70,12 @@ func registerTheme(r multitemplate.Renderer, theme Theme) {
 		r.Add(filepath.Base(unauthedView)+theme.String(), t)
 	}
 
-	authedViews, err := fs.Glob(views, authedViewsGlob)
+	authedViews, err := fs.Glob(Views, authedViewsGlob)
 	if err != nil {
 		panic(err.Error())
 	}
 	for _, authedView := range authedViews {
-		t, err := template.ParseFS(views, baseLayoutPath, authedLayoutsPath, authedView)
+		t, err := template.ParseFS(Views, baseLayoutPath, authedLayoutsPath, authedView)
 		if err != nil {
 			log.Fatal(err)
 		}

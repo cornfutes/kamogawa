@@ -3,9 +3,9 @@ package identity
 import (
 	"database/sql"
 	"fmt"
-	"kamogawa/types"
-
 	"net/http"
+
+	"kamogawa/types"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -13,9 +13,9 @@ import (
 
 func RevokeGCP(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		var email, _ = c.Get(IdentityContextKey)
+		email, _ := c.Get(IdentityContextKey)
 
-		fmt.Printf("Revoking for email: %v\n", email)
+		fmt.Printf("Revoking credentials for email: %v\n", email)
 		var user types.User
 		db.First(&user, "email = ?", email)
 		fmt.Printf("Here %v\n", user.AccessToken.Valid)

@@ -3,15 +3,14 @@ package identity
 import (
 	"bytes"
 	"database/sql"
+	"encoding/json"
 	"fmt"
-	"kamogawa/config"
-	"kamogawa/types"
 	"log"
+	"net/http"
 	"time"
 
-	"net/http"
-
-	"encoding/json"
+	"kamogawa/config"
+	"kamogawa/types"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -30,9 +29,9 @@ type ErrorRefreshToken struct {
 }
 
 func GCPRefresh(c *gin.Context, db *gorm.DB) (*ResponseRefreshToken, *ErrorRefreshToken) {
-	var email, _ = c.Get(IdentityContextKey)
+	email, _ := c.Get(IdentityContextKey)
 
-	fmt.Printf("Revoking for email: %v\n", email)
+	fmt.Printf("Refresh acess token for: %v\n", email)
 	var user types.User
 	db.First(&user, "email = ?", email)
 
@@ -46,7 +45,6 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) (*ResponseRefreshToken, *ErrorRefre
 		log.Fatalf("An error occured while refreshing %v", err)
 	}
 	reqBody := bytes.NewBuffer(postBody)
-	fmt.Printf("PostBody '%v' \n", reqBody)
 	resp, err := http.Post("https://oauth2.googleapis.com/token", "application/json", reqBody)
 	if err != nil {
 		panic(err)
@@ -54,6 +52,7 @@ func GCPRefresh(c *gin.Context, db *gorm.DB) (*ResponseRefreshToken, *ErrorRefre
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 200 {
+		fmt.Printf("Successfully refreshed access token")
 		var responseSuccess ResponseRefreshToken
 		if err := json.NewDecoder(resp.Body).Decode(&responseSuccess); err != nil {
 			panic(err)
@@ -87,6 +86,7 @@ func CheckDBAndRefreshToken(c *gin.Context, user types.User, db *gorm.DB) {
 			}
 			panic("Error: '" + errorRefreshToken.Error + "', description: '" + errorRefreshToken.ErrorDescription + "'")
 		}
+		fmt.Printf("Saving new access token\n")
 		user.AccessToken = &sql.NullString{String: responseRefreshToken.AccessToken, Valid: true}
 		db.Save(&user)
 	}

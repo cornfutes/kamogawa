@@ -1,5 +1,4 @@
 {{define "javascript"}}
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script>
   // Only show one dropdown at a time.
   const dropdowns = document.querySelectorAll(".dropdown");
@@ -19,7 +18,6 @@
   rm = (el, c) => el && el.classList.remove(c);
   ad = (el, c) => el && el.classList.add(c);
 
-
   // Focus and blur from input
   const elTopSearchInput = $$('search-bar-input');
   document.addEventListener('keyup', e => {
@@ -36,14 +34,6 @@
     }
   });
 
-  // Hide the profile elements when search input focus
-  // TODO: renable when we have mobile CSS rules such that this doesn't cause layout hs
-  // l($$('search-bar-input'), 'focus', e => {
-  //   $$('top-session-links').classList.add('ninja');
-  // });
-  // l($$('search-bar-input'), 'blur', e => {
-  //   $$('top-session-links').classList.remove('ninja');
-  // });
   // Submit form
   l($$('search-bar-input'), 'keyup', e => {
     if (e.code == 'Enter') {
@@ -51,10 +41,6 @@
       s(e.target.value);
     }
   });
-
-  // l($$('profile-icon'), 'click', e =>
-  //   elPD.classList.contains('is-active') ? elPD.classList.remove('is-active') : elPD.classList.add('is-active')
-  // );
 
   elSearchFilter = $$('search-filter')
   elSearchCount = $$('search-count')
@@ -84,44 +70,77 @@
     }
   });
 
-  $(document).click(function (e) {
-    var container = $(".status-button");
-    var dd = $(".dropdown");
-    if (!container.is(e.target) && container.has(e.target).length === 0) {
-      dd.removeClass("is-active");
+  l(document, 'click', e=>  {
+    var container = document.querySelectorAll(".status-button");
+    let is = false;
+    container.forEach(c => {
+      if(c == e.target) {
+        is = true;
+      }
+    })
+
+    if (!is) {
+
+      // if(container.has(e.target).length === 0) {
+        document.querySelectorAll('.dropdown').forEach(x => {
+          x.classList.remove('is-active');
+        });
     }
   });
 
   // Toggle dark overlay on the content section.
-  $(function () {
-    $(".dropdown").on("click", function (e) {
-      $(".content-wrapper").addClass("overlay");
+  document.querySelectorAll('.dropdown').forEach(x => {
+    l(x, 'click', e => {
+      const wrappers = document.querySelectorAll('.content-wrapper');
+      wrappers.forEach(w => {
+        w.classList.add('overlay');
+      });
       e.stopPropagation();
     });
-    $(document).on("click", function (e) {
-      if ($(e.target).is(".dropdown") === false) {
-        $(".content-wrapper").removeClass("overlay");
-      }
+  });
+   
+  l(document, "click", e => {
+    console.log('here')
+    if (!e.target.classList.contains('dropdown')) {
+      console.log('okay');
+      const wrappers = document.querySelectorAll('.content-wrapper');
+      wrappers.forEach(w => {
+        w.classList.remove('overlay');
+      });
+    }
+  });
+
+  document.querySelectorAll(".status-button:not(.open)").forEach(el => {
+    l(el, "click", e => {
+      const oa = document.querySelectorAll('.overlay-app');
+      oa.forEach( ee => {
+        ee.classList.add("is-active");
+      });
     });
   });
 
-  $(function () {
-    $(".status-button:not(.open)").on("click", function (e) {
-      $(".overlay-app").addClass("is-active");
+
+  // Should limit to popup closed.
+  document.querySelectorAll('.close').forEach(gg => {
+    l(gg, 'click', _ => {
+      const oa = document.querySelectorAll('.overlay-app');
+    oa.forEach( ee => {
+      ee.classList.remove("is-active");
     });
-    $(".pop-up .close").click(function () {
-      $(".overlay-app").removeClass("is-active");
     });
   });
 
-  $(".status-button:not(.open)").click(function () {
-    $(".pop-up").addClass("visible");
+  document.querySelectorAll(".status-button:not(.open)").forEach(el => {
+    l(el, 'click', () => {
+      document.querySelectorAll(".pop-up").classList.add("visible");
+    });
   });
 
-  $(".pop-up .close").click(function () {
-    $(".pop-up").removeClass("visible");
+  document.querySelectorAll(".pop-up .close").forEach( el =>  {
+    l(el, 'click', _ => {
+      document.querySelectorAll(".pop-up").classList.remove("visible");
+    });
   });
-
 
   l($$('control-center-lightswitch'), 'click', () => {
     const isLight = document.body.classList.contains('light-mode');
@@ -154,7 +173,7 @@
   let abortCtrl;
   var $onic = (url, updateHistory) => {
     if (!$elSlot) { window.location.href = url; return; }
-    if(abortCtrl) {
+    if (abortCtrl) {
       abortCtrl.abort();
     }
     mostRecentPage = url;
@@ -166,10 +185,10 @@
     t = Date.now();
     abortCtrl = new AbortController();
     const signal = abortCtrl.signal;
-    return fetch(url,  { signal })
+    return fetch(url, { signal })
       .then(res => res.text())
       .then(res => {
-        if(url != mostRecentPage) {
+        if (url != mostRecentPage) {
           return;
         }
         $elSlot.innerHTML = new window.DOMParser().parseFromString(res, 'text/html').getElementById('frame-content').innerHTML;
@@ -186,7 +205,7 @@
           ad($$('sonic-linear-waiting'), 'ninja');
         }
 
-        if(updateHistory) {
+        if (updateHistory) {
           window.history.pushState({}, '', url);
         }
       });

@@ -136,8 +136,8 @@ $re[z](u, e => e.code == k && q != o && e[p]() && s(q));
 {{end}}
 
 // Not critical
-const lnl = $d.querySelectorAll('.left-nav-link');
-lnl && lnl.forEach(el => y(el.querySelector('a')) == y(window.location) && ad(el, 'active'));
+const lnl = $d.querySelectorAll('#left-nav li > a');
+lnl && lnl.forEach(el => y(el) == y(window.location) && ad(el.parentElement, 'active'));
 
 </script>
 {{end}}

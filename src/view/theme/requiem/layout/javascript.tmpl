@@ -4,47 +4,40 @@ let $d = document,
     rm = (l, c) => l.classList.remove(c),
     ad = (l, c) => l.classList.add(c),
      $ = l => $d.getElementById(l),
-     p = 'preventDefault',
+     pp = e => e.preventDefault(),
      k = 'Enter',
-     w = e => (el, f) => el && el.addEventListener(e, f),
-     wc = w('click'),
-     wt = w('keyup'),
-     xx = (el, key, fn) => wt(el, e => e.code == key && (e[p], fn())),
+     _w = e => (el, f) => el && el.addEventListener(e, f),
+     wc = _w('click'),
+     wt = _w('keyup'),
+     xx = (el, key, fn) => wt(el, e => e.code == key && (pp(e), fn())),
      xy = (el, fn) => (wc(el, fn), xx(el, k, fn)),
      j = false,
      q = '',
+    $m = $d.getElementsByTagName('main')[0],
+    y = x => x.href.split('?')[0],
     $i = $('s-i'),
-    $m = document.getElementsByTagName('main')[0],
-    $l = $('logo'),
-    $t = $('session-nav'),
-    $s = $('search-box'),
-    $a = $('search-start'),
-     y = x => x.href.split('?')[0],
-     v = e => e.target.value,
-     s = q => window.location.href = `/search?q=${encodeURI(q)}`,
+    _$l = $('logo'),
+    _$t = $('session-nav'),
+    _$s = $('search-box'),
+     s = q =>  window.location.href = `/search?q=${encodeURI(q)}`,
     fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
   defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
 
-
-xy($a, fo);
+xy($('search-start'), fo);
 xx($d, 'Backslash', fo);
 wt($i, e => {
   if(j) {
-    if(e.code == 'Escape') e[p](), defo();
-    else if (e.code == k) {
-      {{if .IsLoggedIn}}
-        e[p]();
-        s($('s-i').value);
-      {{else}}
-        window.location.href = '/login?error=4';
-      {{end}}
-    } else if (e.code == 'Tab') e[p]();
+    if(e.code == 'Escape') pp(e), defo();
+    else if (e.code == k) pp(e), s($('s-i').value);
+    else if (e.code == 'Tab') pp(e);
   }
 });
 wc($('search-cancel'), defo);
 
 // Not critical
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
+const lnl = $d.querySelectorAll('#left-nav li > a');
+lnl && lnl.forEach(el => y(el) == y(window.location) && ad(el.parentElement, 'active'));
 
 {{if eq .IsSearch "yes" }}
  let            f = ['all', 'substring', 'lastmonth'],
@@ -56,6 +49,7 @@ console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;backg
               $re = $('s-re'),
                $h = $('s-h'),
                dd = 'filter-expander-arrow-down',
+                v = e => e.target.value,
               sqb = false,
              o$sm = _ => {
                       if(sqb) ad($sm, dd), ad($qb, "🥷");
@@ -69,7 +63,7 @@ console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;backg
 {{if .Query}}q = '{{.Query}}' {{end}};
 o = q || '';
 
-xy($sm, k, o$sm);
+xy($sm, o$sm);
 
 wc($r, _ => r.value = o, reset());
 
@@ -97,7 +91,7 @@ function change(e, i) {
   }
 }
 wt(r, e => {
-  e[p]();
+  pp(e);
   if(e.code == k) s(v(e));
   else if(v(e) == o) q = v(e), reset();
   else {
@@ -108,12 +102,8 @@ wt(r, e => {
     rm($r, '🥷');
   }
 });
-wc($re, e => q != o && (e[p](), s(q)));
-wt($re, e => e.code == k && q != o && e[p]() && s(q));
+wc($re, e => q != o && (pp(e), s(q)));
+wt($re, e => e.code == k && q != o && pp(e) && s(q));
 {{end}}
-
-// Not critical
-const lnl = $d.querySelectorAll('#left-nav li > a');
-lnl && lnl.forEach(el => y(el) == y(window.location) && ad(el.parentElement, 'active'));
 </script>
 {{end}}

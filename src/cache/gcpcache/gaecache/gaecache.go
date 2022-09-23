@@ -15,7 +15,7 @@ func ReadServicesCache(db *gorm.DB, user types.User, projectId string) (*gaetype
 			" ON gae_service_auths.id = gae_service_dbs.id"+
 			" AND gae_service_auths.gmail = ?"+
 			" AND gae_service_dbs.project_id = ?", user.Gmail.String, projectId,
-	).Order("gae_service_dbs.name, gae_service_dbs.id").Find(&gaeServiceDBs)
+	).Find(&gaeServiceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

@@ -12,6 +12,7 @@ import (
 	"kamogawa/types/gcp/gaetypes"
 	"log"
 	"net/http"
+	"sort"
 
 	"gorm.io/gorm"
 )
@@ -50,6 +51,13 @@ func GAEListServices(db *gorm.DB, user types.User, projectId string, useCache bo
 	if responseSuccess == nil {
 		return nil, responseError
 	}
+
+	sort.Slice(responseSuccess.Services, func(i, j int) bool {
+		if responseSuccess.Services[i].Name != responseSuccess.Services[j].Name {
+			return responseSuccess.Services[i].Name < responseSuccess.Services[j].Name
+		}
+		return responseSuccess.Services[i].Id < responseSuccess.Services[j].Id
+	})
 
 	if config.CacheEnabled {
 		gaecache.WriteServicesCache(db, user, projectId, responseSuccess)

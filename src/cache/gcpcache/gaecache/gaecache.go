@@ -153,7 +153,7 @@ func ReadInstancesCache(db *gorm.DB, user types.User, projectId string, serviceN
 			" ON gae_instance_auths.id = gae_instance_dbs.id"+
 			" AND gae_instance_auths.gmail = ?"+
 			" AND gae_instance_dbs.version_id = ?", user.Gmail.String, gaetypes.ToVersionId(projectId, serviceName, versionName),
-	).Order("gae_instance_dbs.name, gae_instance_dbs.id").Find(&instanceDBs)
+	).Find(&instanceDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

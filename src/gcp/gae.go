@@ -182,6 +182,13 @@ func GAEListInstances(db *gorm.DB, user types.User, projectId string, serviceNam
 		return nil, responseError
 	}
 
+	sort.Slice(responseSuccess.Instances, func(i, j int) bool {
+		if responseSuccess.Instances[i].Name != responseSuccess.Instances[j].Name {
+			return responseSuccess.Instances[i].Name < responseSuccess.Instances[j].Name
+		}
+		return responseSuccess.Instances[i].Id < responseSuccess.Instances[j].Id
+	})
+
 	if config.CacheEnabled {
 		gaecache.WriteInstancesCache(db, user, projectId, serviceName, versionName, responseSuccess)
 	}

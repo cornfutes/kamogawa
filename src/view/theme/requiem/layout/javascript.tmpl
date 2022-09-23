@@ -6,18 +6,18 @@ let $d = document,
      $ = l => $d.getElementById(l),
      pp = e => e.preventDefault(),
     isK = e => e.code == 'Enter',
-     _w = e => (el, f) => el && el.addEventListener(e, f),
-     wc = _w('click'),
-     wt = _w('keyup'),
-     xy = (el, fn) => (wc(el, fn), wt(el, e => isK(e) && (pp(e), fn()))),
-     jj = 0,
+    _w = e => (el, f) => el && el.addEventListener(e, f),
+    wc = _w('click'),
+    wt = _w('keyup'),
+    xy = (el, fn) => (wc(el, fn), wt(el, e => isK(e) && (pp(e), fn()))),
      q = '',
-    $m = $d.getElementsByTagName('main')[0],
     $i = $('s-i'),
-    $l = $('logo'),
-    $t = $('session-nav'),
-    $s = $('search-box'),
+   _$m = $d.getElementsByTagName('main')[0],
+   _$l = $('logo'),
+   _$t = $('session-nav'),
+   _$s = $('search-box'),
      s = q =>  window.location.href = `/search?q=${encodeURI(q)}`,
+    jj = 0,
     fo = _ => { jj=1; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); },
   defo = _ => { jj=0; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             };
 
@@ -39,54 +39,54 @@ const lnl = $d.querySelectorAll('#left-nav li > a'),  yy = x => x.href.split('?'
 lnl && lnl.forEach(el => yy(el) == yy(window.location) && ad(el.parentElement, 'active'));
 
 {{if eq .IsSearch "yes" }}
- let            f = ['all', 'substring', 'lastmonth'],
-            elSoq = $('search-original-query'),
+ let           fz = ['all', 'substring', 'lastmonth'],
+              $so = $('search-original-query'),
               $r  = $('s-b-r'), 
-                r = $("query"),
+              $rq = $("query"),
               $re = $('s-re'),
                $h = $('s-h'),
               val = e => e.target.value,
             reset = _ => { 
-                      elSoq.innerText = '', ad($r, '🥷'); 
+                      $so.innerText = '', ad($r, '🥷'); 
                       rm($h, '⚡'); ad($re, '⚡'); 
                     };
 o = q = '{{.Query}}';
 
 sqb = 0, xy($('s-mod'), e => ((sqb = !sqb) ? rm : ad)($('search-hero'), 'search-hero-hidden'));
 
-wc($r, _ => r.value = o, reset());
+wc($r, _ => $rq.value = o, reset());
 
 function change(e, i) { 
-  f[i] = val(e)
+  fz[i] = val(e)
   let tk = [];
-  if(f[0] != "all"      ) tk.push("provider:" + f[0]);
-  if(f[1] != "substring") tk.push(    "algo:" + f[1]);
-  if(f[2] != "lastmonth") tk.push(    "time:" + f[2]);
+  if(fz[0] != "all"      ) tk.push("provider:" + fz[0]);
+  if(fz[1] != "substring") tk.push(    "algo:" + fz[1]);
+  if(fz[2] != "lastmonth") tk.push(    "time:" + fz[2]);
   if(tk.length) {
-    q = [r.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
+    q = [$rq.value.split(":::")[0].trim(), ":::", ...tk].join(" ").trim();
     if (q == o) {
-      r.value = o;
+      $rq.value = o;
       reset();
     } else {
-      r.value = q;
+      $rq.value = q;
       ad($h, '⚡');
-      elSoq.innerText = o;
+      $so.innerText = o;
       rm($re, '⚡');
       rm($r, '🥷');
     }
   } else {
-    r.value = r.value.split(":::")[0].trim();
-    if(r.value == o) reset();
+    $rq.value = $rq.value.split(":::")[0].trim();
+    if($rq.value == o) reset();
   }
 }
-wt(r, e => {
+wt($rq, e => {
   pp(e);
   if(isK(e)) s(val(e));
   else if(val(e) == o) q = val(e), reset();
   else {
     q = val(e);
     ad($h, '⚡');
-    elSoq.innerText = o;
+    $so.innerText = o;
     rm($re, '⚡');
     rm($r, '🥷');
   }

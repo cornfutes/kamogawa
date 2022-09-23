@@ -12,6 +12,7 @@ import (
 	"kamogawa/types/gcp/gcetypes"
 	"log"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/Jeffail/gabs"
@@ -29,6 +30,18 @@ func GCEListInstances(db *gorm.DB, user types.User, projectId string, useCache b
 	responseSuccess, responseError := GCEListInstancesMain(user, projectId)
 	if responseSuccess == nil {
 		return nil, responseError
+	}
+
+	sort.Slice(responseSuccess.Zones, func(i, j int) bool {
+		return responseSuccess.Zones[i].Zone < responseSuccess.Zones[j].Zone
+	})
+	for _, zone := range responseSuccess.Zones {
+		sort.Slice(zone.Instances, func(i, j int) bool {
+			if zone.Instances[i].Name != zone.Instances[j].Name {
+				return zone.Instances[i].Name < zone.Instances[j].Name
+			}
+			return zone.Instances[i].Id < zone.Instances[j].Id
+		})
 	}
 
 	if config.CacheEnabled {

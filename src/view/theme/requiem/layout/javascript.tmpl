@@ -49,12 +49,6 @@ $i[z](u, e => {
 });
 $('search-cancel')[z](c, defo);
 
-// Not critical.
-const lNav = $("nav-gcp"); if (lNav) {
-  if (localStorage.getItem('nav-gcp-open') == 'true') lNav.open = true;
-  lNav[z]("toggle", _ => localStorage.setItem('nav-gcp-open', lNav.open));
-} 
-
 // Not critical
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
 

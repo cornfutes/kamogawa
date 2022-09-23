@@ -27,6 +27,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 				"Unauthorized": true,
 				"APICallCount": "-1",
 				"PageName":     "gcp_gae_overview",
+				"Section":      "gcp",
 			})
 			return
 		}
@@ -38,6 +39,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "gae.tmpl", gin.H{
 				"MissingScopes": true,
 				"PageName":      "gcp_gae_overview",
+				"Section":       "gcp",
 			})
 			return
 		}
@@ -107,6 +109,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			"AssetLines":   template.HTML(strings.Join(htmlLines[:], "")),
 			"APICallCount": strconv.Itoa(apiCallCount),
 			"PageName":     "gcp_gae_overview",
+			"Section":      "gcp",
 		})
 	}
 }

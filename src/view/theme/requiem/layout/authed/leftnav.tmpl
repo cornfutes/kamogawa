@@ -2,7 +2,11 @@
 <nav class=🔫 id=left-nav>
   <li><a href="search?q=test%20:::%20time:last24">Search</a>
   <li>
+    {{if eq .Section "gcp"}}
+    <details id="nav-gcp" open>
+    {{else}}
     <details id="nav-gcp">
+    {{end}}
       <summary>GCP</summary>
       <ul class=🔫>
         <li><a href=overview>Overview</a>
@@ -14,13 +18,21 @@
     </details>
   </li>
   <li>
+    {{if eq .Section "aws"}}
+    <details id="nav-aws" open>
+    {{else}}
     <details id="nav-aws">
+    {{end}}
       <summary>AWS</summary>
       <p class=🍕>Disabled in demo</p>
     </details>
   </li>
   <li>
-    <details id="nav-aws">
+    {{if eq .Section "azure"}}
+    <details id="nav-zure" open>
+    {{else}}
+    <details id="nav-zure">
+    {{end}}
       <summary>Azure</summary>
       <p class=🍕>Disabled in demo</p>
     </details>

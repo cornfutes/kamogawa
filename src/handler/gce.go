@@ -30,6 +30,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 				"NumCachedCalls": 0,
 				"Unauthorized":   true,
 				"PageName":       "gcp_gce_overview",
+				"Section":        "gcp",
 			})
 			return
 		}
@@ -52,6 +53,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 				core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 					"MissingScopes": true,
 					"PageName":      "gcp_gce_overview",
+					"Section":       "gcp",
 				})
 				return
 			}
@@ -80,6 +82,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 					core.HTMLWithGlobalState(c, "gce.tmpl", gin.H{
 						"MissingScopes": true,
 						"PageName":      "gcp_gce_overview",
+						"Section":       "gcp",
 					})
 					return
 				}
@@ -112,6 +115,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 			"NumCachedCalls": cachedCalls,
 			"AssetLines":     template.HTML(strings.Join(htmlLines[:], "")),
 			"PageName":       "gcp_gce_overview",
+			"Section":        "gcp",
 		})
 
 		if config.CacheEnabled {

@@ -23,6 +23,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 				"Unauthorized": true,
 				"PageName":     "gcp_sql_overview",
+				"Section":      "gcp",
 			})
 			return
 		}
@@ -33,6 +34,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 				"MissingScopes": true,
 				"PageName":      "gcp_sql_overview",
+				"Section":       "gcp",
 			})
 			return
 		}
@@ -54,6 +56,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 					core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 						"MissingScopes": true,
 						"PageName":      "gcp_sql_overview",
+						"Section":       "gcp",
 					})
 					return
 				}
@@ -76,6 +79,7 @@ func SQL(db *gorm.DB) func(*gin.Context) {
 		core.HTMLWithGlobalState(c, "sql.tmpl", gin.H{
 			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
 			"PageName":   "gcp_sql_overview",
+			"Section":    "gcp",
 		})
 	}
 }

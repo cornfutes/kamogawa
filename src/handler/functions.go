@@ -23,6 +23,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 				"Unauthorized": true,
 				"PageName":     "gcp_fn_overview",
+				"Section":      "gcp",
 			})
 			return
 		}
@@ -33,6 +34,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 				"MissingScopes": true,
 				"PageName":      "gcp_fn_overview",
+				"Section":       "gcp",
 			})
 			return
 		}
@@ -54,6 +56,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 					core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 						"MissingScopes": true,
 						"PageName":      "gcp_fn_overview",
+						"Section":       "gcp",
 					})
 					return
 				}
@@ -77,6 +80,7 @@ func Functions(db *gorm.DB) func(*gin.Context) {
 		core.HTMLWithGlobalState(c, "functions.tmpl", gin.H{
 			"AssetLines": template.HTML(strings.Join(htmlLines[:], "")),
 			"PageName":   "gcp_fn_overview",
+			"Section":    "gcp",
 		})
 	}
 }

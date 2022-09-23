@@ -24,25 +24,20 @@ let $d = document,
   defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
 
 wc($a, fo);
-wt($a, e => {
-  if (e.code == k) {
-    e[p]();
-    fo();
-  }
-});
-
-wt($d, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
+wt($a, e => e.code == k && (e[p](), fo()));
+wt($d, e => !j && e.code == 'Backslash' && (e[p](), fo(e)));
 wt($i, e => {
-  if(!j) return;
-  if(e.code == 'Escape') e[p](), defo();
-  else if (e.code == k) {
-    {{if .IsLoggedIn}}
-      e[p]();
-      s($('s-i').value);
-    {{else}}
-      window.location.href = '/login?error=4';
-    {{end}}
-  } else if (e.code == 'Tab') e[p]();
+  if(j) {
+    if(e.code == 'Escape') e[p](), defo();
+    else if (e.code == k) {
+      {{if .IsLoggedIn}}
+        e[p]();
+        s($('s-i').value);
+      {{else}}
+        window.location.href = '/login?error=4';
+      {{end}}
+    } else if (e.code == 'Tab') e[p]();
+  }
 });
 wc($('search-cancel'), defo);
 
@@ -73,17 +68,12 @@ console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;backg
 o = q || '';
 
 wc($sm, o$sm); 
-wt($sm, e => {
-  if(e.code != k) return;
-  event[p]();
-  o$sm();
-});
+wt($sm, e => e.code == k && (e[p](), o$sm()));
 
-wc($r, _ => { r.value = o, reset() });
+wc($r, _ => r.value = o, reset());
 
 function change(e, i) { 
   f[i] = v(e)
-
   let tk = [];
   if(f[0] != "all"      ) tk.push("provider:" + f[0]);
   if(f[1] != "substring") tk.push(    "algo:" + f[1]);
@@ -117,18 +107,12 @@ wt(r, e => {
     rm($r, '🥷');
   }
 });
-wc($re, e => {
-  if(q != o) {
-    e[p]();
-    s(q);  
-  }
-});
+wc($re, e => q != o && (e[p](), s(q)));
 wt($re, e => e.code == k && q != o && e[p]() && s(q));
 {{end}}
 
 // Not critical
 const lnl = $d.querySelectorAll('#left-nav li > a');
 lnl && lnl.forEach(el => y(el) == y(window.location) && ad(el.parentElement, 'active'));
-
 </script>
 {{end}}

@@ -13,14 +13,14 @@
         <a href="/"><span>川</span></a>
         <span class=tag-beta><a href="{{.EapUrl}}">Early Access</a></span>
       </div>
-      <div id=search-box class="💪 🌳 👻">
+      <div id=s-b class="💪 🌳 👻">
         <input class="🌳 🌎" type=text placeholder="Type to search..." spellcheck=false autocomplete=off
           aria-label="Search term" id="s-i">
-        <span id=search-cancel></span>
+        <span id=s-c></span>
       </div>
       <ul class="🍜 💪 🦷 ⚖️ 🚫" id=session-nav>
         {{if .IsLoggedIn}}
-        <span class=top-link id=search-start tabindex=0></span>
+        <span class=top-link id=s-s tabindex=0></span>
         <form method=post action=/logout id="top-link" style="display: inline-flex">
           <input type=hidden name=name value=value />
           <a onclick="this.parentNode.submit();">Logout</a>

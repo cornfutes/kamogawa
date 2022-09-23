@@ -15,13 +15,13 @@ let $d = document,
    _$m = $d.getElementsByTagName('main')[0],
    _$l = $('logo'),
    _$t = $('session-nav'),
-   _$s = $('search-box'),
+   _$s = $('s-b'),
      s = q =>  window.location.href = `/search?q=${encodeURI(q)}`,
     jj = 0,
-    fo = _ => { jj=1; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); },
-  defo = _ => { jj=0; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             };
+    fo = _ => { jj=1; rm(_$s, '👻'); ad(_$t, '👻'); ad(_$m, '🌃'); ad(_$l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); },
+  defo = _ => { jj=0; ad(_$s, '👻'); rm(_$t, '👻'); rm(_$m, '🌃'); rm(_$l, '🌃');                       $i.value='';             };
 
-xy($('search-start'), fo);
+xy($('s-s'), fo);
 wt($d, e => e.code == 'Slash' && (pp(e), fo()))
 
 wt($i, e => {
@@ -31,7 +31,7 @@ wt($i, e => {
     else if(e.code == 'Tab') pp(e);
   }
 });
-wc($('search-cancel'), defo);
+wc($('s-c'), defo);
 
 // Not critical
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");
@@ -40,11 +40,11 @@ lnl && lnl.forEach(el => yy(el) == yy(window.location) && ad(el.parentElement, '
 
 {{if eq .IsSearch "yes" }}
  let           fz = ['all', 'substring', 'lastmonth'],
-              $so = $('search-original-query'),
-              $r  = $('s-b-r'), 
-              $rq = $("query"),
-              $re = $('s-re'),
-               $h = $('s-h'),
+              $so = $('f-o'),
+              $r  = $('f-r'), 
+              $rq = $("f-i"),
+              $re = $('f-s'),
+               $h = $('f-h'),
               val = e => e.target.value,
             reset = _ => { 
                       $so.innerText = '', ad($r, '🥷'); 

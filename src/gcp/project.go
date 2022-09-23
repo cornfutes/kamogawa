@@ -14,6 +14,7 @@ import (
 	"kamogawa/types/gcp/gcetypes"
 	"log"
 	"net/http"
+	"sort"
 	"strings"
 
 	"gorm.io/gorm"
@@ -51,6 +52,13 @@ func GCPListProjects(db *gorm.DB, user types.User, useCache bool) ([]coretypes.P
 	for _, v := range responseSuccess.Projects {
 		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v))
 	}
+
+	sort.Slice(projectDBs, func(i, j int) bool {
+		if projectDBs[i].Name != projectDBs[j].Name {
+			return projectDBs[i].Name < projectDBs[j].Name
+		}
+		return projectDBs[i].ProjectId < projectDBs[j].ProjectId
+	})
 
 	if config.CacheEnabled {
 		gcecache.WriteProjectsCache2(db, user, projectDBs)

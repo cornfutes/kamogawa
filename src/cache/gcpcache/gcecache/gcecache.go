@@ -16,7 +16,7 @@ func ReadProjectsCache(db *gorm.DB, user types.User) (*gcetypes.ListProjectRespo
 		" INNER JOIN project_auths"+
 			" ON project_auths.project_id = project_dbs.project_id"+
 			" AND project_auths.gmail = ? ", user.Gmail.String,
-	).Order("project_dbs.name, project_dbs.project_id").Find(&projectDBs)
+	).Find(&projectDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")
@@ -43,7 +43,7 @@ func ReadProjectsCache2(db *gorm.DB, user types.User) []coretypes.ProjectDB {
 		" INNER JOIN project_auths"+
 			" ON project_auths.project_id = project_dbs.project_id"+
 			" AND project_auths.gmail = ? ", user.Gmail.String,
-	).Order("project_dbs.name, project_dbs.project_id").Find(&projectDBs)
+	).Find(&projectDBs)
 	if result.Error != nil {
 		panic("Query failed")
 	}

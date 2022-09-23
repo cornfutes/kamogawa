@@ -16,9 +16,9 @@ let $d = document,
     $m = $d.getElementsByTagName('main')[0],
     y = x => x.href.split('?')[0],
     $i = $('s-i'),
-    _$l = $('logo'),
-    _$t = $('session-nav'),
-    _$s = $('search-box'),
+    $l = $('logo'),
+    $t = $('session-nav'),
+    $s = $('search-box'),
      s = q =>  window.location.href = `/search?q=${encodeURI(q)}`,
     fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
   defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
@@ -42,33 +42,23 @@ lnl && lnl.forEach(el => y(el) == y(window.location) && ad(el.parentElement, 'ac
 {{if eq .IsSearch "yes" }}
  let            f = ['all', 'substring', 'lastmonth'],
             elSoq = $('search-original-query'),
-              $qb = $('query-builder'),
               $r  = $('s-b-r'), 
                 r = $("query"),
-              $sm = $('s-mod'),
               $re = $('s-re'),
                $h = $('s-h'),
-               dd = 'filter-expander-arrow-down',
-                v = e => e.target.value,
-              sqb = false,
-             o$sm = _ => {
-                      if(sqb) ad($sm, dd), ad($qb, "🥷");
-                      else    rm($sm, dd), rm($qb, "🥷");
-                      sqb = !sqb;
-                    },
+              val = e => e.target.value,
             reset = _ => { 
-                      elSoq.innerText = ''; ad($r, '🥷'); 
+                      elSoq.innerText = '', ad($r, '🥷'); 
                       rm($h, '⚡'); ad($re, '⚡'); 
                     };
-{{if .Query}}q = '{{.Query}}' {{end}};
-o = q || '';
+o = q = '{{.Query}}';
 
-xy($sm, o$sm);
+sqb = false, xy($('s-mod'), e => ((sqb = !sqb) ? rm : ad)($('search-hero'), 'search-hero-hidden'));
 
 wc($r, _ => r.value = o, reset());
 
 function change(e, i) { 
-  f[i] = v(e)
+  f[i] = val(e)
   let tk = [];
   if(f[0] != "all"      ) tk.push("provider:" + f[0]);
   if(f[1] != "substring") tk.push(    "algo:" + f[1]);
@@ -92,10 +82,10 @@ function change(e, i) {
 }
 wt(r, e => {
   pp(e);
-  if(e.code == k) s(v(e));
-  else if(v(e) == o) q = v(e), reset();
+  if(e.code == k) s(val(e));
+  else if(val(e) == o) q = val(e), reset();
   else {
-    q = v(e);
+    q = val(e);
     ad($h, '⚡');
     elSoq.innerText = o;
     rm($re, '⚡');

@@ -1,16 +1,16 @@
 {{define "page"}}
-<div class="🐉 🪜" id="search-hero">
+<div class="🐉 🪜 search-hero-hidden" id="search-hero">
   <div class="💪 🦠">
     <h3 id="s-h">Search Results for: <span id="search-original-query"></span></h3>
     <nav class="💪 🦷 ⚖️" style="padding-top: 3px">
       <span id="s-re" class="🐕 ⚡" tabindex=0 onkeyup="">
         search
       </span>
-      <span tabindex=0 class="🐕 filter-expander-arrow filter-expander-arrow-down" id="s-mod">tools<i></i></span>
+      <span tabindex=0 class="🐕 filter-expander-arrow" id="s-mod">tools<i></i></span>
     </nav>
   </div>
   <input id="query" value="{{.Query}}" placeholder="Type to search..."></input>
-  <div class="💪 🪜 🥷 🦠" id="query-builder">
+  <div class="💪 🪜 🦠 query-builder">
     <div class="💪  🦠">
       <div>
         <label for=provider>Provider:</label>
@@ -36,7 +36,8 @@
         <span class="🐕 🥷" id="s-b-r">reset</spn>
       </div>
     </div>
-    <h3>*We are redesigning the filter mechanism in the <a href="http://localhost:3000/set_theme?theme=kubrick">"Web3.0"</a> version.</h3>
+    <h3>*We are redesigning the filter mechanism in the <a
+        href="http://localhost:3000/set_theme?theme=kubrick">"Web3.0"</a> version.</h3>
   </div>
 </div>
 {{if .Unauthorized}}
@@ -83,7 +84,7 @@
     border-bottom: 1px solid var(--g);
   }
 
-  #query-builder {
+  .query-builder {
     font-size: 14px;
     padding: 0px 20px 8px 20px;
     max-height: 80px;
@@ -91,20 +92,15 @@
     transition: max-height 1s;
   }
 
-  #query-builder>* {
+  .query-builder>* {
     padding-top: 14px;
   }
 
-  #query-builder.🥷 {
-    max-height: 1px;
-    display: flex;
-  }
-
-  #query-builder label {
+  .query-builder label {
     margin-right: 4px;
   }
 
-  #query-builder select {
+  .query-builder select {
     background-color: transparent;
     color: var(--f);
     padding: 0 1em 0 0;
@@ -199,8 +195,14 @@
     /** consider remove */
   }
 
-  .filter-expander-arrow-down>i {
+  #search-hero.search-hero-hidden .filter-expander-arrow>i {
     transform: rotate(45deg) translateX(-3px)
+  }
+
+  #search-hero.search-hero-hidden .query-builder {
+    display: none;
+    max-height: 1px;
+    display: flex;
   }
 </style>
 {{end}}

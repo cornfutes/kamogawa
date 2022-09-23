@@ -8,7 +8,9 @@ let $d = document,
      k = 'Enter',
      w = e => (el, f) => el && el.addEventListener(e, f),
      wc = w('click'),
-     wt = w('keyup')
+     wt = w('keyup'),
+     xx = (el, key, fn) => wt(el, e => e.code == key && (e[p], fn())),
+     xy = (el, fn) => (wc(el, fn), xx(el, k, fn)),
      j = false,
      q = '',
     $i = $('s-i'),
@@ -23,9 +25,9 @@ let $d = document,
     fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
   defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
 
-wc($a, fo);
-wt($a, e => e.code == k && (e[p](), fo()));
-wt($d, e => !j && e.code == 'Backslash' && (e[p](), fo(e)));
+
+xy($a, fo);
+xx($d, 'Backslash', fo);
 wt($i, e => {
   if(j) {
     if(e.code == 'Escape') e[p](), defo();
@@ -67,8 +69,7 @@ console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;backg
 {{if .Query}}q = '{{.Query}}' {{end}};
 o = q || '';
 
-wc($sm, o$sm); 
-wt($sm, e => e.code == k && (e[p](), o$sm()));
+xy($sm, k, o$sm);
 
 wc($r, _ => r.value = o, reset());
 

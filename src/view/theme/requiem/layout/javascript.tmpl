@@ -5,39 +5,38 @@ let $d = document,
     ad = (l, c) => l.classList.add(c),
      $ = l => $d.getElementById(l),
      pp = e => e.preventDefault(),
-     k = 'Enter',
+    isK = e => e.code == 'Enter',
      _w = e => (el, f) => el && el.addEventListener(e, f),
      wc = _w('click'),
      wt = _w('keyup'),
-     xx = (el, key, fn) => wt(el, e => e.code == key && (pp(e), fn())),
-     xy = (el, fn) => (wc(el, fn), xx(el, k, fn)),
-     j = false,
+     xy = (el, fn) => (wc(el, fn), wt(el, e => isK(e) && (pp(e), fn()))),
+     jj = 0,
      q = '',
     $m = $d.getElementsByTagName('main')[0],
-    y = x => x.href.split('?')[0],
     $i = $('s-i'),
     $l = $('logo'),
     $t = $('session-nav'),
     $s = $('search-box'),
      s = q =>  window.location.href = `/search?q=${encodeURI(q)}`,
-    fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
-  defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
+    fo = _ => { jj=1; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); },
+  defo = _ => { jj=0; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             };
 
 xy($('search-start'), fo);
-xx($d, 'Backslash', fo);
+wt($d, e => e.code == 'Slash' && (pp(e), fo()))
+
 wt($i, e => {
-  if(j) {
-    if(e.code == 'Escape') pp(e), defo();
-    else if (e.code == k) pp(e), s($('s-i').value);
-    else if (e.code == 'Tab') pp(e);
+  if(jj) {
+    if (isK(e)) pp(e), s($('s-i').value);
+    else if(e.code == 'Escape') pp(e), defo();
+    else if(e.code == 'Tab') pp(e);
   }
 });
 wc($('search-cancel'), defo);
 
 // Not critical
-console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
-const lnl = $d.querySelectorAll('#left-nav li > a');
-lnl && lnl.forEach(el => y(el) == y(window.location) && ad(el.parentElement, 'active'));
+console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");
+const lnl = $d.querySelectorAll('#left-nav li > a'),  yy = x => x.href.split('?')[0];
+lnl && lnl.forEach(el => yy(el) == yy(window.location) && ad(el.parentElement, 'active'));
 
 {{if eq .IsSearch "yes" }}
  let            f = ['all', 'substring', 'lastmonth'],
@@ -53,7 +52,7 @@ lnl && lnl.forEach(el => y(el) == y(window.location) && ad(el.parentElement, 'ac
                     };
 o = q = '{{.Query}}';
 
-sqb = false, xy($('s-mod'), e => ((sqb = !sqb) ? rm : ad)($('search-hero'), 'search-hero-hidden'));
+sqb = 0, xy($('s-mod'), e => ((sqb = !sqb) ? rm : ad)($('search-hero'), 'search-hero-hidden'));
 
 wc($r, _ => r.value = o, reset());
 
@@ -82,7 +81,7 @@ function change(e, i) {
 }
 wt(r, e => {
   pp(e);
-  if(e.code == k) s(val(e));
+  if(isK(e)) s(val(e));
   else if(val(e) == o) q = val(e), reset();
   else {
     q = val(e);
@@ -93,7 +92,7 @@ wt(r, e => {
   }
 });
 wc($re, e => q != o && (pp(e), s(q)));
-wt($re, e => e.code == k && q != o && pp(e) && s(q));
+wt($re, e => isK(e) && q != o && pp(e) && s(q));
 {{end}}
 </script>
 {{end}}

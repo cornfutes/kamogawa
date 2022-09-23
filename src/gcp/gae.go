@@ -117,6 +117,13 @@ func GAEListVersions(db *gorm.DB, user types.User, projectId string, serviceName
 		return nil, responseError
 	}
 
+	sort.Slice(responseSuccess.Versions, func(i, j int) bool {
+		if responseSuccess.Versions[i].Name != responseSuccess.Versions[j].Name {
+			return responseSuccess.Versions[i].Name < responseSuccess.Versions[j].Name
+		}
+		return responseSuccess.Versions[i].Id < responseSuccess.Versions[j].Id
+	})
+
 	if config.CacheEnabled {
 		gaecache.WriteVersionsCache(db, user, projectId, serviceName, responseSuccess)
 	}

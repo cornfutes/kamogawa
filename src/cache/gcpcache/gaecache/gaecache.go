@@ -83,7 +83,7 @@ func ReadVersionsCache(db *gorm.DB, user types.User, projectId string, serviceNa
 			" ON gae_version_auths.id = gae_version_dbs.id"+
 			" AND gae_version_auths.gmail = ?"+
 			" AND gae_version_dbs.service_id = ?", user.Gmail.String, gaetypes.ToServiceId(projectId, serviceName),
-	).Order("gae_version_dbs.name, gae_version_dbs.id").Find(&gaeVersionDBs)
+	).Find(&gaeVersionDBs)
 	if result.Error != nil {
 		fmt.Printf("Query failed\n")
 		return nil, fmt.Errorf("Query failed")

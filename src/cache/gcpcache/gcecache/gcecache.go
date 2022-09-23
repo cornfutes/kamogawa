@@ -69,7 +69,7 @@ func WriteProjectsCache(db *gorm.DB, user types.User, resp *gcetypes.ListProject
 		projectDBs = append(projectDBs, coretypes.ProjectToProjectDB(&v))
 	}
 
-	utility.BatchUpsertOrElseSingleProjectDB(db, projectDBs)
+	utility.BatchUpsertOrElseSingle(db, projectDBs)
 	WriteProjectsAuth(db, user, resp)
 }
 
@@ -78,7 +78,7 @@ func WriteProjectsCache2(db *gorm.DB, user types.User, projectDBs []coretypes.Pr
 		return
 	}
 
-	utility.BatchUpsertOrElseSingleProjectDB(db, projectDBs)
+	utility.BatchUpsertOrElseSingle(db, projectDBs)
 	WriteProjectsAuth2(db, user, projectDBs)
 }
 
@@ -95,7 +95,7 @@ func WriteProjectsAuth(db *gorm.DB, user types.User, resp *gcetypes.ListProjectR
 		projectAuths = append(projectAuths, coretypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
 	}
 
-	utility.BatchUpsertOrElseSingleProjectAuth(db, projectAuths)
+	utility.BatchUpsertOrElseSingle(db, projectAuths)
 }
 
 func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []coretypes.ProjectDB) {
@@ -108,7 +108,7 @@ func WriteProjectsAuth2(db *gorm.DB, user types.User, projects []coretypes.Proje
 		projectAuths = append(projectAuths, coretypes.ProjectAuth{Gmail: user.Gmail.String, ProjectId: v.ProjectId})
 	}
 
-	utility.BatchUpsertOrElseSingleProjectAuth(db, projectAuths)
+	utility.BatchUpsertOrElseSingle(db, projectAuths)
 }
 
 func ReadInstancesCache(db *gorm.DB, user types.User, projectId string) (*gcetypes.GCEAggregatedInstances, error) {
@@ -143,7 +143,7 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, resp *g
 	}
 
 	gceInstanceDBs := gcetypes.GCEAggregatedInstancesToGCEInstanceDB(user, projectId, resp)
-	utility.BatchUpsertOrElseSingleGCEInstanceDB(db, gceInstanceDBs)
+	utility.BatchUpsertOrElseSingle(db, gceInstanceDBs)
 	WriteInstancesAuth(db, user, gceInstanceDBs)
 }
 
@@ -157,5 +157,5 @@ func WriteInstancesAuth(db *gorm.DB, user types.User, gceInstanceDBs []gcetypes.
 		instanceAuths = append(instanceAuths, gcetypes.GCEInstanceAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
 
-	utility.BatchUpsertOrElseSingleGCEInstanceAuth(db, instanceAuths)
+	utility.BatchUpsertOrElseSingle(db, instanceAuths)
 }

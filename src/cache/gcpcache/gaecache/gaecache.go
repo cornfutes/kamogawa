@@ -59,7 +59,7 @@ func WriteServicesCache(db *gorm.DB, user types.User, projectId string, resp *ga
 		})
 	}
 
-	utility.BatchUpsertOrElseSingleGAEServiceDB(db, serviceDBs)
+	utility.BatchUpsertOrElseSingle(db, serviceDBs)
 	WriteServicesAuth(db, user, serviceDBs)
 }
 
@@ -73,7 +73,7 @@ func WriteServicesAuth(db *gorm.DB, user types.User, gaeServiceDBs []gaetypes.GA
 		gaeServiceAuths = append(gaeServiceAuths, gaetypes.GAEServiceAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
 
-	utility.BatchUpsertOrElseSingleGAEServiceAuth(db, gaeServiceAuths)
+	utility.BatchUpsertOrElseSingle(db, gaeServiceAuths)
 }
 
 func ReadVersionsCache(db *gorm.DB, user types.User, projectId string, serviceName string) (*gaetypes.GAEListVersionsResponse, error) {
@@ -129,7 +129,7 @@ func WriteVersionsCache(db *gorm.DB, user types.User, projectId string, serviceN
 		})
 	}
 
-	utility.BatchUpsertOrElseSingleGAEVersionDB(db, gaeVersionDBs)
+	utility.BatchUpsertOrElseSingle(db, gaeVersionDBs)
 	WriteVersionsAuth(db, user, gaeVersionDBs)
 }
 
@@ -143,7 +143,7 @@ func WriteVersionsAuth(db *gorm.DB, user types.User, gaeVersionDBs []gaetypes.GA
 		gaeVersionAuths = append(gaeVersionAuths, gaetypes.GAEVersionAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
 
-	utility.BatchUpsertOrElseSingleGAEVersionAuth(db, gaeVersionAuths)
+	utility.BatchUpsertOrElseSingle(db, gaeVersionAuths)
 }
 
 func ReadInstancesCache(db *gorm.DB, user types.User, projectId string, serviceName string, versionName string) (*gaetypes.GAEListInstancesResponse, error) {
@@ -200,7 +200,7 @@ func WriteInstancesCache(db *gorm.DB, user types.User, projectId string, service
 		})
 	}
 
-	utility.BatchUpsertOrElseSingleGAEInstanceDB(db, gaeInstanceDBs)
+	utility.BatchUpsertOrElseSingle(db, gaeInstanceDBs)
 	WriteInstancesAuth(db, user, gaeInstanceDBs)
 }
 
@@ -214,5 +214,5 @@ func WriteInstancesAuth(db *gorm.DB, user types.User, gaeInstanceDBs []gaetypes.
 		gaeInstanceAuths = append(gaeInstanceAuths, gaetypes.GAEInstanceAuth{Gmail: user.Gmail.String, Id: v.Id})
 	}
 
-	utility.BatchUpsertOrElseSingleGAEInstanceAuth(db, gaeInstanceAuths)
+	utility.BatchUpsertOrElseSingle(db, gaeInstanceAuths)
 }

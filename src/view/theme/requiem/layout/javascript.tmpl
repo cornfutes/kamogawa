@@ -4,11 +4,11 @@ let $d = document,
     rm = (l, c) => l.classList.remove(c),
     ad = (l, c) => l.classList.add(c),
      $ = l => $d.getElementById(l),
-     z = 'addEventListener',
      p = 'preventDefault',
-     c = 'click',
-     u = 'keyup',
      k = 'Enter',
+     w = e => (el, f) => el && el.addEventListener(e, f),
+     wc = w('click'),
+     wt = w('keyup')
      j = false,
      q = '',
     $i = $('s-i'),
@@ -23,19 +23,16 @@ let $d = document,
     fo = _ => { j=true ; rm($s, '👻'); ad($t, '👻'); ad($m, '🌃'); ad($l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); }
   defo = _ => { j=false; ad($s, '👻'); rm($t, '👻'); rm($m, '🌃'); rm($l, '🌃');                       $i.value='';             }
 
-if($a) {
-  $a[z](c, fo);
-  $a[z](u, e => {
-    if (e.code == k) {
-      e[p]();
-      fo();
-    }
-  });
-}
+wc($a, fo);
+wt($a, e => {
+  if (e.code == k) {
+    e[p]();
+    fo();
+  }
+});
 
-$d[z](u, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
-
-$i[z](u, e => {
+wt($d, e => { if (!j&& e.code == 'Backslash') e[p](), fo(e); });
+wt($i, e => {
   if(!j) return;
   if(e.code == 'Escape') e[p](), defo();
   else if (e.code == k) {
@@ -47,7 +44,7 @@ $i[z](u, e => {
     {{end}}
   } else if (e.code == 'Tab') e[p]();
 });
-$('search-cancel')[z](c, defo);
+wc($('search-cancel'), defo);
 
 // Not critical
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");   
@@ -75,14 +72,14 @@ console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;backg
 {{if .Query}}q = '{{.Query}}' {{end}};
 o = q || '';
 
-$sm[z](c, o$sm); 
-$sm[z](u, e => {
+wc($sm, o$sm); 
+wt($sm, e => {
   if(e.code != k) return;
   event[p]();
   o$sm();
 });
 
-$r[z](c, _ => { r.value = o, reset() });
+wc($r, _ => { r.value = o, reset() });
 
 function change(e, i) { 
   f[i] = v(e)
@@ -108,7 +105,7 @@ function change(e, i) {
     if(r.value == o) reset();
   }
 }
-r[z](u, e => {
+wt(r, e => {
   e[p]();
   if(e.code == k) s(v(e));
   else if(v(e) == o) q = v(e), reset();
@@ -120,13 +117,13 @@ r[z](u, e => {
     rm($r, '🥷');
   }
 });
-$re[z](c, e => {
+wc($re, e => {
   if(q != o) {
     e[p]();
     s(q);  
   }
 });
-$re[z](u, e => e.code == k && q != o && e[p]() && s(q));
+wt($re, e => e.code == k && q != o && e[p]() && s(q));
 {{end}}
 
 // Not critical

@@ -15,7 +15,7 @@
 </p>
 
 <div class="💪 🦠" style="padding-bottom: 20px">
-  <div class="🪜" id="page-export-options">
+  <div class="🪜 page-export-options">
     <label class="container">
       <input type="checkbox" id="download-checkbox-projects">
       <span class="checkmark"></span>
@@ -32,7 +32,7 @@
       GCE Instances
     </label>
   </div>
-  <div class="🪜">
+  <div class="🪜 page-export-options">
     <label class="container disabled">
       <input type="checkbox" disabled>
       <span class="checkmark"></span>
@@ -49,7 +49,7 @@
       GAE Instances
     </label>
   </div>
-  <div class="🪜">
+  <div class="🪜 page-export-options">
     <label class="container disabled">
       <input type="checkbox" disabled>
       <span class="checkmark"></span>
@@ -74,7 +74,7 @@
 </p>
 
 <style>
-  #page-export-options .container {
+  .page-export-options .container {
     display: block;
     position: relative;
     padding-left: 35px;
@@ -86,14 +86,14 @@
     user-select: none;
   }
 
-  #page-export-options .container.disabled {
+  .page-export-options .container.disabled {
     cursor: not-allowed;
     text-decoration: line-through;
     color: var(--g);
   }
 
   /* Hide the browser's default checkbox */
-  #page-export-options .container input {
+  .page-export-options .container input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -102,7 +102,7 @@
   }
 
   /* Create a custom checkbox */
-  #page-export-options .checkmark {
+  .page-export-options .checkmark {
     position: absolute;
     top: 0;
     left: 0;
@@ -112,29 +112,29 @@
     border: 1px var(--f) solid;
   }
 
-  #page-export-options .container.disabled .checkmark {
+  .page-export-options .container.disabled .checkmark {
     border: 1px solid var(--g)
   }
 
-  #page-export-options .container:hover input~.checkmark {
+  .page-export-options .container:hover input~.checkmark {
     background-color: var(-b);
   }
 
 
   /* Create the checkmark/indicator (hidden when not checked) */
-  #page-export-options .checkmark:after {
+  .page-export-options .checkmark:after {
     content: "";
     position: absolute;
     display: none;
   }
 
   /* Show the checkmark when checked */
-  #page-export-options .container input:checked~.checkmark:after {
+  .page-export-options .container input:checked~.checkmark:after {
     display: block;
   }
 
   /* Style the checkmark/indicator */
-  #page-export-options .container .checkmark:after {
+  .page-export-options .container .checkmark:after {
     left: 5px;
     top: 2px;
     width: 4px;

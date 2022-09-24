@@ -130,40 +130,40 @@ func Register(r *gin.Engine) {
 
 	// Register static assets.
 	if config.Env == config.Dev {
-		r.StaticFile("/style.css", "media/asset/style.css")
-		r.StaticFile("/style_glass.css", "media/asset/style_glass.css")
+		r.StaticFile(MediaBaseUrl+"style.css", "media/asset/style.css")
+		r.StaticFile(MediaBaseUrl+"style_glass.css", "media/asset/style_glass.css")
 	} else {
-		r.GET("style.css", Data(MimeTypeCSS, styleCssMin))
-		r.GET("style_glass.css", Data(MimeTypeCSS, styleCssStyleCssKubrickMin))
+		r.GET(MediaBaseUrl+"style.css", Data(MimeTypeCSS, styleCssMin, false))
+		r.GET(MediaBaseUrl+"style_glass.css", Data(MimeTypeCSS, styleCssStyleCssKubrickMin, false))
 	}
-	r.GET(MediaBaseUrl+"screensaver.mp4", Data(MimeTypeMP4, mp4Screensaver))
-	r.GET(MediaBaseUrl+"cloud_logo_aws.png", Data(MimeTypePNG, pngAWS))
-	r.GET(MediaBaseUrl+"cloud_logo_gcp.png", Data(MimeTypePNG, pngGCP))
-	r.GET(MediaBaseUrl+"cloud_logo_azure.png", Data(MimeTypePNG, pngAzure))
-	r.GET(MediaBaseUrl+"blog_traffic.gif", Data(MimeTypeGIF, pngBlog1))
-	r.GET(MediaBaseUrl+"blog_search.gif", Data(MimeTypeGIF, pngBlog2))
-	r.GET(MediaBaseUrl+"blog_splash.jpg", Data(MimeTypeJPG, pngBlog3))
-	r.GET(MediaBaseUrl+"blog_login_error.gif", Data(MimeTypeGIF, pngBlog4))
-	r.GET(MediaBaseUrl+"blog_simple.gif", Data(MimeTypePNG, pngBlog5))
-	r.GET(MediaBaseUrl+"blog_widget.gif", Data(MimeTypePNG, pngBlog6))
-	r.GET(MediaBaseUrl+"blog_docker.gif", Data(MimeTypeGIF, pngBlog7))
+	r.GET(MediaBaseUrl+"screensaver.mp4", Data(MimeTypeMP4, mp4Screensaver, true))
+	r.GET(MediaBaseUrl+"cloud_logo_aws.png", Data(MimeTypePNG, pngAWS, true))
+	r.GET(MediaBaseUrl+"cloud_logo_gcp.png", Data(MimeTypePNG, pngGCP, true))
+	r.GET(MediaBaseUrl+"cloud_logo_azure.png", Data(MimeTypePNG, pngAzure, true))
+	r.GET(MediaBaseUrl+"blog_traffic.gif", Data(MimeTypeGIF, pngBlog1, true))
+	r.GET(MediaBaseUrl+"blog_search.gif", Data(MimeTypeGIF, pngBlog2, true))
+	r.GET(MediaBaseUrl+"blog_splash.jpg", Data(MimeTypeJPG, pngBlog3, true))
+	r.GET(MediaBaseUrl+"blog_login_error.gif", Data(MimeTypeGIF, pngBlog4, true))
+	r.GET(MediaBaseUrl+"blog_simple.gif", Data(MimeTypePNG, pngBlog5, true))
+	r.GET(MediaBaseUrl+"blog_widget.gif", Data(MimeTypePNG, pngBlog6, true))
+	r.GET(MediaBaseUrl+"blog_docker.gif", Data(MimeTypeGIF, pngBlog7, true))
 
-	r.GET(MediaBaseUrl+"splash_landing.gif", Data(MimeTypeGIF, splashLanding))
-	r.GET(MediaBaseUrl+"splash_landing_hd.gif", Data(MimeTypeGIF, splashLandingHD))
-	r.GET(MediaBaseUrl+"splash_fuji.gif", Data(MimeTypeGIF, splashFuji))
-	r.GET(MediaBaseUrl+"splash_ship.gif", Data(MimeTypeGIF, splashShip))
-	r.GET(MediaBaseUrl+"console.svg", Data(MimeTypeSVG, console))
-	r.GET(MediaBaseUrl+"phone.svg", Data(MimeTypeSVG, phone))
-	r.GET(MediaBaseUrl+"consent.png", Data(MimeTypePNG, consent))
-	r.GET(MediaBaseUrl+"nft.gif", Data(MimeTypeGIF, gifProfile))
-	r.GET(MediaBaseUrl+"big_sur.jpg", Data(MimeTypeJPG, jpgBigSur))
-	r.GET(MediaBaseUrl+"landing_clock.png", Data(MimeTypePNG, landingClockPng))
-	r.GET(MediaBaseUrl+"landing_screenshot.png", Data(MimeTypePNG, landingScreenshot))
+	r.GET(MediaBaseUrl+"splash_landing.gif", Data(MimeTypeGIF, splashLanding, true))
+	r.GET(MediaBaseUrl+"splash_landing_hd.gif", Data(MimeTypeGIF, splashLandingHD, true))
+	r.GET(MediaBaseUrl+"splash_fuji.gif", Data(MimeTypeGIF, splashFuji, true))
+	r.GET(MediaBaseUrl+"splash_ship.gif", Data(MimeTypeGIF, splashShip, true))
+	r.GET(MediaBaseUrl+"console.svg", Data(MimeTypeSVG, console, true))
+	r.GET(MediaBaseUrl+"phone.svg", Data(MimeTypeSVG, phone, true))
+	r.GET(MediaBaseUrl+"consent.png", Data(MimeTypePNG, consent, true))
+	r.GET(MediaBaseUrl+"nft.gif", Data(MimeTypeGIF, gifProfile, true))
+	r.GET(MediaBaseUrl+"big_sur.jpg", Data(MimeTypeJPG, jpgBigSur, true))
+	r.GET(MediaBaseUrl+"landing_clock.png", Data(MimeTypePNG, landingClockPng, true))
+	r.GET(MediaBaseUrl+"landing_screenshot.png", Data(MimeTypePNG, landingScreenshot, true))
 
-	r.GET("legal.txt", Data(MimeTypeTXT, legal))
-	r.GET("security.txt", Data(MimeTypeTXT, security))
-	r.GET("about.txt", Data(MimeTypeTXT, about))
-	r.GET("api.txt", Data(MimeTypeTXT, api))
+	r.GET(MediaBaseUrl+"legal.txt", Data(MimeTypeTXT, legal, false))
+	r.GET(MediaBaseUrl+"security.txt", Data(MimeTypeTXT, security, false))
+	r.GET(MediaBaseUrl+"about.txt", Data(MimeTypeTXT, about, false))
+	r.GET(MediaBaseUrl+"api.txt", Data(MimeTypeTXT, api, false))
 
 	// Register static views.
 	for route, file := range staticHtml {
@@ -179,20 +179,24 @@ func preparecss(m *minify.M) {
 	m.AddFunc("text/css", minifyCss.Minify)
 	var err error
 	styleCssMin, err = m.Bytes("text/css", styleCss)
-	styleCssStyleCssKubrickMin, err = m.Bytes("text/css", styleCssKubrick)
 	if err != nil {
 		panic(err)
 	}
+	styleCssStyleCssKubrickMin, err = m.Bytes("text/css", styleCssKubrick)
 }
 
-func Data(mime MimeType, contents []byte) func(c *gin.Context) {
+func Data(mime MimeType, contents []byte, immutable bool) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		a := c.Request.Header["If-None-Match"]
+		if immutable {
+			c.Writer.Header().Set("Cache-Control", "public, max-age=1800, immutable")
+		} else {
+			c.Writer.Header().Set("Cache-Control", "public, max-age=1800")
+		}
 		if len(a) > 0 && a[0] == etag {
 			c.Data(http.StatusNotModified, string(mime), []byte{})
 		} else {
 			c.Header("ETag", etag)
-			c.Writer.Header().Set("Cache-Control", "public, max-age=1800, immutable")
 			c.Data(http.StatusOK, string(mime), contents)
 		}
 	}

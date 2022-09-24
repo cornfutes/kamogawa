@@ -78,7 +78,7 @@ func main() {
 
 	authed := r.Group("/", identity.GateAuth())
 	{
-		authed.GET("release.txt", media.Data(media.MimeTypeTXT, media.Release))
+		authed.GET("/static/release.txt", media.Data(media.MimeTypeTXT, media.Release, false))
 
 		authed.GET("/glass_sample", func(c *gin.Context) {
 			core.HTMLWithGlobalState(c, "glass_sample.tmpl", gin.H{})

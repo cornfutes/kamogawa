@@ -192,6 +192,7 @@ func Data(mime MimeType, contents []byte) func(c *gin.Context) {
 			c.Data(http.StatusNotModified, string(mime), []byte{})
 		} else {
 			c.Header("ETag", etag)
+			c.Writer.Header().Set("Cache-Control", "public, max-age=1800, immutable")
 			c.Data(http.StatusOK, string(mime), contents)
 		}
 	}

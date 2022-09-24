@@ -1,7 +1,6 @@
 :root {
   --a: #030303;
   --b: #1d1d1d;
-  --c: #3A4634;
   --d: #516048;
   --e: #768A6A;
   --f: #A1C58B;
@@ -11,13 +10,8 @@
   --i: #dff6cf;
   --j: #DAD7CD;
   --x: #588157;
-  --y: black;
-  --z: #4EA5D9;
-  --frame-thickness: 1px;
+  --frame-thickness: 0;
   --width: 980px;
-  --text: #2B3044;
-  --line: #BBC1E1;
-  --line-active: #275EFE;
 }
 
 .🍕 { font-style: italic; }
@@ -120,7 +114,7 @@ h2, h3 {
 h2 { font-size: 40px; }
 h3 { font-size: 20px; }
 
-a, span.🐕 { text-decoration: none; color: var(--z); cursor: pointer; }
+a, span.🐕 { text-decoration: none; color: #4EA5D9; cursor: pointer; }
 /** TODO: revisit if still needed or working for top-nav */
 .🐕:hover, a:hover, .top-nav a:hover, #logo a:hover, #s-s:hover {
   transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);

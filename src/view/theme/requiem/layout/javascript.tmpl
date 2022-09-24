@@ -8,7 +8,7 @@ let $d = document,
     isK = e => e.code == 'Enter',
     _w = e => (el, f) => el && el.addEventListener(e, f),
     wc = _w('click'),
-    wt = _w('keyup'),
+    wt = _w('keydown'),
     xy = (el, fn) => (wc(el, fn), wt(el, e => isK(e) && (pp(e), fn()))),
      q = '',
     $i = $('s-i'),
@@ -22,11 +22,11 @@ let $d = document,
   defo = _ => { jj=0; ad(_$s, '👻'); rm(_$t, '👻'); rm(_$m, '🌃'); rm(_$l, '🌃');                       $i.value='';             };
 
 xy($('s-s'), fo);
-wt($d, e => e.code == 'Slash' && (pp(e), fo()))
+wt($d, e => e.code == 'Slash' && (pp(e), fo()));
 
 wt($i, e => {
   if(jj) {
-    if (isK(e)) pp(e), s($('s-i').value);
+    if (isK(e)) pp(e), s($i.value);
     else if(e.code == 'Escape') pp(e), defo();
     else if(e.code == 'Tab') pp(e);
   }
@@ -52,7 +52,7 @@ lnl && lnl.forEach(el => yy(el) == yy(window.location) && ad(el.parentElement, '
                     };
 o = q = '{{.Query}}';
 
-sqb = 0, xy($('s-mod'), e => ((sqb = !sqb) ? rm : ad)($('search-hero'), 'search-hero-hidden'));
+sqb = 0, xy($('f-f'), e => ((sqb = !sqb) ? rm : ad)($('🐉'), 'search-hero-hidden'));
 
 wc($r, _ => $rq.value = o, reset());
 

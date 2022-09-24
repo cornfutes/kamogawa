@@ -1,17 +1,17 @@
 {{define "page"}}
-<div class="🐉 🪜 search-hero-hidden" id="search-hero">
+<div class="🪜 search-hero-hidden" id=🐉>
   <div class="💪 🦠">
     <h3 id="f-h">Search Results for: <span id="f-o"></span></h3>
-    <nav class="💪 🦷 ⚖️" style="padding-top: 3px">
-      <span id="f-s" class="🐕 ⚡" tabindex=0 onkeyup="">
+    <nav class="💪 🦷 ⚖️">
+      <span id="f-s" class="🐕 ⚡" tabindex=0>
         search
       </span>
-      <span tabindex=0 class="🐕" id="s-mod">tools<i></i></span>
+      <span tabindex=0 class="🐕" id="f-f">tools<i></i></span>
     </nav>
   </div>
-  <input id="f-i" value="{{.Query}}" placeholder="Type to search..."></input>
+  <input id="f-i" value="{{.Query}}" placeholder="Type to search...">
   <div class="🪜 🦠 query-builder">
-    <div class="💪  🦠">
+    <div class="💪 🦠">
       <div>
         <label for=provider>Provider:</label>
         <select name=provider onchange="change(event, 0)">
@@ -32,12 +32,10 @@
           <option value=lastmonth>Last Month (implicit) </option>
         </select>
       </div>
-      <div>
-        <span class="🐕 🥷" id="f-r">reset</spn>
-      </div>
+      <span class="🐕 🥷" id="f-r">reset</span>
     </div>
     <h3>*We are redesigning the filter mechanism in the <a
-        href="http://localhost:3000/set_theme?theme=kubrick">"Web3.0"</a> version.</h3>
+        href="http://diceduckmonk.com/set_theme?theme=kubrick">"Web3.0"</a> version.</h3>
   </div>
 </div>
 {{if .Unauthorized}}
@@ -79,7 +77,7 @@
 {{end}}
 {{end}}
 <style>
-  #search-hero {
+  #🐉 {
     padding-bottom: 3px;
     border-bottom: 1px solid var(--g);
   }
@@ -134,13 +132,13 @@
     margin-bottom: 20px;
   }
 
-  .🐉 h3 {
+  #🐉 h3 {
     padding-right: 0;
     margin-bottom: 0;
     border-bottom: 0;
   }
 
-  .🐉 input {
+  #🐉 input {
     color: var(--a);
     opacity: 1;
     background-color: var(--f);
@@ -156,7 +154,7 @@
     transition: opacity 1s, border-radius .5s, box-shadow 1s;
   }
 
-  .🐉 input:focus {
+  #🐉 input:focus {
     opacity: .8;
     border-radius: 0px;
     transition: opacity 1s, border-radius .5s, box-shadow 1s;
@@ -185,21 +183,19 @@
     }
   }
 
-  #s-mod>i {
+  #f-f>i {
     border: solid var(--e);
     border-width: 0 2px 2px 0;
     display: inline-block;
-    /** consider adding class */
     padding: 4px;
     margin-left: 10px;
-    /** consider remove */
   }
 
-  #search-hero.search-hero-hidden #s-mod>i {
+  #🐉.search-hero-hidden #f-f>i {
     transform: rotate(45deg) translateX(-3px)
   }
 
-  #search-hero.search-hero-hidden .query-builder {
+  #🐉.search-hero-hidden .query-builder {
     display: none;
     max-height: 1px;
     display: flex;

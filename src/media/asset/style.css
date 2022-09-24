@@ -8,7 +8,6 @@
   --h: #313231;
   --i: #dff6cf;
   --j: #DAD7CD;
-  --x: #588157;
 }
 
 .🍕 { font-style: italic }
@@ -28,7 +27,7 @@
 .🌃 { filter: brightness(25%); transition: filter .5s }
 
 #s-i {
-  font-size: 17px;
+  font-size: 1.5rem;
   height: 38px;
   padding: 0 0 0 38px;
   outline: none;
@@ -55,7 +54,7 @@
 }
 
 body {
-  font-family:  Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   height: 100vh;
   background-color: var(--b);
   color: var(--j);
@@ -66,9 +65,9 @@ header {
   border-bottom: 1px solid var(--h);
   justify-content: center;
 }
-header>div{ flex: 0 0 980px; }
-header a { color: var(--e); }
-#logo { line-height: 38px; } /** TODO: refactor to variable */
+header>div{ flex: 0 0 980px }
+header a { color: var(--e) }
+#logo { line-height: 38px }
 #logo > a { font-size: 1.2rem; opacity: 1; font-weight: 600;}
 #logo > a > span { transform: scale(-1, 1); display: inline-block; } /** mirror the kanji  */
 #logo > .tag-beta {
@@ -76,7 +75,7 @@ header a { color: var(--e); }
   padding: 3px 10px;
   border-radius: 12px;
   font-size: .9rem;
-  background-color: var(--x);
+  background-color: #588157;
 }
 #session-nav a { opacity: .7; font-size: .9rem; }
 #session-nav { flex-direction: row-reverse; align-items: center;}
@@ -87,8 +86,7 @@ footer>ul>li>a { color: #a1a1a6; }
 
 main { width: 980px }
 
-aside { flex-basis: 14em; border-right: 1px solid var(--h); }
-aside nav { margin-top: 40px }
+aside { flex-basis: 14em; border-right: 1px solid var(--h);  padding-top: 40px }
 aside li { padding: .5rem 0 }
 aside li.active { border-right: .5rem solid var(--f); }
 aside ul { padding: 0; margin: .5rem 0 0 0; }
@@ -107,7 +105,7 @@ h2, h3 {
 h2 { font-size: 40px }
 h3 { font-size: 20px }
 
-a, span.🐕 { text-decoration: none; color: #4EA5D9; cursor: pointer; }
+a, .🐕 { text-decoration: none; color: #4EA5D9; cursor: pointer; }
 .🐕:hover, a:hover, .top-nav a:hover, #logo a:hover, #s-s:hover {
   transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
   opacity: .65;
@@ -117,6 +115,7 @@ a, span.🐕 { text-decoration: none; color: #4EA5D9; cursor: pointer; }
 table {
   border-collapse: collapse;
   font-size: 0.9em;
+  margin: 1rem 0;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   border-top: 1px solid #484b45;
   width: 100%;
@@ -140,7 +139,7 @@ button:hover {
   transition: border-color 1s, color .5s ease;
 }
 button.disabled { color: var(--g); cursor: not-allowed; }
-button.disabled:hover { border-color: var(--g); }
+button.disabled:hover { border-color: var(--g) }
 
 hr {
   width: 300px; /** TODO paramterize */
@@ -162,21 +161,18 @@ hr {
 }
 .splash-container > img { border-radius: 4px; width: 100%; } /** Handle image being smaller than container*/
 
-.content-narrow { padding: 20px 150px; }
+.content-narrow { padding: 20px 150px }
 
 .💘:after { content: "❯"; padding-left: .3rem; }
 
 @media all and (max-width: 1000px) {
-  header { justify-content: flex-start;}
-  header>div, aside { flex-basis: auto; }
-  #session-nav, main, header>div { flex-direction: column; }
-  aside, #session-nav { padding-top: 20px; padding-bottom: 20px; }
-  #session-nav { align-items: flex-start; }
+  header { justify-content: flex-start }
+  header>div, aside { flex-basis: auto }
+  #session-nav, main, header>div { flex-direction: column }
+  header, aside, #content { padding: 20px; }
+  #session-nav { align-items: flex-start }
   aside {  border-right: 0; border-bottom: 1px solid var(--h);}
 
-  #content { padding: 20px; }
-  #session-nav, aside>nav, #logo { margin-left: 20px; }
-  aside>nav { margin-top: 0; }
-  .content-narrow { padding: 10px; }
+  .content-narrow { padding: 10px }
   .splash-container>h1 { font-size: 32px; left: 40px; }
 }

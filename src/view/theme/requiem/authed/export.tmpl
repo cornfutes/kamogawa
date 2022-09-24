@@ -69,7 +69,8 @@
 </div>
 
 <p>
-  <button id="download-csv" class="disabled">Download as CSV</button>
+  <button type="submit" id="download-csv" class="disabled">Download as CSV</button>
+
   <button class="disabled">Download as DuckDB</button>
 </p>
 
@@ -146,4 +147,18 @@
     transform: rotate(35deg);
   }
 </style>
+<script>
+  document.getElementById('download-checkbox-projects').addEventListener('change', e => {
+    if (e.currentTarget.checked) {
+      document.getElementById('download-csv').classList.remove('disabled');
+    } else {
+      document.getElementById('download-csv').classList.add('disabled');
+    }
+  });
+  document.getElementById('download-csv').addEventListener('click', e => {
+    if(!e.target.classList.contains('disabled')) {
+      window.open('/project.csv?t=project');
+    };
+  });
+</script>
 {{end}}

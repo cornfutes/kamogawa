@@ -8,7 +8,7 @@ let $d = document,
     isK = e => e.code == 'Enter',
     _w = e => (el, f) => el && el.addEventListener(e, f),
     wc = _w('click'),
-    wt = _w('keydown'),
+    wt = _w('keyup'),
     xy = (el, fn) => (wc(el, fn), wt(el, e => isK(e) && (pp(e), fn()))),
      q = '',
     $i = $('s-i'),
@@ -16,22 +16,19 @@ let $d = document,
    _$l = $('logo'),
    _$t = $('session-nav'),
    _$s = $('s-b'),
-     s = q =>  window.location.href = `/search?q=${encodeURI(q)}`,
+     s = q => window.location.href = `/search?q=${encodeURI(q)}`,
     jj = 0,
     fo = _ => { jj=1; rm(_$s, '👻'); ad(_$t, '👻'); ad(_$m, '🌃'); ad(_$l, '🌃'); if(q && q.length > 0) $i.value= q; $i.focus(); },
-  defo = _ => { jj=0; ad(_$s, '👻'); rm(_$t, '👻'); rm(_$m, '🌃'); rm(_$l, '🌃');                       $i.value='';             };
+    de = _ => { jj=0; ad(_$s, '👻'); rm(_$t, '👻'); rm(_$m, '🌃'); rm(_$l, '🌃');                       $i.value='';             };
 
 xy($('s-s'), fo);
-wt($d, e => e.code == 'Slash' && (pp(e), fo()));
-
-wt($i, e => {
-  if(jj) {
-    if (isK(e)) pp(e), s($i.value);
-    else if(e.code == 'Escape') pp(e), defo();
-    else if(e.code == 'Tab') pp(e);
-  }
+_w('keydown')($d, e => jj && e.code == 'Tab' && (pp(e), fo()));
+wt($d, e => {
+  e.code == 'Slash' && (pp(e), fo());
+  jj && isK(e) && (pp(e), s($i.value));
+  jj && e.code == 'Escape' && (pp(e), de());
 });
-wc($('s-c'), defo);
+wc($('s-c'), de);
 
 // Not critical
 console.log("%c Hello Y = f=>(x=>x(x))(x=>f(y=>x(x)(y)))", "font-size:24px;background:#67b26f;background:-webkit-linear-gradient(to right, #67b26f, #4ca2cd); background: linear-gradient(to right, #67b26f, #4ca2cd);color:white;text-align:center;padding:10px 15px;width:100%;border-radius:20px;");
@@ -92,7 +89,7 @@ wt($rq, e => {
   }
 });
 wc($re, e => q != o && (pp(e), s(q)));
-wt($re, e => isK(e) && q != o && pp(e) && s(q));
+wt($re, e => isK(e) && q != o && (pp(e), s(q)));
 {{end}}
 </script>
 {{end}}

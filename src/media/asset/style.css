@@ -60,17 +60,12 @@ body {
   color: var(--j);
 }
 
-header {
-  padding: .5rem;
-  border-bottom: 1px solid var(--h);
-  justify-content: center;
-}
+header { border-bottom: 1px solid var(--h) }
 header>div{ flex: 0 0 980px }
 header a { color: var(--e) }
-#logo { line-height: 38px }
-#logo > a { font-size: 1.2rem; opacity: 1; font-weight: 600;}
-#logo > a > span { transform: scale(-1, 1); display: inline-block; } /** mirror the kanji  */
-#logo > .tag-beta {
+#logo { line-height: 38px}
+#logo > a { font-size: 1.2rem; opacity: 1; font-weight: 600; transform: scale(-1, 1); display: inline-block; } /** mirror the kanji  */
+.tag-beta {
   margin: 0 10px;
   padding: 3px 10px;
   border-radius: 12px;
@@ -86,8 +81,8 @@ footer>ul>li>a { color: #a1a1a6; }
 
 main { width: 980px }
 
-aside { flex-basis: 14em; border-right: 1px solid var(--h);  padding-top: 40px }
-aside li { padding: .5rem 0 }
+aside { flex-basis: 14em; border-right: 1px solid var(--h); padding-top: 40px }
+header, aside li { padding: .5rem 0 }
 aside li.active { border-right: .5rem solid var(--f); }
 aside ul { padding: 0; margin: .5rem 0 0 0; }
 aside ul>li { padding-left: 20px }
@@ -166,7 +161,7 @@ hr {
 .💘:after { content: "❯"; padding-left: .3rem; }
 
 @media all and (max-width: 1000px) {
-  header { justify-content: flex-start }
+  header.⚖️ { justify-content: flex-start }
   header>div, aside { flex-basis: auto }
   #session-nav, main, header>div { flex-direction: column }
   header, aside, #content { padding: 20px; }

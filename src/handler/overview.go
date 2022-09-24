@@ -23,7 +23,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 				"Unauthorized": true,
 				"PageName":     "gcp_overview",
-				"Section":      "gae",
+				"Section":      "gcp",
 			})
 			return
 		}
@@ -34,7 +34,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			core.HTMLWithGlobalState(c, "overview.tmpl", gin.H{
 				"MissingScopes": true,
 				"PageName":      "gcp_overview",
-				"Section":       "gae",
+				"Section":      "gcp",
 			})
 			return
 		}
@@ -84,7 +84,7 @@ func Overview(db *gorm.DB) func(*gin.Context) {
 			"HasErrors":   responseError != nil && responseError.Error.Code > 0,
 			"Error":       responseError,
 			"PageName":    "gcp_overview",
-			"Section":     "gae",
+			"Section":     "gcp",
 		})
 	}
 }

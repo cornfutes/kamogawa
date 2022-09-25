@@ -188,10 +188,11 @@ func preparecss(m *minify.M) {
 func Data(mime MimeType, contents []byte, immutable bool) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		a := c.Request.Header["If-None-Match"]
+		c.Header("Vary", "Accept-Encoding")
 		if immutable {
-			c.Writer.Header().Set("Cache-Control", "public, max-age=1800, immutable")
+			c.Header("Cache-Control", "public, max-age=1800, immutable")
 		} else {
-			c.Writer.Header().Set("Cache-Control", "public, max-age=1800")
+			c.Header("Cache-Control", "public, max-age=1800")
 		}
 		if len(a) > 0 && a[0] == etag {
 			c.Data(http.StatusNotModified, string(mime), []byte{})

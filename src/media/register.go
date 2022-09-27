@@ -36,8 +36,6 @@ var (
 	styleCssKubrick            []byte
 	styleCssStyleCssKubrickMin []byte
 
-	//go:embed asset/screensaver.mp4
-	mp4Screensaver []byte
 	//go:embed asset/cloud_logo_aws.png
 	pngAWS []byte
 	//go:embed asset/cloud_logo_gcp.png
@@ -71,10 +69,6 @@ var (
 
 	//go:embed asset/splash_fuji.gif
 	splashFuji []byte
-	//go:embed asset/splash_ship.gif
-	splashShip []byte
-	//go:embed asset/console.svg
-	console []byte
 	//go:embed asset/phone.svg
 	phone []byte
 	//go:embed asset/release.txt
@@ -87,8 +81,6 @@ var (
 	about []byte
 	//go:embed asset/api.txt
 	api []byte
-	//go:embed asset/nft.gif
-	gifProfile []byte
 	//go:embed asset/big_sur.jpg
 	jpgBigSur []byte
 
@@ -136,7 +128,6 @@ func Register(r *gin.Engine) {
 		r.GET(MediaBaseUrl+"style.css", Data(MimeTypeCSS, styleCssMin, false))
 		r.GET(MediaBaseUrl+"style_glass.css", Data(MimeTypeCSS, styleCssStyleCssKubrickMin, false))
 	}
-	r.GET(MediaBaseUrl+"screensaver.mp4", Data(MimeTypeMP4, mp4Screensaver, true))
 	r.GET(MediaBaseUrl+"cloud_logo_aws.png", Data(MimeTypePNG, pngAWS, true))
 	r.GET(MediaBaseUrl+"cloud_logo_gcp.png", Data(MimeTypePNG, pngGCP, true))
 	r.GET(MediaBaseUrl+"cloud_logo_azure.png", Data(MimeTypePNG, pngAzure, true))
@@ -151,11 +142,8 @@ func Register(r *gin.Engine) {
 	r.GET(MediaBaseUrl+"splash_landing.gif", Data(MimeTypeGIF, splashLanding, true))
 	r.GET(MediaBaseUrl+"splash_landing_hd.gif", Data(MimeTypeGIF, splashLandingHD, true))
 	r.GET(MediaBaseUrl+"splash_fuji.gif", Data(MimeTypeGIF, splashFuji, true))
-	r.GET(MediaBaseUrl+"splash_ship.gif", Data(MimeTypeGIF, splashShip, true))
-	r.GET(MediaBaseUrl+"console.svg", Data(MimeTypeSVG, console, true))
 	r.GET(MediaBaseUrl+"phone.svg", Data(MimeTypeSVG, phone, true))
 	r.GET(MediaBaseUrl+"consent.png", Data(MimeTypePNG, consent, true))
-	r.GET(MediaBaseUrl+"nft.gif", Data(MimeTypeGIF, gifProfile, true))
 	r.GET(MediaBaseUrl+"big_sur.jpg", Data(MimeTypeJPG, jpgBigSur, true))
 	r.GET(MediaBaseUrl+"landing_clock.png", Data(MimeTypePNG, landingClockPng, true))
 	r.GET(MediaBaseUrl+"landing_screenshot.png", Data(MimeTypePNG, landingScreenshot, true))

@@ -3,7 +3,6 @@ package aws
 import (
 	"context"
 	"fmt"
-	"kamogawa/config"
 	"kamogawa/types"
 	"kamogawa/types/aws/ec2types"
 
@@ -17,11 +16,13 @@ import (
 )
 
 func AWSListEC2Instances(db *gorm.DB, user types.User, useCache bool) ec2types.EC2AggregatedInstances {
-	if config.CacheEnabled && useCache {
-		return mockData()
-	}
+	return mockData()
 
-	return AWSListEC2InstancesMain(db, user)
+	//if config.CacheEnabled && useCache {
+	//	return mockData()
+	//}
+	//
+	//return AWSListEC2InstancesMain(db, user)
 }
 
 func AWSListEC2InstancesMain(db *gorm.DB, user types.User) ec2types.EC2AggregatedInstances {

@@ -122,12 +122,24 @@ func mockData() ec2types.EC2AggregatedInstances {
 	return ec2types.EC2AggregatedInstances{
 		Zones: []ec2types.EC2Zone{
 			ec2types.EC2Zone{
-				Zone:      "us-west-1c ",
-				Instances: []ec2types.EC2Instance{ec2types.EC2Instance{Id: "2", Name: "instance-2"}},
+				Zone: "us-west-1c ",
+				Instances: []ec2types.EC2Instance{
+					ec2types.EC2Instance{Id: "shimogawa", Name: "shimogawa"},
+					ec2types.EC2Instance{Id: "akari", Name: "akari"},
+					ec2types.EC2Instance{Id: "ichiban", Name: "ichiban"},
+					ec2types.EC2Instance{Id: "ichiro", Name: "ichiro"},
+				},
 			},
 			ec2types.EC2Zone{
-				Zone:      "us-west-2c ",
-				Instances: []ec2types.EC2Instance{ec2types.EC2Instance{Id: "1", Name: "instance-1"}},
+				Zone: "us-west-2c ",
+				Instances: []ec2types.EC2Instance{
+					ec2types.EC2Instance{Id: "kaze", Name: "kaze"},
+					ec2types.EC2Instance{Id: "oni", Name: "oni"},
+					ec2types.EC2Instance{Id: "moku", Name: "moku"},
+					ec2types.EC2Instance{Id: "mizu", Name: "mizu"},
+					ec2types.EC2Instance{Id: "oto", Name: "oto"},
+					ec2types.EC2Instance{Id: "kumo", Name: "kumo"},
+				},
 			},
 		},
 	}

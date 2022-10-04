@@ -25,6 +25,7 @@ func APIsEnabled(db *gorm.DB) func(*gin.Context) {
 				"NumCachedCalls": 0,
 				"Unauthorized":   true,
 				"PageName":       "gcp_apis_enabled",
+				"Section":        "gcp",
 			})
 			return
 		}
@@ -64,6 +65,7 @@ func APIsEnabled(db *gorm.DB) func(*gin.Context) {
 			"NumCachedCalls": cachedCalls,
 			"AssetLines":     template.HTML(strings.Join(htmlLines[:], "")),
 			"PageName":       "gcp_apis_enabled",
+			"Section":        "gcp",
 		})
 	}
 }

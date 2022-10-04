@@ -28,10 +28,6 @@ func EC2(db *gorm.DB) func(*gin.Context) {
 			})
 			return
 		}
-		identity.CheckDBAndRefreshToken(c, user, db)
-		if user.Scope == nil || !user.Scope.Valid {
-			panic("Missing scope")
-		}
 		fmt.Printf("User %v\n", user)
 
 		start := time.Now()

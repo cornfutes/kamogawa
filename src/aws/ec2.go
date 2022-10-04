@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"kamogawa/types"
 	"kamogawa/types/aws/ec2types"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsconfig "github.com/aws/aws-sdk-go-v2/config"
@@ -119,6 +120,7 @@ func GetInstances(c context.Context, api EC2DescribeInstancesAPI, input *ec2.Des
 }
 
 func mockData() ec2types.EC2AggregatedInstances {
+	time.Sleep(5 * time.Millisecond)
 	return ec2types.EC2AggregatedInstances{
 		Zones: []ec2types.EC2Zone{
 			ec2types.EC2Zone{

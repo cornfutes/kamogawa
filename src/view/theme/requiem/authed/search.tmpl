@@ -65,6 +65,8 @@
     <h3> GAE Service "{{.Name}}"</h3>
     {{else if eq .Kind "Version"}}
     <h3> GAE Version "{{.Name}}"</h3>
+    {{else if eq .Product "EC2"}}
+    <h3> EC2 Instance "{{.Name}}"</h3>
     {{else}}
     <h3></h3>
     {{end}}

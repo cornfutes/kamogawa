@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"kamogawa/aws"
 	"net/url"
 	"strings"
 	"time"
@@ -164,6 +165,10 @@ func getSearchResults(db *gorm.DB, user types.User, q string) []SearchResult {
 	if err == nil {
 		searchResults = append(searchResults, r...)
 	}
+	r, err = searchEC2Instances(db, user, word)
+	if err == nil {
+		searchResults = append(searchResults, r...)
+	}
 	// }
 	return searchResults
 }
@@ -311,6 +316,28 @@ func searchGAEVersions(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 				Product:  "GAE",
 				Kind:     "Version",
 			})
+	}
+
+	return searchResults, nil
+}
+
+func searchEC2Instances(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
+	ec2AggregatedInstances := aws.AWSListEC2Instances(db, user, true)
+	searchResults := make([]SearchResult, 0)
+	for _, ec2Zone := range ec2AggregatedInstances.Zones {
+		for _, instance := range ec2Zone.Instances {
+			if strings.Contains(instance.Id, q) {
+				searchResults = append(searchResults,
+					SearchResult{
+						Text:     fmt.Sprintf("Type: EC2 Instance, Name: %v, Id: %v, Zone: %v", instance.Name, instance.Id, ec2Zone.Zone),
+						Link:     "https://us-west-2.console.aws.amazon.com/ec2/home?region=" + ec2Zone.Zone[:len(ec2Zone.Zone)-2] + "#Instances:instanceId=" + instance.Id,
+						Name:     instance.Name,
+						Provider: "AWS",
+						Product:  "EC2",
+						Kind:     "Instance",
+					})
+			}
+		}
 	}
 
 	return searchResults, nil

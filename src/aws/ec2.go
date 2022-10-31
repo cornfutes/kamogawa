@@ -16,7 +16,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func AWSListEC2Instances(db *gorm.DB, user types.User, useCache bool) ec2types.EC2AggregatedInstances {
+func AWSListEC2Instances(db *gorm.DB, useCache bool) ec2types.EC2AggregatedInstances {
 	return mockData()
 
 	//if config.CacheEnabled && useCache {

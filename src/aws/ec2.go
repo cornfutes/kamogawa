@@ -124,7 +124,7 @@ func mockData() ec2types.EC2AggregatedInstances {
 	return ec2types.EC2AggregatedInstances{
 		Zones: []ec2types.EC2Zone{
 			ec2types.EC2Zone{
-				Zone: "us-west-1c ",
+				Zone: "us-west-1c",
 				Instances: []ec2types.EC2Instance{
 					ec2types.EC2Instance{Id: "shimogawa", Name: "shimogawa"},
 					ec2types.EC2Instance{Id: "akari", Name: "akari"},
@@ -133,7 +133,7 @@ func mockData() ec2types.EC2AggregatedInstances {
 				},
 			},
 			ec2types.EC2Zone{
-				Zone: "us-west-2c ",
+				Zone: "us-west-2c",
 				Instances: []ec2types.EC2Instance{
 					ec2types.EC2Instance{Id: "kaze", Name: "kaze"},
 					ec2types.EC2Instance{Id: "oni", Name: "oni"},

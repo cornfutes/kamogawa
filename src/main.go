@@ -99,6 +99,7 @@ func main() {
 		authed.GET("/s3", handler.S3(db))
 
 		authed.GET("/azure_vm", handler.AzureVM(db))
+		authed.GET("/azure_blob_storage", handler.AzureBlobStorage(db))
 
 		authed.GET("/export", handler.Export)
 		authed.GET("/authorization", handler.Authorization(db))

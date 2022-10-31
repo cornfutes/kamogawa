@@ -1,0 +1,23 @@
+{{define "page"}}
+<h2>Azure Blob Storage</h2>
+
+<p>
+  Cache avoided {{.NumCachedCalls}} API calls
+</p>
+<p>Query took ({{.Duration}})</p>
+
+
+<ul>{{.AssetLines}}</ul>
+
+<h2 class="🍜">Update Azure Blob Storage Cache</h2>
+
+<p>
+  You can manually refresh the cache for individual services for free.
+</p>
+
+<button class="disabled">Refresh</button> <span style="color:red">(disabled in demo)</span>
+<p>
+  <a href="overview">See Overview on details on traversing entire graph</a>
+</p>
+
+{{end}}

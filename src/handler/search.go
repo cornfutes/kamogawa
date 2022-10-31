@@ -322,7 +322,7 @@ func searchGAEVersions(db *gorm.DB, user types.User, q string) ([]SearchResult, 
 }
 
 func searchEC2Instances(db *gorm.DB, user types.User, q string) ([]SearchResult, error) {
-	ec2AggregatedInstances := aws.AWSListEC2Instances(db, user, true)
+	ec2AggregatedInstances := aws.AWSListEC2Instances(db, true)
 	searchResults := make([]SearchResult, 0)
 	for _, ec2Zone := range ec2AggregatedInstances.Zones {
 		for _, instance := range ec2Zone.Instances {

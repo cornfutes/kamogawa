@@ -20,7 +20,7 @@ func EC2(db *gorm.DB) func(*gin.Context) {
 		ec2AggregatedInstances := aws.AWSListEC2Instances(db, useCache)
 
 		var htmlLines []string
-		cachedCalls := 0
+		cachedCalls := 10
 		for _, zone := range ec2AggregatedInstances.Zones {
 			if len(zone.Instances) == 0 {
 				continue

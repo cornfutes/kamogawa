@@ -94,8 +94,9 @@ func main() {
 		authed.GET("/sql", handler.SQL(db))
 		authed.GET("/functions", handler.Functions(db))
 		authed.GET("/apis_enabled", handler.APIsEnabled(db))
-		
+
 		authed.GET("/ec2", handler.EC2(db))
+		authed.GET("/s3", handler.S3(db))
 
 		authed.GET("/export", handler.Export)
 		authed.GET("/authorization", handler.Authorization(db))

@@ -125,7 +125,7 @@ Deploy a CloudRun =Revision= by associating with a GCR Docker Image.
 **** Prod 
 
 /note:/ =ENV= for DB URL is 
-=postgres://postgres:dog@10.73.16.3:5432/shimogawa_db=
+=postgres://<retroactively_redacted>:<retroactively_redacted>@<retroactively_redacted>:5432/shimogawa_db=
 
 For all intensive purposes, default URL provided by CloudRun is not useful.
 Only =http://localhost= and =https://diceduckmonk.com= are legitimized for our Google Auth Credentials.
@@ -134,7 +134,7 @@ Only =http://localhost= and =https://diceduckmonk.com= are legitimized for our G
 
 #+BEGIN_SRC bash
 $ psql -h localhost -p 5432 -U local-dev -d shimogawa_db # docker compose
-$ psql -h 10.73.16.6 -p 5432 -U postgres -d shimogawa_db # prod from compute VM
+$ psql -h <retroactively_redacted> -p 5432 -U postgres -d shimogawa_db # prod from compute VM
 #+END_SRC
 
 #+BEGIN_SRC bash

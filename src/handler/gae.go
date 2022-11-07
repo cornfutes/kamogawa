@@ -52,7 +52,7 @@ func GAE(db *gorm.DB) func(*gin.Context) {
 			htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul>")
 
 			responseSuccessAPI, _ := gcp.GCPListProjectAPIs(db, user, p, useCache)
-			if !responseSuccessAPI[0].IsGAEEnabled {
+			if len(responseSuccessAPI) == 0 || !responseSuccessAPI[0].IsGAEEnabled {
 				htmlLines = append(htmlLines, "<li>App Engine not initialized for this Project.</li>")
 				htmlLines = append(htmlLines, "</ul>")
 				continue

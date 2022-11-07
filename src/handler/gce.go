@@ -51,7 +51,7 @@ func GCE(db *gorm.DB) func(*gin.Context) {
 		var cachedCalls = 0
 		for _, p := range projectDBs {
 			responseSuccessAPI, _ := gcp.GCPListProjectAPIs(db, user, p, useCache)
-			if !responseSuccessAPI[0].IsEnabled("Compute Engine API") {
+			if len(responseSuccessAPI) == 0 || !responseSuccessAPI[0].IsEnabled("Compute Engine API") {
 				cachedCalls++
 				htmlLines = append(htmlLines, "<li>"+p.ProjectId+" ( Project ) <ul><li>Compute Engine API has not been enabled on project.</li></ul>")
 				continue
